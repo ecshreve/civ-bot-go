@@ -6,11 +6,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// Formats the user in a readable format.
+// formatUser returns a string for a single user in a readable format.
 func formatUser(u *discordgo.User) string {
 	return fmt.Sprintf("<@%s>", u.ID)
 }
 
+// formatUsers returns a string for a slice of users in a readable format.
 func formatUsers(players map[string]*discordgo.User) string {
 	ret := ""
 	for _, p := range players {
@@ -19,10 +20,16 @@ func formatUsers(players map[string]*discordgo.User) string {
 	return ret
 }
 
+// formatCiv returns a string for a single Civ in a readable format.
 func formatCiv(c *Civ) string {
-	return fmt.Sprintf("%s -- %s", c.CivBase, c.LeaderBase)
+	formatStr := "%s -- %s"
+	if c.Banned {
+		formatStr = "~~%s -- %s~~"
+	}
+	return fmt.Sprintf(formatStr, c.CivBase, c.LeaderBase)
 }
 
+// formatCivs returns a string for a slice of Civs in a readable format.
 func formatCivs(cs []*Civ) string {
 	ret := ""
 	for _, c := range cs {
@@ -31,6 +38,7 @@ func formatCivs(cs []*Civ) string {
 	return ret
 }
 
+// formatPicks returns a string in a readable format for each player's picks.
 func formatPicks(picks map[*discordgo.User][]*Civ) string {
 	ret := ""
 	for k, v := range picks {
@@ -39,6 +47,7 @@ func formatPicks(picks map[*discordgo.User][]*Civ) string {
 	return ret
 }
 
+// formatBans returns a string for the CivSession's Bans in a readable format.
 func (cs *CivSession) formatBans() string {
 	bans := cs.Bans
 	if bans == nil || len(bans) == 0 {
@@ -51,7 +60,7 @@ func (cs *CivSession) formatBans() string {
 	return ret
 }
 
-// Generic message format for errors.
+// errorMessage returns a string for a generic error message.
 func errorMessage(title string, message string) string {
 	return "❌  **" + title + "**\n" + message
 }
