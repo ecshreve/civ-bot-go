@@ -1,9 +1,6 @@
 package discord
 
 import (
-	"fmt"
-
-	"github.com/bwmarrin/discordgo"
 	"github.com/schollz/closestmatch"
 )
 
@@ -27,24 +24,6 @@ func genCivs() []*Civ {
 		civs = append(civs, civ)
 	}
 	return civs
-}
-
-func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title: "☁︎  list all possible civs",
-		Color: cGREEN,
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "All Civs",
-				Value: formatCivs(cs.Civs),
-			},
-		},
-	})
-
-	if err != nil {
-		fmt.Printf("error listing civs: %+v", err)
-		return
-	}
 }
 
 // getCivByString takes a string and returns the Civ whose name or leader most

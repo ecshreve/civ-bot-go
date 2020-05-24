@@ -15,6 +15,7 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args [
 		topic = args[1]
 	}
 
+	// TODO: this is dumb, should make it better.
 	switch topic {
 	case "new":
 		title = "🆕  new"
