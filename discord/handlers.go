@@ -81,5 +81,7 @@ func (cs *CivSession) ReactionsHandler(s *discordgo.Session, r *discordgo.Messag
 	switch args {
 	case "new":
 		cs.newReactionHandler(s, r, m, user)
+	case "pick":
+		cs.pickReactionHandler(s, r, m, user)
 	}
 }

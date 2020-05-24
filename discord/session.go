@@ -1,13 +1,19 @@
 package discord
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"time"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
-	Players map[string]*discordgo.User
-	Civs    []*Civ
-	Bans    map[string]*Civ
-	Picks   map[*discordgo.User][]*Civ
+	Players     map[string]*discordgo.User
+	Civs        []*Civ
+	Bans        map[string]*Civ
+	Picks       map[*discordgo.User][]*Civ
+	PickTime    time.Time
+	RePickVotes int
 }
 
 // NewCivSession returns a new CivSession, note map fields are initialized to

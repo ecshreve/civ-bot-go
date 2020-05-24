@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -39,10 +40,46 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		p = append(p, f)
 	}
+	cs.PickTime = time.Now()
+	time.AfterFunc(60*time.Second, func() { cs.handleRePick(s, m) })
 
-	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title:  "picks",
-		Color:  cDARKBLUE,
-		Fields: p,
+	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+		Title:       "picks",
+		Description: "here's this round of picks, if 50% or more players react with ♻️ in the next 60 seconds then we'll re pick",
+		Color:       cDARKBLUE,
+		Fields:      p,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "pick",
+		},
 	})
+
+	if err != nil {
+		fmt.Println("error sending pick message")
+	}
+
+	s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
+}
+
+func (cs *CivSession) pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
+	if r.Emoji.Name == "♻️" {
+		cs.RePickVotes++
+	}
+}
+
+func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if cs.RePickVotes*2 >= len(cs.Players) {
+		cs.Picks = map[*discordgo.User][]*Civ{}
+		cs.RePickVotes = 0
+		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+			Title: "alright looks like we're picking again",
+			Color: cORANGE,
+		})
+		cs.pick(s, m)
+	} else {
+		cs.reset()
+		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+			Title: "great, have fun! see y'all next time 👋",
+			Color: cORANGE,
+		})
+	}
 }
