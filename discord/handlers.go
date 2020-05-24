@@ -22,7 +22,7 @@ func CommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	args := strings.Split(m.Content, " ")[1:]
 	// Ensure valid command
 	if len(args) == 0 {
-		s.ChannelMessageSend(m.ChannelID, errorMessage("Command missing", "For a list of commands type `/civ help`"))
+		s.ChannelMessageSend(m.ChannelID, errorMessage("command missing", "for a list of commands type `/civ help`"))
 		return
 	}
 
@@ -30,7 +30,14 @@ func CommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	switch args[0] {
 	case "ping":
 		s.ChannelMessageSend(m.ChannelID, "Pong!")
+	case "help":
+		// Help command with topic
+		if len(args) > 1 {
+			helpCommandHandler(s, m, args[1])
+		} else { // Help command without topic
+			helpCommandHandler(s, m, "")
+		}
 	default:
-		s.ChannelMessageSend(m.ChannelID, errorMessage("Invalid command", "For a list of help topics, type `/civ help`"))
+		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid command", "for a list of help topics, type `/civ help`"))
 	}
 }
