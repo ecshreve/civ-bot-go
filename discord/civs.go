@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/schollz/closestmatch"
 )
 
 // CivKey is an enum reprsenting an integer key for a civ.
@@ -55,6 +56,52 @@ const (
 	VENICE
 	ZULUS
 )
+
+var civKeys = []CivKey{
+	AMERICA,
+	ARABIA,
+	ASSYRIA,
+	AUSTRIA,
+	AZTECS,
+	BABYLON,
+	BRAZIL,
+	BYZANTIUM,
+	CARTHAGE,
+	CELTS,
+	CHINA,
+	DENMARK,
+	EGYPT,
+	ENGLAND,
+	ETHIOPIA,
+	FRANCE,
+	GERMANY,
+	GREECE,
+	HUNS,
+	INCA,
+	INDIA,
+	INDONESIA,
+	IROQUOIS,
+	JAPAN,
+	KOREA,
+	MAYANS,
+	MONGOLIA,
+	MOROCCO,
+	NETHERLANDS,
+	OTTOMANS,
+	PERSIA,
+	POLAND,
+	POLYNESIA,
+	PORTUGAL,
+	ROME,
+	RUSSIA,
+	SHOSHONE,
+	SIAM,
+	SONGHAI,
+	SPAIN,
+	SWEDEN,
+	VENICE,
+	ZULUS,
+}
 
 var civBase = map[CivKey]string{
 	AMERICA:     "america",
@@ -185,16 +232,31 @@ func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Ci
 	})
 
 	if err != nil {
-		fmt.Printf("error generating info: %+v", err)
+		fmt.Printf("error listing civs: %+v", err)
 		return
 	}
 }
 
 func (cs *CivSession) getCivByString(s string) *Civ {
+	strsToTest := make([]string, 0)
+	for _, k := range civKeys {
+		strsToTest = append(strsToTest, civBase[k])
+		strsToTest = append(strsToTest, civLeadersBase[k])
+	}
+
+	bagSizes := []int{2, 3, 4, 5, 6, 7, 8, 9, 10}
+	cm := closestmatch.New(strsToTest, bagSizes)
+	closest := cm.Closest(s)
+
 	retCiv := &Civ{}
 	for _, c := range cs.Civs {
-		if c.CivBase == s {
+		if c.CivBase == closest {
 			retCiv = c
+			break
+		}
+		if c.LeaderBase == closest {
+			retCiv = c
+			break
 		}
 	}
 	return retCiv

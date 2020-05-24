@@ -24,20 +24,17 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Civ
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid ban", "🤔  "+formatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
 	}
+
 	c.Banned = true
 	cs.Bans[m.Author] = c
 
-	bans := formatBans(cs.Bans)
-
-	title := "🍌 current bans"
-
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title: title,
+		Title: "🍌 current bans",
 		Color: cRED,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "bans",
-				Value: bans,
+				Value: formatBans(cs.Bans),
 			},
 		},
 	})
