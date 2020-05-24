@@ -1,5 +1,7 @@
 package discord
 
+import "github.com/bwmarrin/discordgo"
+
 // Color Enum
 const (
 	cDEFAULT           = 0
@@ -26,3 +28,14 @@ const (
 	cLUMINOUSVIVIDPINK = 16580705
 	cDARKVIVIDPINK     = 12320855
 )
+
+// isBotReaction checks if users reaction is one preset by the bot.
+func isBotReaction(s *discordgo.Session, reactions []*discordgo.MessageReactions, emoji *discordgo.Emoji) bool {
+	for _, r := range reactions {
+		if r.Emoji.Name == emoji.Name && r.Me {
+			return true
+		}
+	}
+
+	return false
+}

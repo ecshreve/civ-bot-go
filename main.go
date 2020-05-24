@@ -21,7 +21,10 @@ func main() {
 		return
 	}
 
-	dg.AddHandler(discord.CommandsHandler)
+	// Create a CivSession and register handlers.
+	cs := discord.NewCivSession()
+	dg.AddHandler(cs.CommandsHandler)
+	dg.AddHandler(cs.ReactionsHandler)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
