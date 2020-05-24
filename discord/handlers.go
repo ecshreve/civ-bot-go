@@ -34,7 +34,7 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	case "new", "oops":
 		cs.newCommandHandler(s, m)
 	case "info":
-		infoCommandHandler(s, m, cs)
+		cs.infoCommandHandler(s, m)
 	case "list":
 		listCommandHandler(s, m, cs)
 	case "ban":

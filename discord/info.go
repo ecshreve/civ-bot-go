@@ -6,7 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession) {
+func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "ℹ️ current civ session info"
 	players := formatUsers(cs.Players)
 	if players == "" {
