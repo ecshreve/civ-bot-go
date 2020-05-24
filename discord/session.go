@@ -23,5 +23,6 @@ func NewCivSession() *CivSession {
 // reset clears the CivSession referenced by the pointer receiver to the func.
 func (cs *CivSession) reset() {
 	cs.Players = map[string]*discordgo.User{}
+	cs.Civs = genCivs()
 	cs.Bans = make(map[string]*Civ, 0)
 }
