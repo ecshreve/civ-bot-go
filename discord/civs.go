@@ -156,6 +156,7 @@ type Civ struct {
 	LeaderBase    string
 	LeaderAliases []string
 	Banned        *discordgo.User
+	Picked        bool
 }
 
 func genCivs() []*Civ {

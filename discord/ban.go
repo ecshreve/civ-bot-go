@@ -18,6 +18,16 @@ func (cs *CivSession) banInstructions(s *discordgo.Session, channelID string) {
 	})
 }
 
+func (cs *CivSession) getBans() map[*discordgo.User]*Civ {
+	ret := make(map[*discordgo.User]*Civ, 0)
+	for _, c := range cs.Civs {
+		if c.Banned != nil {
+			ret[c.Banned] = c
+		}
+	}
+	return ret
+}
+
 func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession, inp string) {
 	c := cs.getCivByString(inp)
 	if c == nil {
@@ -26,12 +36,8 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Civ
 	}
 	c.Banned = m.Author
 
-	bans := ""
-	for _, c := range cs.Civs {
-		if c.Banned != nil {
-			bans = bans + formatUser(c.Banned) + ": " + formatCiv(c) + "\n"
-		}
-	}
+	bans := cs.getBans()
+	bansStr := formatBans(bans)
 
 	title := "🍌 current bans"
 
@@ -41,8 +47,12 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Civ
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "bans",
-				Value: bans,
+				Value: bansStr,
 			},
 		},
 	})
+
+	if len(bans) == len(cs.Players) {
+		cs.pick(s, m)
+	}
 }

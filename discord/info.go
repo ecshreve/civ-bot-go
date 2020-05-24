@@ -18,8 +18,12 @@ func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Ci
 		Color: cGREEN,
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name:  "Players",
+				Name:  "players",
 				Value: players,
+			},
+			{
+				Name:  "bans",
+				Value: formatBans(cs.getBans()),
 			},
 		},
 	})

@@ -6,6 +6,7 @@ import "github.com/bwmarrin/discordgo"
 type CivSession struct {
 	Players []*discordgo.User
 	Civs    []*Civ
+	Picks   map[*discordgo.User][]*Civ
 }
 
 // NewCivSession returns a clean CivSession.
