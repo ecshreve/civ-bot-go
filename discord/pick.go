@@ -10,7 +10,7 @@ import (
 func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	possibles := []*Civ{}
 	for _, c := range cs.Civs {
-		if c.Banned == nil {
+		if c.Banned == false {
 			possibles = append(possibles, c)
 		}
 	}

@@ -155,7 +155,7 @@ type Civ struct {
 	CivAliases    []string
 	LeaderBase    string
 	LeaderAliases []string
-	Banned        *discordgo.User
+	Banned        bool
 	Picked        bool
 }
 

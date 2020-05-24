@@ -18,26 +18,16 @@ func (cs *CivSession) banInstructions(s *discordgo.Session, channelID string) {
 	})
 }
 
-func (cs *CivSession) getBans() map[*discordgo.User]*Civ {
-	ret := make(map[*discordgo.User]*Civ, 0)
-	for _, c := range cs.Civs {
-		if c.Banned != nil {
-			ret[c.Banned] = c
-		}
-	}
-	return ret
-}
-
 func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession, inp string) {
 	c := cs.getCivByString(inp)
 	if c == nil {
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid ban", "🤔  "+formatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
 	}
-	c.Banned = m.Author
+	c.Banned = true
+	cs.Bans[m.Author] = c
 
-	bans := cs.getBans()
-	bansStr := formatBans(bans)
+	bans := formatBans(cs.Bans)
 
 	title := "🍌 current bans"
 
@@ -47,12 +37,12 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Civ
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "bans",
-				Value: bansStr,
+				Value: bans,
 			},
 		},
 	})
 
-	if len(bans) == len(cs.Players) {
+	if len(cs.Bans) == len(cs.Players) {
 		cs.pick(s, m)
 	}
 }
