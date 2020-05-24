@@ -39,6 +39,8 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 		newCommandHandler(s, m, cs)
 	case "info":
 		infoCommandHandler(s, m, cs)
+	case "list":
+		listCommandHandler(s, m, cs)
 	default:
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid command", "for a list of help topics, type `/civ help`"))
 	}

@@ -5,12 +5,14 @@ import "github.com/bwmarrin/discordgo"
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
 	Players []*discordgo.User
+	Civs    []*Civ
 }
 
 // NewCivSession returns a clean CivSession.
 func NewCivSession() *CivSession {
 	return &CivSession{
 		Players: []*discordgo.User{},
+		Civs:    genCivs(),
 	}
 }
 
