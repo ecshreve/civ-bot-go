@@ -36,7 +36,7 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	case "info":
 		cs.infoCommandHandler(s, m)
 	case "list":
-		listCommandHandler(s, m, cs)
+		cs.listCommandHandler(s, m)
 	case "ban":
 		// String for a civ to ban provided.
 		if len(args) > 1 {

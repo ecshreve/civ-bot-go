@@ -219,7 +219,7 @@ func genCivs() []*Civ {
 	return civs
 }
 
-func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession) {
+func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title: "☁︎  list all possible civs",
 		Color: cGREEN,
