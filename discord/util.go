@@ -2,7 +2,7 @@ package discord
 
 import "github.com/bwmarrin/discordgo"
 
-// Color Enum
+// Color Enum.
 const (
 	cDEFAULT           = 0
 	cAQUA              = 1752220
