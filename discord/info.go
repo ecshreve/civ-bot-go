@@ -8,14 +8,9 @@ import (
 
 func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession) {
 	title := "ℹ️ current civ session info"
-	players := ""
-
-	if len(cs.Players) == 0 {
+	players := formatUsers(cs.Players)
+	if players == "" {
 		players = "no players yet"
-	} else {
-		for _, p := range cs.Players {
-			players = players + formatUser(p) + "\n"
-		}
 	}
 
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{

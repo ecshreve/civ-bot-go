@@ -155,6 +155,7 @@ type Civ struct {
 	CivAliases    []string
 	LeaderBase    string
 	LeaderAliases []string
+	Banned        *discordgo.User
 }
 
 func genCivs() []*Civ {
@@ -186,4 +187,14 @@ func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *Ci
 		fmt.Printf("error generating info: %+v", err)
 		return
 	}
+}
+
+func (cs *CivSession) getCivByString(s string) *Civ {
+	retCiv := &Civ{}
+	for _, c := range cs.Civs {
+		if c.CivBase == s {
+			retCiv = c
+		}
+	}
+	return retCiv
 }

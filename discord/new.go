@@ -3,8 +3,6 @@ package discord
 import (
 	"fmt"
 
-	"github.com/kr/pretty"
-
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -37,6 +35,6 @@ func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m
 		cs.Players = append(cs.Players, user)
 	}
 	if r.Emoji.Name == "✅" {
-		pretty.Println(cs)
+		cs.banInstructions(s, m.ChannelID)
 	}
 }

@@ -41,6 +41,12 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 		infoCommandHandler(s, m, cs)
 	case "list":
 		listCommandHandler(s, m, cs)
+	case "ban":
+		if len(args) > 1 {
+			banCommandHandler(s, m, cs, args[1])
+		} else { // Help command without topic
+			s.ChannelMessageSend(m.ChannelID, errorMessage("ban missing", "🤔  "+formatUser(m.Author)+" you have to actually ban someone"))
+		}
 	default:
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid command", "for a list of help topics, type `/civ help`"))
 	}

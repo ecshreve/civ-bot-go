@@ -11,6 +11,14 @@ func formatUser(u *discordgo.User) string {
 	return fmt.Sprintf("<@%s>", u.ID)
 }
 
+func formatUsers(users []*discordgo.User) string {
+	ret := ""
+	for _, u := range users {
+		ret = ret + formatUser(u) + "\n"
+	}
+	return ret
+}
+
 func formatCiv(c *Civ) string {
 	return fmt.Sprintf("%s -- %s", c.CivBase, c.LeaderBase)
 }
