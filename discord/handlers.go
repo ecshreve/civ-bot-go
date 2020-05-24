@@ -28,8 +28,6 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 
 	// Call the corresponding handler
 	switch args[0] {
-	case "ping":
-		s.ChannelMessageSend(m.ChannelID, "Pong!")
 	case "help":
 		// Help command with topic
 		if len(args) > 1 {
@@ -37,7 +35,7 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 		} else { // Help command without topic
 			helpCommandHandler(s, m, "")
 		}
-	case "new":
+	case "new", "oops":
 		newCommandHandler(s, m, cs)
 	case "info":
 		infoCommandHandler(s, m, cs)

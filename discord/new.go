@@ -10,7 +10,7 @@ import (
 
 func newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession) {
 	title := "🆕 starting a new game"
-	description := "whoever wants to play react with  ✋\n someone add a  ✅ react when ready to continue"
+	description := "whoever wants to play react with  ✋\n someone add a  ✅ react when ready to continue \n enter `/civ oops` at any point to completely start over"
 
 	newSession, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       title,
