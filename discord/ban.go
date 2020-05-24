@@ -18,8 +18,13 @@ func (cs *CivSession) banInstructions(s *discordgo.Session, channelID string) {
 	})
 }
 
-func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, cs *CivSession, inp string) {
-	c := cs.getCivByString(inp)
+func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	if len(args) == 1 {
+		s.ChannelMessageSend(m.ChannelID, errorMessage("ban missing", "🤔  "+formatUser(m.Author)+" you have to actually ban someone"))
+		return
+	}
+
+	c := cs.getCivByString(args[1])
 	if c == nil {
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid ban", "🤔  "+formatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return

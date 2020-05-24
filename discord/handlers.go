@@ -38,13 +38,7 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	case "list":
 		cs.listCommandHandler(s, m)
 	case "ban":
-		// String for a civ to ban provided.
-		if len(args) > 1 {
-			banCommandHandler(s, m, cs, args[1])
-			// No string for a civ to ban provided, invalid.
-		} else {
-			s.ChannelMessageSend(m.ChannelID, errorMessage("ban missing", "🤔  "+formatUser(m.Author)+" you have to actually ban someone"))
-		}
+		cs.banCommandHandler(s, m, args)
 	default:
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid command", "for a list of help topics, type `/civ help`"))
 	}
