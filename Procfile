@@ -1,1 +1,1 @@
-web: civ-bot-go
+worker: civ-bot-go
