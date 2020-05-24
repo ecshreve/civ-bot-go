@@ -13,6 +13,8 @@ type Civ struct {
 	Picked     bool
 }
 
+// genCivs generates and returns a slice of Civs based on the base values in the
+// utils file.
 func genCivs() []*Civ {
 	civs := make([]*Civ, 0)
 	for k, c := range civBase {

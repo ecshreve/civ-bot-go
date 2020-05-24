@@ -32,7 +32,7 @@ const (
 // CivKey is an enum reprsenting an integer key for a civ.
 type CivKey int
 
-// Civ consts.
+// Consts defining the CivKeys this bot works with.
 const (
 	AMERICA CivKey = iota
 	ARABIA
@@ -79,6 +79,8 @@ const (
 	ZULUS
 )
 
+// civKeys is a slice of the defined CivKey values, this makes it easier for us
+// to iterate over all CivKeys.
 var civKeys = []CivKey{
 	AMERICA,
 	ARABIA,
@@ -125,6 +127,7 @@ var civKeys = []CivKey{
 	ZULUS,
 }
 
+// civBase is a map of CivKey to string representation of that Civ.
 var civBase = map[CivKey]string{
 	AMERICA:     "america",
 	ARABIA:      "arabia",
@@ -171,6 +174,7 @@ var civBase = map[CivKey]string{
 	ZULUS:       "zulu",
 }
 
+// civLeaderBase is a map of CivKey to string representation of that Civ's leader.
 var civLeadersBase = map[CivKey]string{
 	AMERICA:     "washington",
 	ARABIA:      "harun al-rashad",

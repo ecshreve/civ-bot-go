@@ -30,6 +30,8 @@ func formatCiv(c *Civ) string {
 }
 
 // formatCivs returns a string for a slice of Civs in a readable format.
+//
+// TODO: fix this, just call it on CivSession pointer receiver.
 func formatCivs(cs []*Civ) string {
 	ret := ""
 	for _, c := range cs {

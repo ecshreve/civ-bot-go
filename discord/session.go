@@ -10,7 +10,8 @@ type CivSession struct {
 	Picks   map[*discordgo.User][]*Civ
 }
 
-// NewCivSession returns a clean CivSession.
+// NewCivSession returns a new CivSession, note map fields are initialized to
+// empty zero lengtrh maps.
 func NewCivSession() *CivSession {
 	return &CivSession{
 		Players: map[string]*discordgo.User{},
