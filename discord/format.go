@@ -40,7 +40,7 @@ func formatPicks(picks map[*discordgo.User][]*Civ) string {
 }
 
 func formatBans(bans map[*discordgo.User]*Civ) string {
-	if bans == nil {
+	if bans == nil || len(bans) == 0 {
 		return "no bans yet"
 	}
 	ret := ""

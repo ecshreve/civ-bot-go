@@ -15,7 +15,7 @@ func NewCivSession() *CivSession {
 	return &CivSession{
 		Players: []*discordgo.User{},
 		Civs:    genCivs(),
-		Bans:    make(map[*discordgo.User]*Civ, 0),
+		Bans:    map[*discordgo.User]*Civ{},
 	}
 }
 
