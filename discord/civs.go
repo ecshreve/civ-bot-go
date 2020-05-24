@@ -237,6 +237,8 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	}
 }
 
+// getCivByString takes a string and returns the Civ whose name or leader most
+// closely matches the input string.
 func (cs *CivSession) getCivByString(s string) *Civ {
 	strsToTest := make([]string, 0)
 	for _, k := range civKeys {
@@ -244,7 +246,7 @@ func (cs *CivSession) getCivByString(s string) *Civ {
 		strsToTest = append(strsToTest, civLeadersBase[k])
 	}
 
-	bagSizes := []int{2, 3, 4, 5, 6, 7, 8, 9, 10}
+	bagSizes := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	cm := closestmatch.New(strsToTest, bagSizes)
 	closest := cm.Closest(s)
 
