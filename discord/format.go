@@ -22,11 +22,8 @@ func formatUsers(players map[string]*discordgo.User) string {
 
 // formatCiv returns a string for a single Civ in a readable format.
 func formatCiv(c *Civ) string {
-	formatStr := "%s -- %s"
-	if c.Banned {
-		formatStr = "~~%s -- %s~~"
-	}
-	return fmt.Sprintf(formatStr, c.CivBase, c.LeaderBase)
+	formatStr := "[%s -- %s](%s)"
+	return fmt.Sprintf(formatStr, c.CivBase, c.LeaderBase, c.ZigURL)
 }
 
 // formatCivs returns a string for a slice of Civs in a readable format.
@@ -35,7 +32,7 @@ func formatCiv(c *Civ) string {
 func formatCivs(cs []*Civ) string {
 	ret := ""
 	for _, c := range cs {
-		ret = ret + formatCiv(c) + "\n"
+		ret = ret + "\n" + formatCiv(c)
 	}
 	return ret
 }
@@ -44,7 +41,7 @@ func formatCivs(cs []*Civ) string {
 func formatPicks(picks map[*discordgo.User][]*Civ) string {
 	ret := ""
 	for k, v := range picks {
-		ret = ret + formatUser(k) + ":\n" + formatCivs(v) + "\n--\n\n"
+		ret = ret + "\n" + formatUser(k) + ":\n" + formatCivs(v) + "\n-----\n"
 	}
 	return ret
 }

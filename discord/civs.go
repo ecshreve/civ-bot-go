@@ -9,6 +9,7 @@ type Civ struct {
 	Key        CivKey
 	CivBase    string
 	LeaderBase string
+	ZigURL     string
 	Banned     bool
 	Picked     bool
 }
@@ -22,6 +23,7 @@ func genCivs() []*Civ {
 			Key:        k,
 			CivBase:    c,
 			LeaderBase: civLeadersBase[k],
+			ZigURL:     civZig[k],
 		}
 		civs = append(civs, civ)
 	}

@@ -31,14 +31,18 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
+	var p []*discordgo.MessageEmbedField
+	for k, v := range picks {
+		f := &discordgo.MessageEmbedField{
+			Name:  k.Username,
+			Value: formatCivs(v),
+		}
+		p = append(p, f)
+	}
+
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title: "picks",
-		Color: cDARKBLUE,
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "picks",
-				Value: formatPicks(picks),
-			},
-		},
+		Title:  "picks",
+		Color:  cDARKBLUE,
+		Fields: p,
 	})
 }
