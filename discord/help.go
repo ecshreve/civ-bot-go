@@ -2,21 +2,32 @@ package discord
 
 import "github.com/bwmarrin/discordgo"
 
-func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, topic string) {
+// helpCommandHandler sends a help message. If a specific command is provided it
+// provides that specific help message, otherwise it provides the default summary
+// help message for all commands.
+func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	var title string
 	var description string
 	var fields []*discordgo.MessageEmbedField
 
+	topic := ""
+	if len(args) > 1 {
+		topic = args[1]
+	}
+
 	switch topic {
 	case "new":
-		title = "🆕  new - civ-bot help"
-		description = "starts a new civ-bot session"
-		fields = []*discordgo.MessageEmbedField{
-			{
-				Name:  "basic operation",
-				Value: "`/civ new`: starts a new civ-bot session in the current channel \n whoever wants to play reacts with  ✋\n someone adds a  ✅ react when ready to continue",
-			},
-		}
+		title = "🆕  new"
+		description = "starts a new civ-bot session in the current channel \n whoever wants to play reacts with  ✋\n someone adds a  ✅ react when ready to continue"
+	case "oops":
+		title = "🤷‍♀️  oops"
+		description = "abandon current session and start over"
+	case "info":
+		title = "ℹ️  info"
+		description = "output the current state of the session"
+	case "ban":
+		title = "🍌  ban"
+		description = "ban a civ so it can't be part of a player's picks"
 	case "list":
 		title = "☁︎  list"
 		description = "lists all civs and leaders"
@@ -27,6 +38,18 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, topic 
 			{
 				Name:  "🆕  new",
 				Value: "`/civ help new`: instructions on starting a new civ-bot session",
+			},
+			{
+				Name:  "🤷‍♀️  oops",
+				Value: "`/civ help oops`: abandon current session and start over",
+			},
+			{
+				Name:  "ℹ️  info",
+				Value: "`/civ help info`: output the current state of the session",
+			},
+			{
+				Name:  "🍌  ban",
+				Value: "`/civ help ban`: ban a civ so it can't be part of a player's picks",
 			},
 			{
 				Name:  "☁︎  list",
