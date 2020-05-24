@@ -6,10 +6,10 @@ import (
 
 // banInstructions sends a Message with instructions for how to ban a Civ.
 func (cs *CivSession) banInstructions(s *discordgo.Session, channelID string) {
-	title := "ℹ️ okay, here's our players \neveryone gets to ban a civ now, enter `/civ ban <civ name>` to choose"
 	s.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
-		Title: title,
-		Color: cGREEN,
+		Title:       "ℹ️ okay, here's our players",
+		Description: "- everyone gets to ban a civ now, enter `/civ ban <civ name>` to choose\n- if you change your mind just enter `/civ ban <new civ name>` to update your choice\n\nnote: you can enter a ban by either the civ or leader name",
+		Color:       cGREEN,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "Players",
@@ -21,14 +21,20 @@ func (cs *CivSession) banInstructions(s *discordgo.Session, channelID string) {
 
 // banCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
-func (cs *CivSession) banCiv(civToBan string, u *discordgo.User) *Civ {
+func (cs *CivSession) banCiv(civToBan string, uid string) *Civ {
 	c := cs.getCivByString(civToBan)
-	if c == nil {
+	if c == nil || c.Banned == true {
 		return nil
 	}
 
+	// If this player had previously banned a Civ then unban the previous Civ.
+	if _, ok := cs.Bans[uid]; ok {
+		cs.Bans[uid].Banned = false
+	}
+
 	c.Banned = true
-	cs.Bans[u] = c
+	cs.Bans[uid] = c
+
 	return c
 }
 
@@ -38,7 +44,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 		return
 	}
 
-	c := cs.banCiv(args[1], m.Author)
+	c := cs.banCiv(args[1], m.Author.ID)
 	if c == nil {
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid ban", "🤔  "+formatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
@@ -50,7 +56,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "bans",
-				Value: formatBans(cs.Bans),
+				Value: cs.formatBans(),
 			},
 		},
 	})

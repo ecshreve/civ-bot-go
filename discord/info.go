@@ -23,7 +23,7 @@ func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.Mess
 			},
 			{
 				Name:  "bans",
-				Value: formatBans(cs.Bans),
+				Value: cs.formatBans(),
 			},
 		},
 	})

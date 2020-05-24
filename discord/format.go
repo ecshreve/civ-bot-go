@@ -11,10 +11,10 @@ func formatUser(u *discordgo.User) string {
 	return fmt.Sprintf("<@%s>", u.ID)
 }
 
-func formatUsers(users []*discordgo.User) string {
+func formatUsers(players map[string]*discordgo.User) string {
 	ret := ""
-	for _, u := range users {
-		ret = ret + formatUser(u) + "\n"
+	for _, p := range players {
+		ret = ret + formatUser(p) + "\n"
 	}
 	return ret
 }
@@ -39,13 +39,14 @@ func formatPicks(picks map[*discordgo.User][]*Civ) string {
 	return ret
 }
 
-func formatBans(bans map[*discordgo.User]*Civ) string {
+func (cs *CivSession) formatBans() string {
+	bans := cs.Bans
 	if bans == nil || len(bans) == 0 {
 		return "no bans yet"
 	}
 	ret := ""
 	for k, v := range bans {
-		ret = ret + formatUser(k) + ": " + formatCiv(v) + "\n"
+		ret = ret + formatUser(cs.Players[k]) + ": " + formatCiv(v) + "\n"
 	}
 	return ret
 }

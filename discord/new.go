@@ -34,7 +34,7 @@ func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.Messa
 // newReactionHandler handles all new related reactions.
 func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "✋" {
-		cs.Players = append(cs.Players, user)
+		cs.Players[user.ID] = user
 	}
 	if r.Emoji.Name == "✅" {
 		cs.banInstructions(s, m.ChannelID)

@@ -4,23 +4,23 @@ import "github.com/bwmarrin/discordgo"
 
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
-	Players []*discordgo.User
+	Players map[string]*discordgo.User
 	Civs    []*Civ
-	Bans    map[*discordgo.User]*Civ
+	Bans    map[string]*Civ
 	Picks   map[*discordgo.User][]*Civ
 }
 
 // NewCivSession returns a clean CivSession.
 func NewCivSession() *CivSession {
 	return &CivSession{
-		Players: []*discordgo.User{},
+		Players: map[string]*discordgo.User{},
 		Civs:    genCivs(),
-		Bans:    map[*discordgo.User]*Civ{},
+		Bans:    map[string]*Civ{},
 	}
 }
 
 // reset clears the CivSession referenced by the pointer receiver to the func.
 func (cs *CivSession) reset() {
-	cs.Players = []*discordgo.User{}
-	cs.Bans = make(map[*discordgo.User]*Civ, 0)
+	cs.Players = map[string]*discordgo.User{}
+	cs.Bans = make(map[string]*Civ, 0)
 }
