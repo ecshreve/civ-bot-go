@@ -17,7 +17,7 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	}
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:  "☁︎  list all possible civs",
-		Color:  cGREEN,
+		Color:  ColorGREEN,
 		Fields: fields,
 	})
 

@@ -15,7 +15,7 @@ func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.Mess
 
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title: title,
-		Color: cGREEN,
+		Color: ColorGREEN,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "players",

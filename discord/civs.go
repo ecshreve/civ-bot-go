@@ -18,12 +18,12 @@ type Civ struct {
 // utils file.
 func genCivs() []*Civ {
 	civs := make([]*Civ, 0)
-	for k, c := range civBase {
+	for k, c := range CivBase {
 		civ := &Civ{
 			Key:        k,
 			CivBase:    c,
-			LeaderBase: civLeadersBase[k],
-			ZigURL:     civZig[k],
+			LeaderBase: CivLeaders[k],
+			ZigURL:     CivZig[k],
 		}
 		civs = append(civs, civ)
 	}
@@ -34,9 +34,9 @@ func genCivs() []*Civ {
 // closely matches the input string.
 func (cs *CivSession) getCivByString(s string) *Civ {
 	strsToTest := make([]string, 0)
-	for _, k := range civKeys {
-		strsToTest = append(strsToTest, civBase[k])
-		strsToTest = append(strsToTest, civLeadersBase[k])
+	for _, k := range CivKeys {
+		strsToTest = append(strsToTest, CivBase[k])
+		strsToTest = append(strsToTest, CivLeaders[k])
 	}
 
 	bagSizes := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}

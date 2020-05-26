@@ -63,6 +63,6 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args [
 		Title:       title,
 		Description: description,
 		Fields:      fields,
-		Color:       cBLUE,
+		Color:       ColorBLUE,
 	})
 }

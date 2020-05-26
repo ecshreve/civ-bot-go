@@ -46,7 +46,7 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
 		Description: "here's this round of picks, if 50% or more players react with ♻️ in the next 60 seconds then we'll re pick",
-		Color:       cDARKBLUE,
+		Color:       ColorDARKBLUE,
 		Fields:      p,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "pick",
@@ -72,14 +72,14 @@ func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCre
 		cs.RePickVotes = 0
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "alright looks like we're picking again",
-			Color: cORANGE,
+			Color: ColorORANGE,
 		})
 		cs.pick(s, m)
 	} else {
 		cs.reset()
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "great, have fun! see y'all next time 👋",
-			Color: cORANGE,
+			Color: ColorORANGE,
 		})
 	}
 }

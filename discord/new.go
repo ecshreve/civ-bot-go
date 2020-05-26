@@ -13,7 +13,7 @@ func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.Messa
 	newSession, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       title,
 		Description: description,
-		Color:       cDARKPURPLE,
+		Color:       ColorDARKPURPLE,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "new",
 		},
