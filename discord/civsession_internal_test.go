@@ -3,6 +3,7 @@ package discord
 import (
 	"testing"
 
+	"github.com/ecshreve/civ-bot-go/constants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,7 +38,7 @@ func TestReset(t *testing.T) {
 			actual.reset()
 
 			assert.Equal(t, 0, len(actual.Players))
-			assert.Equal(t, len(CivKeys), len(actual.Civs))
+			assert.Equal(t, len(constants.CivKeys), len(actual.Civs))
 
 			for _, civ := range actual.Civs {
 				assert.False(t, civ.Banned)

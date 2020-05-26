@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/constants"
 )
 
 func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -13,7 +14,7 @@ func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.Messa
 	newSession, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       title,
 		Description: description,
-		Color:       ColorDARKPURPLE,
+		Color:       constants.ColorDARKPURPLE,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "new",
 		},

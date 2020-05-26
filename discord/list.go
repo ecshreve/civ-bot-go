@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/constants"
 )
 
 func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -17,7 +18,7 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	}
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:  "☁︎  list all possible civs",
-		Color:  ColorGREEN,
+		Color:  constants.ColorGREEN,
 		Fields: fields,
 	})
 

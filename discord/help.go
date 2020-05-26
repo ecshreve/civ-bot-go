@@ -1,6 +1,9 @@
 package discord
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/constants"
+)
 
 // helpCommandHandler sends a help message. If a specific command is provided it
 // provides that specific help message, otherwise it provides the default summary
@@ -63,6 +66,6 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args [
 		Title:       title,
 		Description: description,
 		Fields:      fields,
-		Color:       ColorBLUE,
+		Color:       constants.ColorBLUE,
 	})
 }

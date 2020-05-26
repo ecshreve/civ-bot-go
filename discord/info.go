@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/constants"
 )
 
 func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -15,7 +16,7 @@ func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.Mess
 
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title: title,
-		Color: ColorGREEN,
+		Color: constants.ColorGREEN,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "players",

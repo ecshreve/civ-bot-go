@@ -2,6 +2,7 @@ package discord
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/constants"
 )
 
 // banInstructions sends a Message with instructions for how to ban a Civ.
@@ -9,7 +10,7 @@ func (cs *CivSession) banInstructions(s *discordgo.Session, channelID string) {
 	s.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
 		Title:       "ℹ️ okay, here's our players",
 		Description: "- everyone gets to ban a civ now, enter `/civ ban <civ name>` to choose\n- if you change your mind just enter `/civ ban <new civ name>` to update your choice\n\nnote: you can enter a ban by either the civ or leader name",
-		Color:       ColorGREEN,
+		Color:       constants.ColorGREEN,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "Players",
@@ -52,7 +53,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title: "🍌 current bans",
-		Color: ColorRED,
+		Color: constants.ColorRED,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "bans",

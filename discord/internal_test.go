@@ -3,6 +3,9 @@ package discord
 import (
 	"testing"
 
+	"github.com/ecshreve/civ-bot-go/constants"
+	"github.com/ecshreve/civ-bot-go/util"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -13,57 +16,57 @@ func TestGetCivByString(t *testing.T) {
 	testcases := []struct {
 		desc     string
 		inp      string
-		expected CivKey
+		expected util.CivKey
 	}{
 		{
 			desc:     "exact match",
 			inp:      "america",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "exact match mixed capitalization",
 			inp:      "AmerICa",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "exact match leader",
 			inp:      "washington",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "exact match leader mixed capitalization",
 			inp:      "WasHINGton",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "civ misspelled a little bit",
 			inp:      "amearica",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "civ misspelled a lot",
 			inp:      "AmMericaas",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "leader misspelled a little bit",
 			inp:      "washhingten",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "leader misspelled a lot",
 			inp:      "WashinnSSHton",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "civ short substring",
 			inp:      "meric",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 		{
 			desc:     "leader short substring",
 			inp:      "wash",
-			expected: AMERICA,
+			expected: constants.AMERICA,
 		},
 	}
 
