@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ecshreve/civ-bot-go/discord"
+	"github.com/ecshreve/civ-bot-go/bot/discord"
 
 	"github.com/bwmarrin/discordgo"
 )
