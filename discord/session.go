@@ -20,15 +20,19 @@ type CivSession struct {
 // empty zero lengtrh maps.
 func NewCivSession() *CivSession {
 	return &CivSession{
-		Players: map[string]*discordgo.User{},
+		Players: make(map[string]*discordgo.User),
 		Civs:    genCivs(),
-		Bans:    map[string]*Civ{},
+		Bans:    make(map[string]*Civ),
+		Picks:   make(map[*discordgo.User][]*Civ),
 	}
 }
 
 // reset clears the CivSession referenced by the pointer receiver to the func.
 func (cs *CivSession) reset() {
-	cs.Players = map[string]*discordgo.User{}
+	cs.Players = make(map[string]*discordgo.User)
 	cs.Civs = genCivs()
-	cs.Bans = make(map[string]*Civ, 0)
+	cs.Bans = make(map[string]*Civ)
+	cs.Picks = make(map[*discordgo.User][]*Civ)
+	cs.PickTime = time.Time{}
+	cs.RePickVotes = 0
 }
