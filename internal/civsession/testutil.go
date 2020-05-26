@@ -1,0 +1,100 @@
+package civsession
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/internal/civ"
+)
+
+func genPlayersForTest() []*discordgo.User {
+	var players []*discordgo.User
+	for i := 1; i <= 10; i++ {
+		p := &discordgo.User{
+			ID:       fmt.Sprintf("p%dID", i),
+			Email:    fmt.Sprintf("p%dEmail@devnull.com", i),
+			Username: fmt.Sprintf("p%dUsername", i),
+		}
+		players = append(players, p)
+	}
+	return players
+}
+
+// setCivSessionPlayersForTest sets the CivSession's Players field based on the
+// given slice of players.
+func (cs *CivSession) setCivSessionPlayersForTest(players []*discordgo.User) {
+	playerMap := make(map[string]*discordgo.User)
+	for _, p := range players {
+		playerMap[p.ID] = p
+	}
+	cs.Players = playerMap
+}
+
+// setCivSessionPBansForTest sets the CivSession's Bans field based on the
+// given slice of players, and updates the CivSession's slice of Civs accordingly.
+func (cs *CivSession) setCivSessionBansForTest(players []*discordgo.User) {
+	for i, p := range players {
+		cs.Bans[p.ID] = cs.Civs[i]
+		cs.Civs[i].Banned = true
+	}
+}
+
+// TODO error checking / edge case handling.
+//
+// setCivSessionPicksForTest sets the CivSession's Picks field based on the
+// given slice of players, and updates the CivSession's slice of Civs accordingly.
+// It also sets the PickTime and RePickVotes fields.
+func (cs *CivSession) setCivSessionPicksForTest(players []*discordgo.User) {
+	civInd := 0
+	for _, p := range players {
+		var picks []*civ.Civ
+		for len(picks) < 3 && civInd < len(cs.Civs) {
+			curCiv := cs.Civs[civInd]
+			if curCiv.Banned == false && curCiv.Picked == false {
+				curCiv.Picked = true
+				picks = append(picks, curCiv)
+			}
+			civInd++
+		}
+		cs.Picks[p] = picks
+	}
+	cs.PickTime = time.Now()
+	cs.RePickVotes = 6
+}
+
+// CivBotTestData contains data to use in automated tests.
+type CivBotTestData struct {
+	Players                   []*discordgo.User
+	CS                        *CivSession
+	CSWithPlayers             *CivSession
+	CSWithPlayersAndBans      *CivSession
+	csWithPlayersBansAndPicks *CivSession
+}
+
+// NewTestData returns a fresh instance of CivBotTestData to use in tests.
+func NewTestData() *CivBotTestData {
+	players := genPlayersForTest()
+
+	csWithPlayers := NewCivSession()
+	csWithPlayers.setCivSessionPlayersForTest(players)
+
+	csWithPlayersAndBans := NewCivSession()
+	csWithPlayersAndBans.setCivSessionPlayersForTest(players)
+	csWithPlayersAndBans.setCivSessionBansForTest(players)
+
+	csWithPlayersBansAndPicks := NewCivSession()
+	csWithPlayersBansAndPicks.setCivSessionPlayersForTest(players)
+	csWithPlayersBansAndPicks.setCivSessionBansForTest(players)
+	csWithPlayersBansAndPicks.setCivSessionPicksForTest(players)
+
+	data := &CivBotTestData{
+		Players:                   players,
+		CS:                        NewCivSession(),
+		CSWithPlayers:             csWithPlayers,
+		CSWithPlayersAndBans:      csWithPlayersAndBans,
+		csWithPlayersBansAndPicks: csWithPlayersBansAndPicks,
+	}
+
+	return data
+}
