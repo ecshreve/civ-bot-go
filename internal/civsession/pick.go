@@ -10,6 +10,8 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
+// Pick handles the logic for selecting Civs at random and assigning them to
+// each player.
 func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cs := CS
 	possibles := []*civ.Civ{}
