@@ -1,8 +1,6 @@
 package discord
 
-import (
-	"github.com/bwmarrin/discordgo"
-)
+import "github.com/bwmarrin/discordgo"
 
 // newReactionHandler handles all new related reactions.
 func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
@@ -11,5 +9,11 @@ func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m
 	}
 	if r.Emoji.Name == "✅" {
 		banInstructions(s, m.ChannelID)
+	}
+}
+
+func pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
+	if r.Emoji.Name == "♻️" {
+		Session.RePickVotes++
 	}
 }

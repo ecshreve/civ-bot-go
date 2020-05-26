@@ -61,12 +61,6 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
 }
 
-func pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
-	if r.Emoji.Name == "♻️" {
-		Session.RePickVotes++
-	}
-}
-
 func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if cs.RePickVotes*2 >= len(cs.Players) {
 		cs.Picks = map[*discordgo.User][]*Civ{}
