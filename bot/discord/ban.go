@@ -40,33 +40,3 @@ func banCiv(civToBan string, uid string) *Civ {
 
 	return c
 }
-
-func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	if len(args) == 1 {
-		s.ChannelMessageSend(m.ChannelID, errorMessage("ban missing", "🤔  "+formatUser(m.Author)+" you have to actually ban someone"))
-		return
-	}
-
-	cs := Session
-	c := banCiv(args[1], m.Author.ID)
-	if c == nil {
-		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid ban", "🤔  "+formatUser(m.Author)+" can you pick a valid civ to ban?"))
-		return
-	}
-
-	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title: "🍌 current bans",
-		Color: constants.ColorRED,
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "bans",
-				Value: cs.formatBans(),
-			},
-		},
-	})
-
-	// If all players have entered a Ban then pick Civs for all players.
-	if len(cs.Bans) == len(cs.Players) {
-		cs.pick(s, m)
-	}
-}
