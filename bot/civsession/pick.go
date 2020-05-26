@@ -1,4 +1,4 @@
-package discord
+package civsession
 
 import (
 	"fmt"
@@ -7,12 +7,11 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/bot/civ"
-	"github.com/ecshreve/civ-bot-go/bot/civsession"
 	"github.com/ecshreve/civ-bot-go/bot/constants"
 )
 
-func pick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := civsession.CS
+func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cs := CS
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
 		if c.Banned == false {
@@ -91,7 +90,7 @@ func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.
 }
 
 func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := civsession.CS
+	cs := CS
 	if cs.RePickVotes*2 >= len(cs.Players) {
 		cs.Picks = map[*discordgo.User][]*civ.Civ{}
 		cs.RePickVotes = 0
@@ -99,7 +98,7 @@ func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Title: "alright looks like we're picking again",
 			Color: constants.ColorORANGE,
 		})
-		pick(s, m)
+		Pick(s, m)
 	} else {
 		cs.Reset()
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{

@@ -35,7 +35,7 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []
 
 	// If all players have entered a Ban then pick Civs for all players.
 	if len(cs.Bans) == len(cs.Players) {
-		pick(s, m)
+		civsession.Pick(s, m)
 	}
 }
 
