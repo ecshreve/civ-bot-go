@@ -1,22 +1,22 @@
-package discord
+package civ_test
 
 import (
 	"testing"
 
+	"github.com/ecshreve/civ-bot-go/bot/civ"
 	"github.com/ecshreve/civ-bot-go/bot/constants"
-	"github.com/ecshreve/civ-bot-go/bot/util"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestGetCivByString(t *testing.T) {
-	cs := NewCivSession()
+	civs := civ.GenCivs()
 
 	testcases := []struct {
 		desc     string
 		inp      string
-		expected util.CivKey
+		expected constants.CivKey
 	}{
 		{
 			desc:     "exact match",
@@ -72,15 +72,15 @@ func TestGetCivByString(t *testing.T) {
 
 	for _, testcase := range testcases {
 		t.Run(testcase.desc, func(t *testing.T) {
-			var expectedCiv *Civ
-			for _, c := range cs.Civs {
+			var expectedCiv *civ.Civ
+			for _, c := range civs {
 				if c.Key == testcase.expected {
 					expectedCiv = c
 				}
 			}
 			require.NotNil(t, expectedCiv)
 
-			actualCiv := cs.getCivByString(testcase.inp)
+			actualCiv := civ.GetCivByString(testcase.inp, civs)
 			assert.Equal(t, expectedCiv, actualCiv)
 		})
 	}
