@@ -7,7 +7,8 @@ import (
 	"github.com/ecshreve/civ-bot-go/bot/constants"
 )
 
-func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cs := Session
 	title := "ℹ️ current civ session info"
 	players := formatUsers(cs.Players)
 	if players == "" {

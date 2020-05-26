@@ -7,9 +7,9 @@ import (
 	"github.com/ecshreve/civ-bot-go/bot/constants"
 )
 
-func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var fields []*discordgo.MessageEmbedField
-	for _, c := range cs.Civs {
+	for _, c := range Session.Civs {
 		f := &discordgo.MessageEmbedField{
 			Name:  c.CivBase + " -- " + c.LeaderBase,
 			Value: fmt.Sprintf("[zigzag guide >>](%s)\n", c.ZigURL),

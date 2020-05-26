@@ -6,9 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ecshreve/civ-bot-go/bot/discord"
-
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/bot/discord"
 )
 
 func main() {
@@ -21,10 +20,8 @@ func main() {
 		return
 	}
 
-	// Create a CivSession and register handlers.
-	cs := discord.NewCivSession()
-	dg.AddHandler(cs.CommandsHandler)
-	dg.AddHandler(cs.ReactionsHandler)
+	dg.AddHandler(discord.CommandsHandler)
+	dg.AddHandler(discord.ReactionsHandler)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()

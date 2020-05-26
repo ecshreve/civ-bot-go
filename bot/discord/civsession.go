@@ -6,6 +6,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var Session = NewCivSession()
+
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
 	Players     map[string]*discordgo.User

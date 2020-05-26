@@ -7,7 +7,7 @@ import (
 )
 
 // CommandsHandler handles all civ-bot commands.
-func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func CommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore all messages created by the bot itself.
 	if m.Author.ID == s.State.User.ID {
 		return
@@ -32,20 +32,20 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	case "help":
 		helpCommandHandler(s, m, args)
 	case "new", "oops":
-		cs.newCommandHandler(s, m)
+		newCommandHandler(s, m)
 	case "info":
-		cs.infoCommandHandler(s, m)
+		infoCommandHandler(s, m)
 	case "list":
-		cs.listCommandHandler(s, m)
+		listCommandHandler(s, m)
 	case "ban":
-		cs.banCommandHandler(s, m, args)
+		banCommandHandler(s, m, args)
 	default:
 		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid command", "for a list of help topics, type `/civ help`"))
 	}
 }
 
 // ReactionsHandler handles all civ-bot related reactions.
-func (cs *CivSession) ReactionsHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
+func ReactionsHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	// Ignore all reactions created by the bot itself.
 	if r.UserID == s.State.User.ID {
 		return
@@ -80,8 +80,8 @@ func (cs *CivSession) ReactionsHandler(s *discordgo.Session, r *discordgo.Messag
 	// Call the corresponding handler.
 	switch args {
 	case "new":
-		cs.newReactionHandler(s, r, m, user)
+		newReactionHandler(s, r, m, user)
 	case "pick":
-		cs.pickReactionHandler(s, r, m, user)
+		pickReactionHandler(s, r, m, user)
 	}
 }

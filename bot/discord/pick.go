@@ -61,9 +61,9 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
 }
 
-func (cs *CivSession) pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
+func pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "♻️" {
-		cs.RePickVotes++
+		Session.RePickVotes++
 	}
 }
 
