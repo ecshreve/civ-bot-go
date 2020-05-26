@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/bot/util"
 )
 
 // CommandsHandler handles all civ-bot commands.
@@ -65,7 +66,7 @@ func ReactionsHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	}
 
 	// Ignore reactions that haven't been set by the bot.
-	if !isBotReaction(s, m.Reactions, &r.Emoji) {
+	if !util.IsBotReaction(s, m.Reactions, &r.Emoji) {
 		return
 	}
 
