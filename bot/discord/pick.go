@@ -42,7 +42,6 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		p = append(p, f)
 	}
 	cs.PickTime = time.Now()
-	time.AfterFunc(60*time.Second, func() { cs.handleRePick(s, m) })
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
@@ -59,6 +58,33 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
+	countdown(s, m, pickMessage, cs.PickTime, 60)
+}
+
+func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
+	end := start.Add(time.Duration(time.Second * time.Duration(seconds)))
+	channelID := msg.ChannelID
+	messageID := msg.ID
+
+	if len(msg.Embeds) != 1 {
+		return
+	}
+	embed := msg.Embeds[0]
+
+	for range time.Tick(1 * time.Second) {
+		timeRemaining := int(end.Sub(time.Now()).Seconds())
+		siren := ""
+		if timeRemaining <= 10 && timeRemaining > 0 {
+			siren = "🚨"
+		}
+		embed.Title = fmt.Sprintf("picks     %s -- %d seconds remaining -- %s", siren, timeRemaining, siren)
+		s.ChannelMessageEditEmbed(channelID, messageID, embed)
+		if timeRemaining <= 0 {
+			break
+		}
+	}
+
+	Session.handleRePick(s, m)
 }
 
 func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
