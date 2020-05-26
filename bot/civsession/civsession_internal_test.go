@@ -1,4 +1,4 @@
-package discord
+package civsession
 
 import (
 	"testing"
@@ -35,7 +35,7 @@ func TestReset(t *testing.T) {
 	for _, testcase := range testcases {
 		t.Run(testcase.description, func(t *testing.T) {
 			actual := testcase.cs
-			actual.reset()
+			actual.Reset()
 
 			assert.Equal(t, 0, len(actual.Players))
 			assert.Equal(t, len(constants.CivKeys), len(actual.Civs))

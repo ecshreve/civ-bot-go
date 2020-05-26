@@ -6,20 +6,23 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/bot/civ"
+	"github.com/ecshreve/civ-bot-go/bot/civsession"
 	"github.com/ecshreve/civ-bot-go/bot/constants"
 )
 
-func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	possibles := []*Civ{}
+func pick(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cs := civsession.CS
+	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
 		if c.Banned == false {
 			possibles = append(possibles, c)
 		}
 	}
 
-	picks := make(map[*discordgo.User][]*Civ, 0)
+	picks := make(map[*discordgo.User][]*civ.Civ, 0)
 	for _, u := range cs.Players {
-		picks[u] = []*Civ{}
+		picks[u] = []*civ.Civ{}
 		rand.Seed(time.Now().Unix())
 		for i := 0; i < 3; i++ {
 			n := rand.Int() % len(possibles)
@@ -37,7 +40,7 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	for k, v := range picks {
 		f := &discordgo.MessageEmbedField{
 			Name:  k.Username,
-			Value: formatCivs(v),
+			Value: civ.FormatCivs(v),
 		}
 		p = append(p, f)
 	}
@@ -84,20 +87,21 @@ func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.
 		}
 	}
 
-	Session.handleRePick(s, m)
+	handleRePick(s, m)
 }
 
-func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
+func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cs := civsession.CS
 	if cs.RePickVotes*2 >= len(cs.Players) {
-		cs.Picks = map[*discordgo.User][]*Civ{}
+		cs.Picks = map[*discordgo.User][]*civ.Civ{}
 		cs.RePickVotes = 0
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "alright looks like we're picking again",
 			Color: constants.ColorORANGE,
 		})
-		cs.pick(s, m)
+		pick(s, m)
 	} else {
-		cs.reset()
+		cs.Reset()
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "great, have fun! see y'all next time 👋",
 			Color: constants.ColorORANGE,

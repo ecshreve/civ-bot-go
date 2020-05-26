@@ -1,19 +1,21 @@
-package discord
+package civsession
 
 import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/bot/civ"
 )
 
-var Session = NewCivSession()
+// CS stores the global CivSession.
+var CS = NewCivSession()
 
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
 	Players     map[string]*discordgo.User
-	Civs        []*Civ
-	Bans        map[string]*Civ
-	Picks       map[*discordgo.User][]*Civ
+	Civs        []*civ.Civ
+	Bans        map[string]*civ.Civ
+	Picks       map[*discordgo.User][]*civ.Civ
 	PickTime    time.Time
 	RePickVotes int
 }
@@ -23,27 +25,27 @@ type CivSession struct {
 func NewCivSession() *CivSession {
 	return &CivSession{
 		Players: make(map[string]*discordgo.User),
-		Civs:    genCivs(),
-		Bans:    make(map[string]*Civ),
-		Picks:   make(map[*discordgo.User][]*Civ),
+		Civs:    civ.GenCivs(),
+		Bans:    make(map[string]*civ.Civ),
+		Picks:   make(map[*discordgo.User][]*civ.Civ),
 	}
 }
 
-// reset clears the CivSession referenced by the pointer receiver to the func.
-func (cs *CivSession) reset() {
+// Reset clears the CivSession referenced by the pointer receiver to the func.
+func (cs *CivSession) Reset() {
 	cs.Players = make(map[string]*discordgo.User)
-	cs.Civs = genCivs()
-	cs.Bans = make(map[string]*Civ)
-	cs.Picks = make(map[*discordgo.User][]*Civ)
+	cs.Civs = civ.GenCivs()
+	cs.Bans = make(map[string]*civ.Civ)
+	cs.Picks = make(map[*discordgo.User][]*civ.Civ)
 	cs.PickTime = time.Time{}
 	cs.RePickVotes = 0
 }
 
-// banCiv does a fuzzy match on the given string, if it finds a match it sets that
+// BanCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
-func banCiv(civToBan string, userID string) *Civ {
-	cs := Session
-	c := cs.getCivByString(civToBan)
+func BanCiv(civToBan string, userID string) *civ.Civ {
+	cs := CS
+	c := civ.GetCivByString(civToBan, cs.Civs)
 	if c == nil || c.Banned == true {
 		return nil
 	}

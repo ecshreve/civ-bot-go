@@ -1,14 +1,15 @@
-package discord
+package civ
 
 import (
+	"fmt"
+
 	"github.com/ecshreve/civ-bot-go/bot/constants"
-	"github.com/ecshreve/civ-bot-go/bot/util"
 	"github.com/schollz/closestmatch"
 )
 
 // Civ represents an individual civilization.
 type Civ struct {
-	Key        util.CivKey
+	Key        constants.CivKey
 	CivBase    string
 	LeaderBase string
 	ZigURL     string
@@ -16,9 +17,9 @@ type Civ struct {
 	Picked     bool
 }
 
-// genCivs generates and returns a slice of Civs based on the base values in the
+// GenCivs generates and returns a slice of Civs based on the base values in the
 // constants file.
-func genCivs() []*Civ {
+func GenCivs() []*Civ {
 	civs := make([]*Civ, 0)
 	for k, c := range constants.CivBase {
 		civ := &Civ{
@@ -32,9 +33,9 @@ func genCivs() []*Civ {
 	return civs
 }
 
-// getCivByString takes a string and returns the Civ whose name or leader most
+// GetCivByString takes a string and returns the Civ whose name or leader most
 // closely matches the input string.
-func (cs *CivSession) getCivByString(s string) *Civ {
+func GetCivByString(s string, civs []*Civ) *Civ {
 	strsToTest := make([]string, 0)
 	for _, k := range constants.CivKeys {
 		strsToTest = append(strsToTest, constants.CivBase[k])
@@ -46,7 +47,7 @@ func (cs *CivSession) getCivByString(s string) *Civ {
 	closest := cm.Closest(s)
 
 	retCiv := &Civ{}
-	for _, c := range cs.Civs {
+	for _, c := range civs {
 		if c.CivBase == closest {
 			retCiv = c
 			break
@@ -57,4 +58,19 @@ func (cs *CivSession) getCivByString(s string) *Civ {
 		}
 	}
 	return retCiv
+}
+
+// FormatCiv returns a string for a single Civ in a readable format.
+func FormatCiv(c *Civ) string {
+	formatStr := "[%s -- %s](%s)"
+	return fmt.Sprintf(formatStr, c.CivBase, c.LeaderBase, c.ZigURL)
+}
+
+// FormatCivs returns a string for a slice of Civs in a readable format.
+func FormatCivs(cs []*Civ) string {
+	ret := ""
+	for _, c := range cs {
+		ret = ret + "\n" + FormatCiv(c)
+	}
+	return ret
 }

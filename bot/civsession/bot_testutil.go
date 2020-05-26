@@ -1,10 +1,11 @@
-package discord
+package civsession
 
 import (
 	"fmt"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/bot/civ"
 )
 
 func genPlayersForTest() []*discordgo.User {
@@ -47,7 +48,7 @@ func (cs *CivSession) setCivSessionBansForTest(players []*discordgo.User) {
 func (cs *CivSession) setCivSessionPicksForTest(players []*discordgo.User) {
 	civInd := 0
 	for _, p := range players {
-		var picks []*Civ
+		var picks []*civ.Civ
 		for len(picks) < 3 && civInd < len(cs.Civs) {
 			curCiv := cs.Civs[civInd]
 			if curCiv.Banned == false && curCiv.Picked == false {

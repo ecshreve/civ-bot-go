@@ -1,7 +1,5 @@
 package constants
 
-import "github.com/ecshreve/civ-bot-go/bot/util"
-
 // Color Enum.
 const (
 	ColorDEFAULT           = 0
@@ -29,9 +27,12 @@ const (
 	ColorDARKVIVIDPINK     = 12320855
 )
 
+// CivKey represents an integer key for a Civ.
+type CivKey int
+
 // Consts defining the CivKeys this bot works with.
 const (
-	AMERICA util.CivKey = iota
+	AMERICA CivKey = iota
 	ARABIA
 	ASSYRIA
 	AUSTRIA
@@ -78,7 +79,7 @@ const (
 
 // CivKeys is a slice of the defined CivKey values, this makes it easier for us
 // to iterate over all CivKeys.
-var CivKeys = []util.CivKey{
+var CivKeys = []CivKey{
 	AMERICA,
 	ARABIA,
 	ASSYRIA,
@@ -125,7 +126,7 @@ var CivKeys = []util.CivKey{
 }
 
 // CivBase is a map of CivKey to string name of that Civ.
-var CivBase = map[util.CivKey]string{
+var CivBase = map[CivKey]string{
 	AMERICA:     "america",
 	ARABIA:      "arabia",
 	ASSYRIA:     "assyria",
@@ -172,7 +173,7 @@ var CivBase = map[util.CivKey]string{
 }
 
 // CivLeaders is a map of CivKey to string representation of that Civ's leader.
-var CivLeaders = map[util.CivKey]string{
+var CivLeaders = map[CivKey]string{
 	AMERICA:     "washington",
 	ARABIA:      "harun al-rashad",
 	ASSYRIA:     "ashurbanipal",
@@ -219,7 +220,7 @@ var CivLeaders = map[util.CivKey]string{
 }
 
 // CivZig is a map of CivKey to the URL of the ZigZagal guide for the Civ.
-var CivZig = map[util.CivKey]string{
+var CivZig = map[CivKey]string{
 	AMERICA:     "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240",
 	ARABIA:      "http://steamcommunity.com/sharedfiles/filedetails/?id=253052919",
 	ASSYRIA:     "http://steamcommunity.com/sharedfiles/filedetails/?id=172318070",

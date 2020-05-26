@@ -4,19 +4,21 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/bot/civsession"
 	"github.com/ecshreve/civ-bot-go/bot/constants"
+	"github.com/ecshreve/civ-bot-go/bot/util"
 )
 
 func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	if len(args) == 1 {
-		s.ChannelMessageSend(m.ChannelID, errorMessage("ban missing", "🤔  "+formatUser(m.Author)+" you have to actually ban someone"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+util.FormatUser(m.Author)+" you have to actually ban someone"))
 		return
 	}
 
-	cs := Session
-	c := banCiv(args[1], m.Author.ID)
+	cs := civsession.CS
+	c := civsession.BanCiv(args[1], m.Author.ID)
 	if c == nil {
-		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid ban", "🤔  "+formatUser(m.Author)+" can you pick a valid civ to ban?"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
 	}
 
@@ -26,14 +28,14 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "bans",
-				Value: cs.formatBans(),
+				Value: cs.FormatBans(),
 			},
 		},
 	})
 
 	// If all players have entered a Ban then pick Civs for all players.
 	if len(cs.Bans) == len(cs.Players) {
-		cs.pick(s, m)
+		pick(s, m)
 	}
 }
 
@@ -103,9 +105,9 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args [
 }
 
 func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := Session
+	cs := civsession.CS
 	title := "ℹ️ current civ session info"
-	players := formatUsers(cs.Players)
+	players := util.FormatUsers(cs.Players)
 	if players == "" {
 		players = "no players yet"
 	}
@@ -120,7 +122,7 @@ func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			},
 			{
 				Name:  "bans",
-				Value: cs.formatBans(),
+				Value: cs.FormatBans(),
 			},
 		},
 	})
@@ -133,7 +135,7 @@ func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var fields []*discordgo.MessageEmbedField
-	for _, c := range Session.Civs {
+	for _, c := range civsession.CS.Civs {
 		f := &discordgo.MessageEmbedField{
 			Name:  c.CivBase + " -- " + c.LeaderBase,
 			Value: fmt.Sprintf("[zigzag guide >>](%s)\n", c.ZigURL),
@@ -172,7 +174,7 @@ func newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Reset the CivSession and add the two reactions needed to add players to the
 	// game, and complete adding players to the game.
-	Session.reset()
+	civsession.CS.Reset()
 	s.MessageReactionAdd(m.ChannelID, newSession.ID, "✋")
 	s.MessageReactionAdd(m.ChannelID, newSession.ID, "✅")
 }

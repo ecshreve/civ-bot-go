@@ -24,7 +24,7 @@ func CommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Ensure command exists.
 	if len(args) == 0 {
-		s.ChannelMessageSend(m.ChannelID, errorMessage("command missing", "for a list of commands type `/civ help`"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("command missing", "for a list of commands type `/civ help`"))
 		return
 	}
 
@@ -41,7 +41,7 @@ func CommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case "ban":
 		banCommandHandler(s, m, args)
 	default:
-		s.ChannelMessageSend(m.ChannelID, errorMessage("invalid command", "for a list of help topics, type `/civ help`"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid command", "for a list of help topics, type `/civ help`"))
 	}
 }
 
