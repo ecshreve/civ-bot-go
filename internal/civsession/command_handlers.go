@@ -14,7 +14,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 		return
 	}
 
-	c := cs.BanCiv(args[1], m.Author.ID)
+	c := cs.banCiv(args[1], m.Author.ID)
 	if c == nil {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
@@ -33,7 +33,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 
 	// If all players have entered a Ban then pick Civs for all players.
 	if len(cs.Bans) == len(cs.Players) {
-		cs.Pick(s, m)
+		cs.pick(s, m)
 	}
 }
 

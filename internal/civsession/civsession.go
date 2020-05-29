@@ -40,22 +40,3 @@ func (cs *CivSession) Reset() {
 	cs.RePickVotes = 0
 	cs.RePicksRemaining = 3
 }
-
-// BanCiv does a fuzzy match on the given string, if it finds a match it sets that
-// Civ's Banned value to true and updates the CivSession's slice of Bans.
-func (cs *CivSession) BanCiv(civToBan string, userID string) *civ.Civ {
-	c := civ.GetCivByString(civToBan, cs.Civs)
-	if c == nil || c.Banned == true {
-		return nil
-	}
-
-	// If this player had previously banned a Civ then unban the previous Civ.
-	if _, ok := cs.Bans[userID]; ok {
-		cs.Bans[userID].Banned = false
-	}
-
-	c.Banned = true
-	cs.Bans[userID] = c
-
-	return c
-}
