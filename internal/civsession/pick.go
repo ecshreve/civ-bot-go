@@ -11,10 +11,7 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
-// Pick handles the logic for selecting Civs at random and assigning them to
-// each player.
-func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := CS
+func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
 		if c.Banned == false {
@@ -37,6 +34,7 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 	}
+	cs.Picks = picks
 
 	var p []*discordgo.MessageEmbedField
 	for k, v := range picks {
@@ -47,18 +45,25 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		p = append(p, f)
 	}
 	cs.PickTime = time.Now()
+
+	return p
+}
+
+// Pick handles selecting Civs at random.
+func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cs := CS
+	pickEmbedFields := cs.makePicks()
 	rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
 		Description: fmt.Sprintf("here's this round of picks, if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining]),
 		Color:       constants.ColorDARKBLUE,
-		Fields:      p,
+		Fields:      pickEmbedFields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "pick",
 		},
 	})
-
 	if err != nil {
 		fmt.Println("error sending pick message")
 	}
