@@ -7,9 +7,6 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 )
 
-// CS stores the global CivSession.
-var CS = NewCivSession()
-
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
 	Players          map[string]*discordgo.User
@@ -46,8 +43,7 @@ func (cs *CivSession) Reset() {
 
 // BanCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
-func BanCiv(civToBan string, userID string) *civ.Civ {
-	cs := CS
+func (cs *CivSession) BanCiv(civToBan string, userID string) *civ.Civ {
 	c := civ.GetCivByString(civToBan, cs.Civs)
 	if c == nil || c.Banned == true {
 		return nil

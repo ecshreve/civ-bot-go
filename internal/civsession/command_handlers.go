@@ -8,14 +8,13 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
-func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	if len(args) == 1 {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+util.FormatUser(m.Author)+" you have to actually ban someone"))
 		return
 	}
 
-	cs := CS
-	c := BanCiv(args[1], m.Author.ID)
+	c := cs.BanCiv(args[1], m.Author.ID)
 	if c == nil {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
@@ -34,7 +33,7 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []
 
 	// If all players have entered a Ban then pick Civs for all players.
 	if len(cs.Bans) == len(cs.Players) {
-		Pick(s, m)
+		cs.Pick(s, m)
 	}
 }
 
@@ -103,8 +102,7 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args [
 	})
 }
 
-func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := CS
+func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "ℹ️ current civ session info"
 	players := util.FormatUsers(cs.Players)
 	if players == "" {
@@ -132,9 +130,9 @@ func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var fields []*discordgo.MessageEmbedField
-	for _, c := range CS.Civs {
+	for _, c := range cs.Civs {
 		f := &discordgo.MessageEmbedField{
 			Name:  c.CivBase + " -- " + c.LeaderBase,
 			Value: fmt.Sprintf("[zigzag guide >>](%s)\n", c.ZigURL),
@@ -153,7 +151,7 @@ func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "🆕 starting a new game"
 	description := "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n- enter `/civ oops` at any point to completely start over"
 
@@ -173,7 +171,7 @@ func newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Reset the CivSession and add the two reactions needed to add players to the
 	// game, and complete adding players to the game.
-	CS.Reset()
+	cs.Reset()
 	s.MessageReactionAdd(m.ChannelID, newSession.ID, "✋")
 	s.MessageReactionAdd(m.ChannelID, newSession.ID, "✅")
 }

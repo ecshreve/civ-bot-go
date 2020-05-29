@@ -7,8 +7,7 @@ import (
 )
 
 // newReactionHandler handles all new related reactions.
-func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
-	cs := CS
+func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "✋" {
 		cs.Players[user.ID] = user
 	}
@@ -27,8 +26,8 @@ func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m
 	}
 }
 
-func pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
+func (cs *CivSession) pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "♻️" {
-		CS.RePickVotes++
+		cs.RePickVotes++
 	}
 }
