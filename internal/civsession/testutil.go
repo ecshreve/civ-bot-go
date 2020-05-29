@@ -57,7 +57,7 @@ func (cs *CivSession) setCivSessionPicksForTest(players []*discordgo.User) {
 			}
 			civInd++
 		}
-		cs.Picks[p] = picks
+		cs.Picks[p.ID] = picks
 	}
 	cs.PickTime = time.Now()
 	cs.RePickVotes = 6

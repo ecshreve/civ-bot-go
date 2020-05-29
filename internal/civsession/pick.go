@@ -22,15 +22,15 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	picks := make(map[*discordgo.User][]*civ.Civ, 0)
+	picks := make(map[string][]*civ.Civ)
 	for _, u := range cs.Players {
-		picks[u] = []*civ.Civ{}
+		picks[u.ID] = []*civ.Civ{}
 		rand.Seed(time.Now().Unix())
 		for i := 0; i < 3; i++ {
 			n := rand.Int() % len(possibles)
 			p := possibles[n]
 			if p.Picked != true {
-				picks[u] = append(picks[u], p)
+				picks[u.ID] = append(picks[u.ID], p)
 				p.Picked = true
 			} else {
 				i--
@@ -41,7 +41,7 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var p []*discordgo.MessageEmbedField
 	for k, v := range picks {
 		f := &discordgo.MessageEmbedField{
-			Name:  k.Username,
+			Name:  cs.Players[k].Username,
 			Value: civ.FormatCivs(v),
 		}
 		p = append(p, f)
@@ -105,7 +105,7 @@ func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cs.RePicksRemaining--
 
 	if cs.RePickVotes*2 >= len(cs.Players) {
-		cs.Picks = map[*discordgo.User][]*civ.Civ{}
+		cs.Picks = map[string][]*civ.Civ{}
 		cs.RePickVotes = 0
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "alright looks like we're picking again",
