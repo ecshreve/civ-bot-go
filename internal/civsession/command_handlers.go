@@ -165,7 +165,7 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 
 func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "⚙️ configuration"
-	description := "here's the current game config\nselect ✅ to accept config\nselect 🛠 to change config"
+	description := "here's the current game config\nselect 🛠 to change config\nselect ✅ to accept config"
 	fields := cs.getConfigEmbedFields()
 
 	configMsg, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
@@ -182,13 +182,13 @@ func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCr
 		return
 	}
 
-	s.MessageReactionAdd(m.ChannelID, configMsg.ID, "✅")
 	s.MessageReactionAdd(m.ChannelID, configMsg.ID, "🛠")
+	s.MessageReactionAdd(m.ChannelID, configMsg.ID, "✅")
 }
 
 func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "🆕 starting a new civ picker session"
-	description := "- whoever wants to play react with  ✋\n\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view / update the configuration \n- enter `/civ oops` at any point to completely start over"
+	description := "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view / update the configuration \n- enter `/civ oops` at any point to completely start over"
 
 	newSession, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       title,

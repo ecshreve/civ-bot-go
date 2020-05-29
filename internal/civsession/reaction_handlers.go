@@ -88,12 +88,12 @@ func (cs *CivSession) configReactionHandler(s *discordgo.Session, r *discordgo.M
 	}
 	if r.Emoji.Name == "👍" || r.Emoji.Name == "👎" {
 		cs.Config.UseFilthyTiers = r.Emoji.Name == "👍"
-		embed.Description = "here's the current game config\nselect ✅ to accept config\nselect 🛠 to change config"
+		embed.Description = "here's the current game config\nselect 🛠 to change config\nselect ✅ to accept config"
 		embed.Fields = cs.getConfigEmbedFields()
 		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
 		s.MessageReactionsRemoveAll(m.ChannelID, m.ID)
-		s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 		s.MessageReactionAdd(m.ChannelID, m.ID, "🛠")
+		s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 	}
 }
 
