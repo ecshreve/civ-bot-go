@@ -62,7 +62,6 @@ func (cs *CivSession) Reset() {
 }
 
 func (cs *CivSession) getConfigEmbedFields() []*discordgo.MessageEmbedField {
-	// TODO update for tiers.
 	maxPlayers := len(constants.CivKeys) / (cs.Config.NumBans + cs.Config.NumPicks)
 
 	return []*discordgo.MessageEmbedField{
@@ -79,7 +78,7 @@ func (cs *CivSession) getConfigEmbedFields() []*discordgo.MessageEmbedField {
 			Value: fmt.Sprintf("%d", cs.Config.NumRepicks),
 		},
 		{
-			Name:  "UseFilthyTiers -- true/false make picks based on Filthy's tier list",
+			Name:  "UseFilthyTiers -- true/false make picks based on Filthy's tier list\nsetting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
 			Value: fmt.Sprintf("%v", cs.Config.UseFilthyTiers),
 		},
 		{

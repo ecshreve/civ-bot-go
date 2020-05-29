@@ -33,6 +33,63 @@ func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 	return c
 }
 
+func makePick(civs []*civ.Civ) *civ.Civ {
+	rand.Seed(time.Now().Unix())
+
+	var p *civ.Civ
+	foundPick := false
+	for !foundPick {
+		n := rand.Int() % len(civs)
+		p = civs[n]
+		if p.Picked != true {
+			foundPick = true
+		}
+	}
+
+	p.Picked = true
+	return p
+}
+
+func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
+	possibles := []*civ.Civ{}
+	for _, c := range cs.Civs {
+		if c.Banned == false {
+			possibles = append(possibles, c)
+		}
+	}
+
+	possiblesByTier := getCivsByTier(possibles)
+	topTierPossibles := append(possiblesByTier[1], possiblesByTier[2]...)
+	picks := make(map[string][]*civ.Civ)
+	for _, u := range cs.Players {
+		picks[u.ID] = []*civ.Civ{}
+
+		// Pick a top tier Civ for this player.
+		picks[u.ID] = append(picks[u.ID], makePick(topTierPossibles))
+	}
+
+	// Pick remaining Civs for each Player.
+	for _, u := range cs.Players {
+		for i := 0; i < cs.Config.NumPicks-1; i++ {
+			picks[u.ID] = append(picks[u.ID], makePick(possibles))
+		}
+	}
+	cs.Picks = picks
+	cs.PickTime = time.Now()
+
+	// Generate MessageEmbedFields for the Picks.
+	var p []*discordgo.MessageEmbedField
+	for k, v := range picks {
+		f := &discordgo.MessageEmbedField{
+			Name:  cs.Players[k].Username,
+			Value: civ.FormatCivs(v),
+		}
+		p = append(p, f)
+	}
+
+	return p
+}
+
 func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
@@ -80,7 +137,12 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		embedDescription = embedDescription + fmt.Sprintf(", if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining])
 	}
 
-	embedFields := cs.makePicks()
+	var embedFields []*discordgo.MessageEmbedField
+	if cs.Config.UseFilthyTiers {
+		embedFields = cs.makePicksWithTier()
+	} else {
+		embedFields = cs.makePicks()
+	}
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
