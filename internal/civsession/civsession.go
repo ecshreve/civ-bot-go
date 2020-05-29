@@ -7,8 +7,17 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 )
 
+// CivConfig holds a config for a CivSession.
+type CivConfig struct {
+	NumBans        int
+	NumPicks       int
+	NumRepicks     int
+	UseFilthyTiers bool
+}
+
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
+	Config           *CivConfig
 	Players          map[string]*discordgo.User
 	Civs             []*civ.Civ
 	Bans             map[string]*civ.Civ
@@ -21,7 +30,15 @@ type CivSession struct {
 // NewCivSession returns a new CivSession, note map fields are initialized to
 // empty zero lengtrh maps.
 func NewCivSession() *CivSession {
+	cfg := &CivConfig{
+		NumBans:        1,
+		NumPicks:       3,
+		NumRepicks:     3,
+		UseFilthyTiers: false,
+	}
+
 	return &CivSession{
+		Config:           cfg,
 		Players:          make(map[string]*discordgo.User),
 		Civs:             civ.GenCivs(),
 		Bans:             make(map[string]*civ.Civ),
