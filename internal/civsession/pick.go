@@ -50,8 +50,7 @@ func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 }
 
 // Pick handles selecting Civs at random.
-func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := CS
+func (cs *CivSession) Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	pickEmbedFields := cs.makePicks()
 	rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
 
@@ -70,7 +69,7 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if cs.RePicksRemaining > 0 {
 		s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
-		countdown(s, m, pickMessage, cs.PickTime, 10)
+		cs.countdown(s, m, pickMessage, cs.PickTime, 10)
 	} else {
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "no more re-picks, those are your choices, deal with it",
@@ -79,7 +78,7 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
+func (cs *CivSession) countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
 	end := start.Add(time.Duration(time.Second * time.Duration(seconds)))
 	channelID := msg.ChannelID
 	messageID := msg.ID
@@ -102,11 +101,10 @@ func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.
 		}
 	}
 
-	handleRePick(s, m)
+	cs.handleRePick(s, m)
 }
 
-func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := CS
+func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cs.RePicksRemaining--
 
 	if cs.RePickVotes*2 >= len(cs.Players) {
@@ -116,7 +114,7 @@ func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Title: "alright looks like we're picking again",
 			Color: constants.ColorORANGE,
 		})
-		Pick(s, m)
+		cs.Pick(s, m)
 	} else {
 		cs.Reset()
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{

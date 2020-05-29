@@ -20,8 +20,10 @@ func main() {
 		return
 	}
 
-	dg.AddHandler(civsession.CommandsHandler)
-	dg.AddHandler(civsession.ReactionsHandler)
+	cs := civsession.NewCivSession()
+
+	dg.AddHandler(cs.CommandsHandler)
+	dg.AddHandler(cs.ReactionsHandler)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
