@@ -3,23 +3,37 @@ package civ
 import (
 	"fmt"
 
-	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/schollz/closestmatch"
+
+	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
 // Civ represents an individual civilization.
 type Civ struct {
-	Key        constants.CivKey
-	CivBase    string
+	// Key is the CivKey enum entry for this Civ.
+	Key constants.CivKey
+
+	// CivBase is the string representation of the Civ's name.
+	CivBase string
+
+	// LeaderBase is the string representation of the Civ's Leader's name.
 	LeaderBase string
-	ZigURL     string
+
+	// ZigURL is the URL of the ZigZagal guide for the Civ.
+	ZigURL string
+
+	// FilthyTier is an integer [1...6] representing the Civ's tier.
 	FilthyTier int
-	Banned     bool
-	Picked     bool
+
+	// Banned is a boolean indicating if this Civ is currently banned.
+	Banned bool
+
+	// Picked is a boolean indicating if this Civ has been picked for a Player.
+	Picked bool
 }
 
-// GenCivs generates and returns a slice of Civs based on the base values in the
-// constants file.
+// GenCivs generates and returns a slice of Civs for all the base values
+// defined in the constants package.
 func GenCivs() []*Civ {
 	civs := make([]*Civ, 0)
 	for k, c := range constants.CivBase {
@@ -35,9 +49,23 @@ func GenCivs() []*Civ {
 	return civs
 }
 
+// GenCivMap generates and returns a map of CivKey to Civ for all base values
+// defined in the constants package.
+func GenCivMap() map[constants.CivKey]*Civ {
+	civs := GenCivs()
+	civMap := make(map[constants.CivKey]*Civ)
+
+	for _, c := range civs {
+		civMap[c.Key] = c
+	}
+
+	return civMap
+}
+
 // GetCivByString takes a string and returns the Civ whose name or leader most
 // closely matches the input string.
 func GetCivByString(s string, civs []*Civ) *Civ {
+	// We want to test the input string agains all civiliation and leader names.
 	strsToTest := make([]string, 0)
 	for _, k := range constants.CivKeys {
 		strsToTest = append(strsToTest, constants.CivBase[k])
@@ -50,15 +78,12 @@ func GetCivByString(s string, civs []*Civ) *Civ {
 
 	retCiv := &Civ{}
 	for _, c := range civs {
-		if c.CivBase == closest {
-			retCiv = c
-			break
-		}
-		if c.LeaderBase == closest {
+		if c.CivBase == closest || c.LeaderBase == closest {
 			retCiv = c
 			break
 		}
 	}
+
 	return retCiv
 }
 
