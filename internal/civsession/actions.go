@@ -11,6 +11,25 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
+// BanCiv does a fuzzy match on the given string, if it finds a match it sets that
+// Civ's Banned value to true and updates the CivSession's slice of Bans.
+func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
+	c := civ.GetCivByString(civToBan, cs.Civs)
+	if c == nil || c.Banned == true {
+		return nil
+	}
+
+	// If this player had previously banned a Civ then unban the previous Civ.
+	if _, ok := cs.Bans[userID]; ok {
+		cs.Bans[userID].Banned = false
+	}
+
+	c.Banned = true
+	cs.Bans[userID] = c
+
+	return c
+}
+
 func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
@@ -50,7 +69,7 @@ func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 }
 
 // Pick handles selecting Civs at random.
-func (cs *CivSession) Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	pickEmbedFields := cs.makePicks()
 	rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
 
@@ -114,7 +133,7 @@ func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCre
 			Title: "alright looks like we're picking again",
 			Color: constants.ColorORANGE,
 		})
-		cs.Pick(s, m)
+		cs.pick(s, m)
 	} else {
 		cs.Reset()
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
