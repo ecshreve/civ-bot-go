@@ -1,15 +1,14 @@
-package discord
+package civsession
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/ecshreve/civ-bot-go/internal/civsession"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
 // newReactionHandler handles all new related reactions.
 func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
-	cs := civsession.CS
+	cs := CS
 	if r.Emoji.Name == "✋" {
 		cs.Players[user.ID] = user
 	}
@@ -30,6 +29,6 @@ func newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m
 
 func pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "♻️" {
-		civsession.CS.RePickVotes++
+		CS.RePickVotes++
 	}
 }

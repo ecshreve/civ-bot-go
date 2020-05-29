@@ -1,10 +1,9 @@
-package discord
+package civsession
 
 import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/ecshreve/civ-bot-go/internal/civsession"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
@@ -15,8 +14,8 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []
 		return
 	}
 
-	cs := civsession.CS
-	c := civsession.BanCiv(args[1], m.Author.ID)
+	cs := CS
+	c := BanCiv(args[1], m.Author.ID)
 	if c == nil {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(m.Author)+" can you pick a valid civ to ban?"))
 		return
@@ -35,7 +34,7 @@ func banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []
 
 	// If all players have entered a Ban then pick Civs for all players.
 	if len(cs.Bans) == len(cs.Players) {
-		civsession.Pick(s, m)
+		Pick(s, m)
 	}
 }
 
@@ -105,7 +104,7 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args [
 }
 
 func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := civsession.CS
+	cs := CS
 	title := "ℹ️ current civ session info"
 	players := util.FormatUsers(cs.Players)
 	if players == "" {
@@ -135,7 +134,7 @@ func infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var fields []*discordgo.MessageEmbedField
-	for _, c := range civsession.CS.Civs {
+	for _, c := range CS.Civs {
 		f := &discordgo.MessageEmbedField{
 			Name:  c.CivBase + " -- " + c.LeaderBase,
 			Value: fmt.Sprintf("[zigzag guide >>](%s)\n", c.ZigURL),
@@ -174,7 +173,7 @@ func newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Reset the CivSession and add the two reactions needed to add players to the
 	// game, and complete adding players to the game.
-	civsession.CS.Reset()
+	CS.Reset()
 	s.MessageReactionAdd(m.ChannelID, newSession.ID, "✋")
 	s.MessageReactionAdd(m.ChannelID, newSession.ID, "✅")
 }
