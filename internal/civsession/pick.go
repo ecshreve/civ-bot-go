@@ -2,6 +2,7 @@ package civsession
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"time"
 
@@ -46,10 +47,11 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		p = append(p, f)
 	}
 	cs.PickTime = time.Now()
+	rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
-		Description: "here's this round of picks, if 50% or more players react with ♻️ in the next 60 seconds then we'll re pick",
+		Description: fmt.Sprintf("here's this round of picks, if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining]),
 		Color:       constants.ColorDARKBLUE,
 		Fields:      p,
 		Footer: &discordgo.MessageEmbedFooter{
@@ -61,8 +63,15 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Println("error sending pick message")
 	}
 
-	s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
-	countdown(s, m, pickMessage, cs.PickTime, 60)
+	if cs.RePicksRemaining > 0 {
+		s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
+		countdown(s, m, pickMessage, cs.PickTime, 10)
+	} else {
+		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+			Title: "no more re-picks, those are your choices, deal with it",
+			Color: constants.ColorORANGE,
+		})
+	}
 }
 
 func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
@@ -93,6 +102,8 @@ func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.
 
 func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cs := CS
+	cs.RePicksRemaining--
+
 	if cs.RePickVotes*2 >= len(cs.Players) {
 		cs.Picks = map[*discordgo.User][]*civ.Civ{}
 		cs.RePickVotes = 0

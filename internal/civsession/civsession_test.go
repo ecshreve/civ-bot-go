@@ -15,4 +15,5 @@ func TestNewCivSession(t *testing.T) {
 	assert.Equal(t, 0, len(cs.Picks))
 	assert.True(t, cs.PickTime.IsZero())
 	assert.Equal(t, 0, cs.RePickVotes)
+	assert.Equal(t, 3, cs.RePicksRemaining)
 }

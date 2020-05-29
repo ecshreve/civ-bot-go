@@ -49,6 +49,7 @@ func TestReset(t *testing.T) {
 			assert.Equal(t, 0, len(actual.Picks))
 			assert.True(t, actual.PickTime.IsZero())
 			assert.Equal(t, 0, actual.RePickVotes)
+			assert.Equal(t, 3, actual.RePicksRemaining)
 		})
 	}
 }
