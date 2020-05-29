@@ -13,6 +13,7 @@ type Civ struct {
 	CivBase    string
 	LeaderBase string
 	ZigURL     string
+	FilthyTier int
 	Banned     bool
 	Picked     bool
 }
@@ -27,6 +28,7 @@ func GenCivs() []*Civ {
 			CivBase:    c,
 			LeaderBase: constants.CivLeaders[k],
 			ZigURL:     constants.CivZig[k],
+			FilthyTier: constants.CivFilthyTiers[k],
 		}
 		civs = append(civs, civ)
 	}
