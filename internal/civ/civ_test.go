@@ -3,15 +3,16 @@ package civ_test
 import (
 	"testing"
 
-	"github.com/ecshreve/civ-bot-go/internal/civ"
-	"github.com/ecshreve/civ-bot-go/internal/constants"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/ecshreve/civ-bot-go/internal/civ"
+	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
 func TestGetCivByString(t *testing.T) {
 	civs := civ.GenCivs()
+	civMap := civ.GenCivMap()
 
 	testcases := []struct {
 		desc     string
@@ -72,12 +73,7 @@ func TestGetCivByString(t *testing.T) {
 
 	for _, testcase := range testcases {
 		t.Run(testcase.desc, func(t *testing.T) {
-			var expectedCiv *civ.Civ
-			for _, c := range civs {
-				if c.Key == testcase.expected {
-					expectedCiv = c
-				}
-			}
+			expectedCiv := civMap[testcase.expected]
 			require.NotNil(t, expectedCiv)
 
 			actualCiv := civ.GetCivByString(testcase.inp, civs)
