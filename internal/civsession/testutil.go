@@ -57,7 +57,7 @@ func (cs *CivSession) setCivSessionPicksForTest(players []*discordgo.User) {
 			}
 			civInd++
 		}
-		cs.Picks[p] = picks
+		cs.Picks[p.ID] = picks
 	}
 	cs.PickTime = time.Now()
 	cs.RePickVotes = 6
@@ -69,7 +69,7 @@ type CivBotTestData struct {
 	CS                        *CivSession
 	CSWithPlayers             *CivSession
 	CSWithPlayersAndBans      *CivSession
-	csWithPlayersBansAndPicks *CivSession
+	CSWithPlayersBansAndPicks *CivSession
 }
 
 // NewTestData returns a fresh instance of CivBotTestData to use in tests.
@@ -93,7 +93,7 @@ func NewTestData() *CivBotTestData {
 		CS:                        NewCivSession(),
 		CSWithPlayers:             csWithPlayers,
 		CSWithPlayersAndBans:      csWithPlayersAndBans,
-		csWithPlayersBansAndPicks: csWithPlayersBansAndPicks,
+		CSWithPlayersBansAndPicks: csWithPlayersBansAndPicks,
 	}
 
 	return data

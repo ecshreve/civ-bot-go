@@ -2,6 +2,7 @@ package civsession
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"time"
 
@@ -10,10 +11,7 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
-// Pick handles the logic for selecting Civs at random and assigning them to
-// each player.
-func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cs := CS
+func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
 		if c.Banned == false {
@@ -21,48 +19,64 @@ func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	picks := make(map[*discordgo.User][]*civ.Civ, 0)
+	picks := make(map[string][]*civ.Civ)
 	for _, u := range cs.Players {
-		picks[u] = []*civ.Civ{}
+		picks[u.ID] = []*civ.Civ{}
 		rand.Seed(time.Now().Unix())
 		for i := 0; i < 3; i++ {
 			n := rand.Int() % len(possibles)
 			p := possibles[n]
 			if p.Picked != true {
-				picks[u] = append(picks[u], p)
+				picks[u.ID] = append(picks[u.ID], p)
 				p.Picked = true
 			} else {
 				i--
 			}
 		}
 	}
+	cs.Picks = picks
 
 	var p []*discordgo.MessageEmbedField
 	for k, v := range picks {
 		f := &discordgo.MessageEmbedField{
-			Name:  k.Username,
+			Name:  cs.Players[k].Username,
 			Value: civ.FormatCivs(v),
 		}
 		p = append(p, f)
 	}
 	cs.PickTime = time.Now()
 
+	return p
+}
+
+// Pick handles selecting Civs at random.
+func Pick(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cs := CS
+	pickEmbedFields := cs.makePicks()
+	rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
+
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
-		Description: "here's this round of picks, if 50% or more players react with ♻️ in the next 60 seconds then we'll re pick",
+		Description: fmt.Sprintf("here's this round of picks, if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining]),
 		Color:       constants.ColorDARKBLUE,
-		Fields:      p,
+		Fields:      pickEmbedFields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "pick",
 		},
 	})
-
 	if err != nil {
 		fmt.Println("error sending pick message")
 	}
 
-	s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
-	countdown(s, m, pickMessage, cs.PickTime, 60)
+	if cs.RePicksRemaining > 0 {
+		s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
+		countdown(s, m, pickMessage, cs.PickTime, 10)
+	} else {
+		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+			Title: "no more re-picks, those are your choices, deal with it",
+			Color: constants.ColorORANGE,
+		})
+	}
 }
 
 func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
@@ -93,8 +107,10 @@ func countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.
 
 func handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cs := CS
+	cs.RePicksRemaining--
+
 	if cs.RePickVotes*2 >= len(cs.Players) {
-		cs.Picks = map[*discordgo.User][]*civ.Civ{}
+		cs.Picks = map[string][]*civ.Civ{}
 		cs.RePickVotes = 0
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "alright looks like we're picking again",

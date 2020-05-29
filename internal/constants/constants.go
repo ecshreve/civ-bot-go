@@ -27,6 +27,14 @@ const (
 	ColorDARKVIVIDPINK     = 12320855
 )
 
+// NumEmojiMap is a map of integers to their string emoji equivalents.
+var NumEmojiMap = map[int]string{
+	0: "0️⃣",
+	1: "1️⃣",
+	2: "2️⃣",
+	3: "3️⃣",
+}
+
 // CivKey represents an integer key for a Civ.
 type CivKey int
 
