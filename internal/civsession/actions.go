@@ -11,7 +11,7 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
-// BanCiv does a fuzzy match on the given string, if it finds a match it sets that
+// banCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
 func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 	c := civ.GetCivByString(civToBan, cs.Civs)
@@ -19,13 +19,16 @@ func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 		return nil
 	}
 
-	// If this player had previously banned a Civ then unban the previous Civ.
-	if _, ok := cs.Bans[userID]; ok {
-		cs.Bans[userID].Banned = false
+	// If this player had previously banned the max number of Civs as defined by
+	// the cs.Config, then unban the oldest one.
+	if len(cs.Bans[userID]) == cs.Config.NumBans {
+		cs.Bans[userID][0].Banned = false
+		cs.Bans[userID] = cs.Bans[userID][1:]
 	}
 
+	// Add this Civ to the ban list.
 	c.Banned = true
-	cs.Bans[userID] = c
+	cs.Bans[userID] = append(cs.Bans[userID], c)
 
 	return c
 }

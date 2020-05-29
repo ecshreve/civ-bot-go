@@ -23,7 +23,7 @@ func (cs *CivSession) FormatBans() string {
 	}
 	ret := ""
 	for k, v := range bans {
-		ret = ret + util.FormatUser(cs.Players[k]) + ": " + civ.FormatCiv(v) + "\n"
+		ret = ret + util.FormatUser(cs.Players[k]) + ":\n" + civ.FormatCivs(v) + "\n"
 	}
 	return ret
 }
