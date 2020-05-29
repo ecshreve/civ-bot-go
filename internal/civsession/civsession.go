@@ -23,7 +23,7 @@ type CivSession struct {
 	Config           *CivConfig
 	Players          map[string]*discordgo.User
 	Civs             []*civ.Civ
-	Bans             map[string]*civ.Civ
+	Bans             map[string][]*civ.Civ
 	Picks            map[string][]*civ.Civ
 	PickTime         time.Time
 	RePickVotes      int
@@ -44,7 +44,7 @@ func NewCivSession() *CivSession {
 		Config:           cfg,
 		Players:          make(map[string]*discordgo.User),
 		Civs:             civ.GenCivs(),
-		Bans:             make(map[string]*civ.Civ),
+		Bans:             make(map[string][]*civ.Civ),
 		Picks:            make(map[string][]*civ.Civ),
 		RePicksRemaining: cfg.NumRepicks,
 	}
@@ -54,7 +54,7 @@ func NewCivSession() *CivSession {
 func (cs *CivSession) Reset() {
 	cs.Players = make(map[string]*discordgo.User)
 	cs.Civs = civ.GenCivs()
-	cs.Bans = make(map[string]*civ.Civ)
+	cs.Bans = make(map[string][]*civ.Civ)
 	cs.Picks = make(map[string][]*civ.Civ)
 	cs.PickTime = time.Time{}
 	cs.RePickVotes = 0

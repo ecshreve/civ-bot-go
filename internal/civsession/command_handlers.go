@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
@@ -20,19 +21,30 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 		return
 	}
 
+	// TODO make this a generic helper func.
+	var embedFields []*discordgo.MessageEmbedField
+	for k, v := range cs.Bans {
+		f := &discordgo.MessageEmbedField{
+			Name:  cs.Players[k].Username,
+			Value: civ.FormatCivs(v),
+		}
+		embedFields = append(embedFields, f)
+	}
+
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title: "🍌 current bans",
-		Color: constants.ColorRED,
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "bans",
-				Value: cs.FormatBans(),
-			},
-		},
+		Title:  "🍌 current bans",
+		Color:  constants.ColorRED,
+		Fields: embedFields,
 	})
 
-	// If all players have entered a Ban then pick Civs for all players.
+	// If all players have entered the number of bans defined in cs.Config then
+	// pick Civs for all players.
 	if len(cs.Bans) == len(cs.Players) {
+		for _, b := range cs.Bans {
+			if len(b) < cs.Config.NumBans {
+				return
+			}
+		}
 		cs.pick(s, m)
 	}
 }
