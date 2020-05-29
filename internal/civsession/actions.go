@@ -68,16 +68,22 @@ func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 	return p
 }
 
-// Pick handles selecting Civs at random.
+// pick selects Civs at random and assigns them to Players. It also handles the
+// logic surrounding re-picking.
 func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
-	pickEmbedFields := cs.makePicks()
-	rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
+	embedDescription := "here's this round of picks"
+	if cs.RePicksRemaining > 0 {
+		rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
+		embedDescription = embedDescription + fmt.Sprintf(", if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining])
+	}
+
+	embedFields := cs.makePicks()
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       "picks",
-		Description: fmt.Sprintf("here's this round of picks, if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining]),
+		Description: embedDescription,
 		Color:       constants.ColorDARKBLUE,
-		Fields:      pickEmbedFields,
+		Fields:      embedFields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "pick",
 		},

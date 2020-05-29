@@ -175,8 +175,8 @@ func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCr
 }
 
 func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	title := "🆕 starting a new game"
-	description := "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n- enter `/civ config` to view / update the configuration \n- enter `/civ oops` at any point to completely start over"
+	title := "🆕 starting a new civ picker session"
+	description := "- whoever wants to play react with  ✋\n\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view / update the configuration \n- enter `/civ oops` at any point to completely start over"
 
 	newSession, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Title:       title,

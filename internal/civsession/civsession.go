@@ -46,7 +46,7 @@ func NewCivSession() *CivSession {
 		Civs:             civ.GenCivs(),
 		Bans:             make(map[string]*civ.Civ),
 		Picks:            make(map[string][]*civ.Civ),
-		RePicksRemaining: 3,
+		RePicksRemaining: cfg.NumRepicks,
 	}
 }
 
@@ -58,7 +58,7 @@ func (cs *CivSession) Reset() {
 	cs.Picks = make(map[string][]*civ.Civ)
 	cs.PickTime = time.Time{}
 	cs.RePickVotes = 0
-	cs.RePicksRemaining = 3
+	cs.RePicksRemaining = cs.Config.NumRepicks
 }
 
 func (cs *CivSession) getConfigEmbedFields() []*discordgo.MessageEmbedField {
