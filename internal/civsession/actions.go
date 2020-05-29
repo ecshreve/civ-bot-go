@@ -42,7 +42,7 @@ func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
 	for _, u := range cs.Players {
 		picks[u.ID] = []*civ.Civ{}
 		rand.Seed(time.Now().Unix())
-		for i := 0; i < 3; i++ {
+		for i := 0; i < cs.Config.NumPicks; i++ {
 			n := rand.Int() % len(possibles)
 			p := possibles[n]
 			if p.Picked != true {
