@@ -159,7 +159,7 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if cs.RePicksRemaining > 0 {
 		s.MessageReactionAdd(m.ChannelID, pickMessage.ID, "♻️")
-		cs.countdown(s, m, pickMessage, cs.PickTime, 10)
+		cs.countdown(s, m, pickMessage, cs.PickTime, 60)
 	} else {
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 			Title: "no more re-picks, those are your choices, deal with it",
