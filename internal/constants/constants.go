@@ -33,6 +33,18 @@ var NumEmojiMap = map[int]string{
 	1: "1️⃣",
 	2: "2️⃣",
 	3: "3️⃣",
+	4: "4️⃣",
+	5: "5️⃣",
+}
+
+// EmojiNumMap is a map of string emojis to their integer equivalents.
+var EmojiNumMap = map[string]int{
+	"0️⃣": 0,
+	"1️⃣": 1,
+	"2️⃣": 2,
+	"3️⃣": 3,
+	"4️⃣": 4,
+	"5️⃣": 5,
 }
 
 // CivKey represents an integer key for a Civ.
