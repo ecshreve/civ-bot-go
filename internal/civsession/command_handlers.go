@@ -151,6 +151,46 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	}
 }
 
+func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	title := "⚙️ configuration"
+	description := "here's the current game config\nselect ✅ to accept config\nselect 🛠 to change config"
+	fields := []*discordgo.MessageEmbedField{
+		{
+			Name:  "NumBans -- the number of Civs each player gets to ban",
+			Value: fmt.Sprintf("%d", cs.Config.NumBans),
+		},
+		{
+			Name:  "NumPicks -- the number of Civs each player gets to choose from",
+			Value: fmt.Sprintf("%d", cs.Config.NumPicks),
+		},
+		{
+			Name:  "NumRepicks -- the max number of times allowed to re-pick Civs",
+			Value: fmt.Sprintf("%d", cs.Config.NumRepicks),
+		},
+		{
+			Name:  "UseFilthyTiers -- true/false make picks based on Filthy's tier list",
+			Value: fmt.Sprintf("%v", cs.Config.UseFilthyTiers),
+		},
+	}
+
+	configMsg, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
+		Title:       title,
+		Description: description,
+		Fields:      fields,
+		Color:       constants.ColorDARKGREY,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "config",
+		},
+	})
+	if err != nil {
+		fmt.Println("error sending config embed")
+		return
+	}
+
+	s.MessageReactionAdd(m.ChannelID, configMsg.ID, "✅")
+	s.MessageReactionAdd(m.ChannelID, configMsg.ID, "🛠")
+}
+
 func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "🆕 starting a new game"
 	description := "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n- enter `/civ oops` at any point to completely start over"

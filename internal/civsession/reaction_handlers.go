@@ -26,6 +26,18 @@ func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.Mess
 	}
 }
 
+func (cs *CivSession) configReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
+	embed := m.Embeds[0]
+	if r.Emoji.Name == "✅" {
+		embed.Description = "✅ **starting civ picker session with the current config** ✅"
+		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
+	}
+	if r.Emoji.Name == "🛠" {
+		embed.Description = "updating config"
+		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
+	}
+}
+
 func (cs *CivSession) pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "♻️" {
 		cs.RePickVotes++

@@ -32,6 +32,8 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	switch args[0] {
 	case "help":
 		helpCommandHandler(s, m, args)
+	case "config":
+		cs.configHandler(s, m)
 	case "new", "oops":
 		cs.newCommandHandler(s, m)
 	case "info":
@@ -80,6 +82,8 @@ func (cs *CivSession) ReactionsHandler(s *discordgo.Session, r *discordgo.Messag
 
 	// Call the corresponding handler.
 	switch args {
+	case "config":
+		cs.configReactionHandler(s, r, m, user)
 	case "new":
 		cs.newReactionHandler(s, r, m, user)
 	case "pick":
