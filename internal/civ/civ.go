@@ -64,8 +64,8 @@ func GetCivByString(s string, civs []*Civ) *Civ {
 
 // FormatCiv returns a string for a single Civ in a readable format.
 func FormatCiv(c *Civ) string {
-	formatStr := "[%s -- %s](%s)"
-	return fmt.Sprintf(formatStr, c.CivBase, c.LeaderBase, c.ZigURL)
+	formatStr := "{ t-%d } -- [%s -- %s](%s)"
+	return fmt.Sprintf(formatStr, c.FilthyTier, c.CivBase, c.LeaderBase, c.ZigURL)
 }
 
 // FormatCivs returns a string for a slice of Civs in a readable format.
