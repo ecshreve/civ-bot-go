@@ -146,13 +146,13 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	var fields []*discordgo.MessageEmbedField
 	for _, c := range cs.Civs {
 		f := &discordgo.MessageEmbedField{
-			Name:  c.CivBase + " -- " + c.LeaderBase,
+			Name:  fmt.Sprintf("{ t-%d } -- %s -- %s", c.FilthyTier, c.CivBase, c.LeaderBase),
 			Value: fmt.Sprintf("[zigzag guide >>](%s)\n", c.ZigURL),
 		}
 		fields = append(fields, f)
 	}
 	_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Title:  "☁︎  list all possible civs",
+		Title:  "☁︎  list all possible civs (in no particular order)",
 		Color:  constants.ColorGREEN,
 		Fields: fields,
 	})
