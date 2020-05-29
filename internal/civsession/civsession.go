@@ -1,7 +1,10 @@
 package civsession
 
 import (
+	"fmt"
 	"time"
+
+	"github.com/ecshreve/civ-bot-go/internal/constants"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/civ"
@@ -56,4 +59,32 @@ func (cs *CivSession) Reset() {
 	cs.PickTime = time.Time{}
 	cs.RePickVotes = 0
 	cs.RePicksRemaining = 3
+}
+
+func (cs *CivSession) getConfigEmbedFields() []*discordgo.MessageEmbedField {
+	// TODO update for tiers.
+	maxPlayers := len(constants.CivKeys) / (cs.Config.NumBans + cs.Config.NumPicks)
+
+	return []*discordgo.MessageEmbedField{
+		{
+			Name:  "NumBans -- the number of Civs each player gets to ban",
+			Value: fmt.Sprintf("%d", cs.Config.NumBans),
+		},
+		{
+			Name:  "NumPicks -- the number of Civs each player gets to choose from",
+			Value: fmt.Sprintf("%d", cs.Config.NumPicks),
+		},
+		{
+			Name:  "NumRepicks -- the max number of times allowed to re-pick Civs",
+			Value: fmt.Sprintf("%d", cs.Config.NumRepicks),
+		},
+		{
+			Name:  "UseFilthyTiers -- true/false make picks based on Filthy's tier list",
+			Value: fmt.Sprintf("%v", cs.Config.UseFilthyTiers),
+		},
+		{
+			Name:  "Players",
+			Value: fmt.Sprintf("This Config allows for a max of **%d** players", maxPlayers),
+		},
+	}
 }

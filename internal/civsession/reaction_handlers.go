@@ -1,8 +1,6 @@
 package civsession
 
 import (
-	"fmt"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/ecshreve/civ-bot-go/internal/util"
@@ -28,6 +26,12 @@ func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.Mess
 	}
 }
 
+func addNumberReactionHelper(s *discordgo.Session, m *discordgo.Message, nums []int) {
+	for _, n := range nums {
+		s.MessageReactionAdd(m.ChannelID, m.ID, constants.NumEmojiMap[n])
+	}
+}
+
 func (cfg *CivConfig) setConfigFieldHelper(s *discordgo.Session, m *discordgo.Message, r string) {
 	embed := m.Embeds[0]
 	if cfg.NumBans < 0 {
@@ -35,12 +39,7 @@ func (cfg *CivConfig) setConfigFieldHelper(s *discordgo.Session, m *discordgo.Me
 		embed.Description = "updating config...\nselect NumPicks -- the number of Civs each player gets to choose from"
 		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
 		s.MessageReactionsRemoveAll(m.ChannelID, m.ID)
-		s.MessageReactionAdd(m.ChannelID, m.ID, "0️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "1️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "2️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "3️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "4️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "5️⃣")
+		addNumberReactionHelper(s, m, []int{1, 2, 3, 4, 5})
 		return
 	}
 	if cfg.NumPicks < 0 {
@@ -48,12 +47,7 @@ func (cfg *CivConfig) setConfigFieldHelper(s *discordgo.Session, m *discordgo.Me
 		embed.Description = "updating config...\nselect NumRepicks -- the max number of times allowed to re-pick Civs"
 		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
 		s.MessageReactionsRemoveAll(m.ChannelID, m.ID)
-		s.MessageReactionAdd(m.ChannelID, m.ID, "0️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "1️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "2️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "3️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "4️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "5️⃣")
+		addNumberReactionHelper(s, m, []int{0, 1, 2, 3, 4, 5})
 		return
 	}
 	if cfg.NumRepicks < 0 {
@@ -70,18 +64,18 @@ func (cfg *CivConfig) setConfigFieldHelper(s *discordgo.Session, m *discordgo.Me
 func (cs *CivSession) configReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	embed := m.Embeds[0]
 	if r.Emoji.Name == "✅" {
-		embed.Description = "✅ **starting civ picker session with the current config** ✅"
+		embed.Description = "✅ **starting new civ picker session with the current config** ✅"
 		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
+		cs.Reset()
+		cs.newCommandHandler(s, &discordgo.MessageCreate{Message: m})
 	}
 	if r.Emoji.Name == "🛠" {
 		embed.Description = "updating config...\nselect NumBans -- the number of Civs each player gets to ban"
 		embed.Fields = nil
 		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
 		s.MessageReactionsRemoveAll(m.ChannelID, m.ID)
-		s.MessageReactionAdd(m.ChannelID, m.ID, "0️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "1️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "2️⃣")
-		s.MessageReactionAdd(m.ChannelID, m.ID, "3️⃣")
+		addNumberReactionHelper(s, m, []int{0, 1, 2, 3})
+
 		cs.Config = &CivConfig{
 			NumBans:        -1,
 			NumPicks:       -1,
@@ -95,24 +89,7 @@ func (cs *CivSession) configReactionHandler(s *discordgo.Session, r *discordgo.M
 	if r.Emoji.Name == "👍" || r.Emoji.Name == "👎" {
 		cs.Config.UseFilthyTiers = r.Emoji.Name == "👍"
 		embed.Description = "here's the current game config\nselect ✅ to accept config\nselect 🛠 to change config"
-		embed.Fields = []*discordgo.MessageEmbedField{
-			{
-				Name:  "NumBans -- the number of Civs each player gets to ban",
-				Value: fmt.Sprintf("%d", cs.Config.NumBans),
-			},
-			{
-				Name:  "NumPicks -- the number of Civs each player gets to choose from",
-				Value: fmt.Sprintf("%d", cs.Config.NumPicks),
-			},
-			{
-				Name:  "NumRepicks -- the max number of times allowed to re-pick Civs",
-				Value: fmt.Sprintf("%d", cs.Config.NumRepicks),
-			},
-			{
-				Name:  "UseFilthyTiers -- true/false make picks based on Filthy's tier list",
-				Value: fmt.Sprintf("%v", cs.Config.UseFilthyTiers),
-			},
-		}
+		embed.Fields = cs.getConfigEmbedFields()
 		s.ChannelMessageEditEmbed(m.ChannelID, m.ID, embed)
 		s.MessageReactionsRemoveAll(m.ChannelID, m.ID)
 		s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
