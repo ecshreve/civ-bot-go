@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
@@ -14,6 +15,12 @@ import (
 // banCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
 func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
+	if civToBan == "" || userID == "" {
+		return nil
+	}
+
+	// If we didn't find a match, or the matched Civ is already banned then just
+	// return nil.
 	c := civ.GetCivByString(civToBan, cs.Civs)
 	if c == nil || c.Banned == true {
 		return nil
@@ -26,18 +33,23 @@ func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 		cs.Bans[userID] = cs.Bans[userID][1:]
 	}
 
-	// Add this Civ to the ban list.
+	// Add this Civ to the CivSession's slice of Bans.
 	c.Banned = true
 	cs.Bans[userID] = append(cs.Bans[userID], c)
 
 	return c
 }
 
+// makePick returns a random Civ from the given slice of Civs that has not been
+// marked as Picked.
 func makePick(civs []*civ.Civ) *civ.Civ {
 	rand.Seed(time.Now().Unix())
 
 	var p *civ.Civ
 	foundPick := false
+
+	// Keep picking at random until we find a Civ that hasn't been picked yet.
+	// Once we find one, mark it as picked.
 	for !foundPick {
 		n := rand.Int() % len(civs)
 		p = civs[n]
@@ -45,8 +57,8 @@ func makePick(civs []*civ.Civ) *civ.Civ {
 			foundPick = true
 		}
 	}
-
 	p.Picked = true
+
 	return p
 }
 
