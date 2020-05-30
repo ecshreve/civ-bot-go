@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
-	"github.com/ecshreve/civ-bot-go/internal/constants"
-
 	"github.com/bwmarrin/discordgo"
+
 	"github.com/ecshreve/civ-bot-go/internal/civ"
+	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
 // CivConfig holds a config for a CivSession.
@@ -25,6 +25,7 @@ type CivSession struct {
 	Clock            clock.Clock
 	Players          map[string]*discordgo.User
 	Civs             []*civ.Civ
+	CivMap           map[constants.CivKey]*civ.Civ
 	Bans             map[string][]*civ.Civ
 	Picks            map[string][]*civ.Civ
 	PickTime         time.Time
@@ -42,11 +43,15 @@ func NewCivSession() *CivSession {
 		UseFilthyTiers: false,
 	}
 
+	civs := civ.GenCivs()
+	civMap := civ.GenCivMap(civs)
+
 	return &CivSession{
 		Config:           cfg,
 		Clock:            clock.New(),
 		Players:          make(map[string]*discordgo.User),
-		Civs:             civ.GenCivs(),
+		Civs:             civs,
+		CivMap:           civMap,
 		Bans:             make(map[string][]*civ.Civ),
 		Picks:            make(map[string][]*civ.Civ),
 		RePicksRemaining: cfg.NumRepicks,
@@ -55,8 +60,12 @@ func NewCivSession() *CivSession {
 
 // Reset clears the CivSession referenced by the pointer receiver to the func.
 func (cs *CivSession) Reset() {
+	civs := civ.GenCivs()
+	civMap := civ.GenCivMap(civs)
+
 	cs.Players = make(map[string]*discordgo.User)
-	cs.Civs = civ.GenCivs()
+	cs.Civs = civs
+	cs.CivMap = civMap
 	cs.Bans = make(map[string][]*civ.Civ)
 	cs.Picks = make(map[string][]*civ.Civ)
 	cs.PickTime = time.Time{}

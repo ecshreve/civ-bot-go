@@ -51,10 +51,12 @@ func GenCivs() []*Civ {
 
 // GenCivMap generates and returns a map of CivKey to Civ for all base values
 // defined in the constants package.
-func GenCivMap() map[constants.CivKey]*Civ {
-	civs := GenCivs()
-	civMap := make(map[constants.CivKey]*Civ)
+func GenCivMap(civs []*Civ) map[constants.CivKey]*Civ {
+	if len(civs) == 0 {
+		return nil
+	}
 
+	civMap := make(map[constants.CivKey]*Civ)
 	for _, c := range civs {
 		civMap[c.Key] = c
 	}

@@ -12,7 +12,7 @@ import (
 
 func TestGetCivByString(t *testing.T) {
 	civs := civ.GenCivs()
-	civMap := civ.GenCivMap()
+	civMap := civ.GenCivMap(civs)
 
 	testcases := []struct {
 		desc     string
@@ -79,5 +79,16 @@ func TestGetCivByString(t *testing.T) {
 			actualCiv := civ.GetCivByString(testcase.inp, civs)
 			assert.Equal(t, expectedCiv, actualCiv)
 		})
+	}
+}
+
+func TestGenCivMap(t *testing.T) {
+	civs := civ.GenCivs()
+	civMap := civ.GenCivMap(civs)
+
+	// Make sure that the values in our CivMap point to the same Civs as the
+	// items in the slice passed in to GenCivMap.
+	for _, c := range civs {
+		assert.Same(t, c, civMap[c.Key])
 	}
 }
