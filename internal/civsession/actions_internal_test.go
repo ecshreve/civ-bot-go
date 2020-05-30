@@ -3,12 +3,10 @@ package civsession
 import (
 	"testing"
 
-	"github.com/ecshreve/civ-bot-go/internal/constants"
-
 	"github.com/bwmarrin/discordgo"
-	"github.com/ecshreve/civ-bot-go/internal/civ"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
 func TestBanCiv(t *testing.T) {
@@ -18,27 +16,29 @@ func TestBanCiv(t *testing.T) {
 	for _, p := range players {
 		playerMap[p.ID] = p
 	}
-	civMap := civ.GenCivMap()
 
 	testcases := []struct {
 		description string
 		civToBan    string
-		expected    *civ.Civ
+		expectBan   bool
+		expected    constants.CivKey
 	}{
 		{
 			description: "empty string expect nil",
 			civToBan:    "",
-			expected:    nil,
+			expectBan:   false,
 		},
 		{
 			description: "ban by civ name",
 			civToBan:    "america",
-			expected:    civMap[constants.AMERICA],
+			expectBan:   true,
+			expected:    constants.AMERICA,
 		},
 		{
 			description: "ban by leader name",
 			civToBan:    "washington",
-			expected:    civMap[constants.AMERICA],
+			expectBan:   true,
+			expected:    constants.AMERICA,
 		},
 	}
 
@@ -47,13 +47,14 @@ func TestBanCiv(t *testing.T) {
 			cs := NewCivSession()
 			cs.Players = playerMap
 			testPlayer := players[0]
+			expectedCiv := cs.CivMap[testcase.expected]
 
 			actual := cs.banCiv(testcase.civToBan, testPlayer.ID)
-			if testcase.expected != nil {
+			if testcase.expectBan {
 				// Make sure we only banned the expected Civ and all others are
 				// not banned.
 				for _, c := range cs.Civs {
-					if c.Key == testcase.expected.Key {
+					if c.Key == expectedCiv.Key {
 						assert.True(t, c.Banned)
 					} else {
 						assert.False(t, c.Banned)
@@ -65,7 +66,7 @@ func TestBanCiv(t *testing.T) {
 				assert.Equal(t, 1, len(cs.Bans))
 				foundInBans := false
 				for _, c := range cs.Bans[testPlayer.ID] {
-					if c.Key == testcase.expected.Key {
+					if c.Key == expectedCiv.Key {
 						foundInBans = true
 						break
 					}
