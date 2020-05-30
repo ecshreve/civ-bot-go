@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/benbjohnson/clock"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 
 	"github.com/bwmarrin/discordgo"
@@ -21,6 +22,7 @@ type CivConfig struct {
 // CivSession holds data for a single civ-bot session.
 type CivSession struct {
 	Config           *CivConfig
+	Clock            clock.Clock
 	Players          map[string]*discordgo.User
 	Civs             []*civ.Civ
 	Bans             map[string][]*civ.Civ
@@ -42,6 +44,7 @@ func NewCivSession() *CivSession {
 
 	return &CivSession{
 		Config:           cfg,
+		Clock:            clock.New(),
 		Players:          make(map[string]*discordgo.User),
 		Civs:             civ.GenCivs(),
 		Bans:             make(map[string][]*civ.Civ),
