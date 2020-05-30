@@ -36,10 +36,10 @@ type Civ struct {
 // defined in the constants package.
 func GenCivs() []*Civ {
 	civs := make([]*Civ, 0)
-	for k, c := range constants.CivBase {
+	for _, k := range constants.CivKeys {
 		civ := &Civ{
 			Key:        k,
-			CivBase:    c,
+			CivBase:    constants.CivBase[k],
 			LeaderBase: constants.CivLeaders[k],
 			ZigURL:     constants.CivZig[k],
 			FilthyTier: constants.CivFilthyTiers[k],
