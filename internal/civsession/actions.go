@@ -141,30 +141,20 @@ func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 	return p
 }
 
+// makePicksWithoutTier returns random picks for each Player with no guarantees
+// related to the Civ tiers.
 func (cs *CivSession) makePicksWithoutTier() []*discordgo.MessageEmbedField {
-	possibles := []*civ.Civ{}
-	for _, c := range cs.Civs {
-		if c.Banned == false {
-			possibles = append(possibles, c)
-		}
-	}
-
 	picks := make(map[string][]*civ.Civ)
 	for _, u := range cs.Players {
-		picks[u.ID] = []*civ.Civ{}
-		rand.Seed(time.Now().Unix())
-		for i := 0; i < cs.Config.NumPicks; i++ {
-			n := rand.Int() % len(possibles)
-			p := possibles[n]
-			if p.Picked != true {
-				picks[u.ID] = append(picks[u.ID], p)
-				p.Picked = true
-			} else {
-				i--
-			}
+		// Pick Civs for this player.
+		picksForPlayer := cs.makePicks(cs.Civs, cs.Config.NumPicks)
+		if picksForPlayer == nil {
+			return nil
 		}
+		picks[u.ID] = picksForPlayer
 	}
 	cs.Picks = picks
+	cs.PickTime = time.Now()
 
 	var p []*discordgo.MessageEmbedField
 	for k, v := range picks {
@@ -174,7 +164,6 @@ func (cs *CivSession) makePicksWithoutTier() []*discordgo.MessageEmbedField {
 		}
 		p = append(p, f)
 	}
-	cs.PickTime = time.Now()
 
 	return p
 }
