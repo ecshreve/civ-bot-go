@@ -20,26 +20,42 @@ func TestBanCiv(t *testing.T) {
 	}
 
 	testcases := []struct {
-		description string
-		civToBan    string
-		expectBan   bool
-		expected    constants.CivKey
+		description       string
+		civToBan          string
+		playerID          string
+		initialBannedCivs []constants.CivKey
+		expectError       bool
+		expected          constants.CivKey
 	}{
 		{
-			description: "empty string expect nil",
+			description: "empty civToBan expect error",
 			civToBan:    "",
-			expectBan:   false,
+			playerID:    players[0].ID,
+			expectError: true,
+		},
+		{
+			description: "empty userID expect error",
+			civToBan:    "america",
+			playerID:    "",
+			expectError: true,
+		},
+		{
+			description:       "civ already banned expect error",
+			civToBan:          "america",
+			playerID:          players[0].ID,
+			initialBannedCivs: []constants.CivKey{constants.AMERICA},
+			expectError:       true,
 		},
 		{
 			description: "ban by civ name",
 			civToBan:    "america",
-			expectBan:   true,
+			playerID:    players[0].ID,
 			expected:    constants.AMERICA,
 		},
 		{
 			description: "ban by leader name",
 			civToBan:    "washington",
-			expectBan:   true,
+			playerID:    players[0].ID,
 			expected:    constants.AMERICA,
 		},
 	}
@@ -49,11 +65,16 @@ func TestBanCiv(t *testing.T) {
 			cs := NewCivSession()
 			cs.Players = players
 			cs.PlayerMap = playerMap
-			testPlayer := players[0]
-			expectedCiv := cs.CivMap[testcase.expected]
 
-			actual := cs.banCiv(testcase.civToBan, testPlayer.ID)
-			if testcase.expectBan {
+			for _, b := range testcase.initialBannedCivs {
+				cs.CivMap[b].Banned = true
+			}
+
+			expectedCiv := cs.CivMap[testcase.expected]
+			actual, err := cs.banCiv(testcase.civToBan, testcase.playerID)
+
+			if !testcase.expectError {
+				assert.NoError(t, err)
 				// Make sure we only banned the expected Civ and all others are
 				// not banned.
 				for _, c := range cs.Civs {
@@ -68,7 +89,7 @@ func TestBanCiv(t *testing.T) {
 				// Ban slice.
 				assert.Equal(t, 1, len(cs.Bans))
 				foundInBans := false
-				for _, c := range cs.Bans[testPlayer.ID] {
+				for _, c := range cs.Bans[testcase.playerID] {
 					if c.Key == expectedCiv.Key {
 						foundInBans = true
 						break
@@ -77,6 +98,7 @@ func TestBanCiv(t *testing.T) {
 				assert.True(t, foundInBans)
 			} else {
 				assert.Nil(t, actual)
+				assert.Error(t, err)
 			}
 		})
 	}

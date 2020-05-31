@@ -2,6 +2,7 @@ package civsession
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/civ"
@@ -9,15 +10,18 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
+// TODO: fix embed text to indicate number of bans, don't do banning if numBans
+// is set to 0.
 func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	if len(args) == 1 {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+util.FormatUser(m.Author)+" you have to actually ban someone"))
 		return
 	}
 
-	c := cs.banCiv(args[1], m.Author.ID)
-	if c == nil {
+	_, err := cs.banCiv(args[1], m.Author.ID)
+	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(m.Author)+" can you pick a valid civ to ban?"))
+		log.Print(err)
 		return
 	}
 
