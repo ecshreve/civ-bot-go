@@ -1,0 +1,13 @@
+Features:
+    MapPicker:
+        Add random map picker 
+        ☐ get list of available maps
+        
+Tooling:
+    ☐ figure out a way to make golint order imports how i want
+
+Testing:
+    ☐ fix the testdata thing it's dumb right now
+
+Improvements:
+    ☐ add CivKey.INVALID as a constant
