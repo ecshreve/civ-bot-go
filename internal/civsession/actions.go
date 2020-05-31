@@ -128,7 +128,7 @@ func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 	var p []*discordgo.MessageEmbedField
 	for k, v := range picks {
 		f := &discordgo.MessageEmbedField{
-			Name:  cs.Players[k].Username,
+			Name:  cs.PlayerMap[k].Username,
 			Value: civ.FormatCivs(v),
 		}
 		p = append(p, f)
@@ -165,7 +165,7 @@ func (cs *CivSession) makePicksWithoutTier() []*discordgo.MessageEmbedField {
 	var p []*discordgo.MessageEmbedField
 	for k, v := range picks {
 		f := &discordgo.MessageEmbedField{
-			Name:  cs.Players[k].Username,
+			Name:  cs.PlayerMap[k].Username,
 			Value: civ.FormatCivs(v),
 		}
 		p = append(p, f)

@@ -25,7 +25,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 	var embedFields []*discordgo.MessageEmbedField
 	for k, v := range cs.Bans {
 		f := &discordgo.MessageEmbedField{
-			Name:  cs.Players[k].Username,
+			Name:  cs.PlayerMap[k].Username,
 			Value: civ.FormatCivs(v),
 		}
 		embedFields = append(embedFields, f)
@@ -94,7 +94,7 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "ℹ️ current civ session info"
-	players := util.FormatUsers(cs.Players)
+	players := util.FormatUsers(cs.PlayerMap)
 	if players == "" {
 		players = "no players yet"
 	}

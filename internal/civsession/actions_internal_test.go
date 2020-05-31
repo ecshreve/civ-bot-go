@@ -47,7 +47,8 @@ func TestBanCiv(t *testing.T) {
 	for _, testcase := range testcases {
 		t.Run(testcase.description, func(t *testing.T) {
 			cs := NewCivSession()
-			cs.Players = playerMap
+			cs.Players = players
+			cs.PlayerMap = playerMap
 			testPlayer := players[0]
 			expectedCiv := cs.CivMap[testcase.expected]
 
