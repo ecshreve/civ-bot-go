@@ -143,7 +143,7 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 
 func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	title := "⚙️ configuration"
-	description := "here's the current game config\nselect 🛠 to change config\nselect ✅ to accept config"
+	description := "- select 🛠 to change config\n- select ✅ to accept config"
 	fields := cs.getConfigEmbedFields()
 
 	configMsg, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
