@@ -11,3 +11,4 @@ Testing:
 
 Improvements:
     ☐ add CivKey.INVALID as a constant
+    ☐ error handling throughout
