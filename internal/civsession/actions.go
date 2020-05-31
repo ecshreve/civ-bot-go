@@ -73,6 +73,30 @@ func (cs *CivSession) makePick(civs []*civ.Civ) *civ.Civ {
 	return p
 }
 
+// makePicks returns a slice of numPicks random Civs from the given slice of
+// Civs that have not been marked as Picked. If the provided slice is empty it
+// or if we are unable to get numPicks random Civs it returns nil.
+func (cs *CivSession) makePicks(civs []*civ.Civ, numPicks int) []*civ.Civ {
+	if len(civs) < numPicks {
+		return nil
+	}
+
+	var picks []*civ.Civ
+	for i := 0; i < numPicks; i++ {
+		pick := cs.makePick(civs)
+		if pick == nil {
+			for _, p := range picks {
+				p.Picked = false
+			}
+			return nil
+		}
+		picks = append(picks, pick)
+	}
+
+	civ.SortCivs(picks)
+	return picks
+}
+
 func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
