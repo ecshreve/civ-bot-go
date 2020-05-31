@@ -14,6 +14,8 @@ import (
 
 // banCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
+//
+// FIXME: handle zero bans for civsession
 func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 	if civToBan == "" || userID == "" {
 		return nil
@@ -177,11 +179,19 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 		embedDescription = embedDescription + fmt.Sprintf(", if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining])
 	}
 
-	var embedFields []*discordgo.MessageEmbedField
 	if cs.Config.UseFilthyTiers {
-		embedFields = cs.makePicksWithTier()
+		cs.makePicksWithTier()
 	} else {
-		embedFields = cs.makePicksWithoutTier()
+		cs.makePicksWithoutTier()
+	}
+
+	var embedFields []*discordgo.MessageEmbedField
+	for k, v := range cs.Picks {
+		f := &discordgo.MessageEmbedField{
+			Name:  cs.PlayerMap[k].Username,
+			Value: civ.FormatCivs(v),
+		}
+		embedFields = append(embedFields, f)
 	}
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
