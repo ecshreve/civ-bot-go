@@ -113,7 +113,7 @@ func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 	return p
 }
 
-func (cs *CivSession) makePicks() []*discordgo.MessageEmbedField {
+func (cs *CivSession) makePicksWithoutTier() []*discordgo.MessageEmbedField {
 	possibles := []*civ.Civ{}
 	for _, c := range cs.Civs {
 		if c.Banned == false {
@@ -164,7 +164,7 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if cs.Config.UseFilthyTiers {
 		embedFields = cs.makePicksWithTier()
 	} else {
-		embedFields = cs.makePicks()
+		embedFields = cs.makePicksWithoutTier()
 	}
 
 	pickMessage, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
