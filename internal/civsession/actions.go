@@ -60,7 +60,7 @@ func (cs *CivSession) makePick(civs []*civ.Civ) *civ.Civ {
 	// Once we find one, mark it as picked.
 	for !foundPick && len(possibles) > 0 {
 		n := rand.Int() % len(possibles)
-		if civs[n].Picked != true {
+		if civs[n].Picked != true && civs[n].Banned != true {
 			p = civs[n]
 			p.Picked = true
 			foundPick = true
