@@ -344,3 +344,98 @@ func TestMakePicksWithTier(t *testing.T) {
 		})
 	}
 }
+
+func TestMakePicksWithoutTier(t *testing.T) {
+	testdata := NewTestData()
+	players := testdata.Players
+	clk := clock.NewMock()
+
+	testcases := []struct {
+		description string
+		civs        []constants.CivKey
+		players     []*discordgo.User
+		numPicks    int
+		expected    map[string][]constants.CivKey
+	}{
+		{
+			description: "nil civ list returns nil",
+			civs:        nil,
+			players:     players[:1],
+			numPicks:    1,
+			expected:    nil,
+		},
+		{
+			description: "one pick, one player, one civ returns that civ",
+			civs:        []constants.CivKey{constants.ARABIA},
+			players:     players[:1],
+			numPicks:    1,
+			expected: map[string][]constants.CivKey{
+				players[0].ID: {constants.ARABIA},
+			},
+		},
+		{
+			description: "two picks, one player, two civs returns those civs",
+			civs:        []constants.CivKey{constants.AMERICA, constants.ARABIA},
+			players:     players[:1],
+			numPicks:    2,
+			expected: map[string][]constants.CivKey{
+				players[0].ID: {constants.AMERICA, constants.ARABIA},
+			},
+		},
+		{
+			description: "one pick, two players, four civs returns expected civs",
+			civs:        []constants.CivKey{constants.AMERICA, constants.ARABIA, constants.ASSYRIA, constants.AZTECS},
+			players:     players[:2],
+			numPicks:    1,
+			expected: map[string][]constants.CivKey{
+				players[0].ID: {constants.ARABIA},
+				players[1].ID: {constants.AMERICA},
+			},
+		},
+		{
+			description: "two picks, two players, four civs returns those civs",
+			civs:        []constants.CivKey{constants.AMERICA, constants.ARABIA, constants.ASSYRIA, constants.AZTECS},
+			players:     players[:2],
+			numPicks:    2,
+			expected: map[string][]constants.CivKey{
+				players[0].ID: {constants.AMERICA, constants.ARABIA},
+				players[1].ID: {constants.ASSYRIA, constants.AZTECS},
+			},
+		},
+	}
+
+	for _, testcase := range testcases {
+		t.Run(testcase.description, func(t *testing.T) {
+			// TODO: all of this setup can probably be pulled into a helper.
+			cs := NewCivSession()
+			cs.Clock = clk
+
+			var civsToTest []*civ.Civ
+			for _, k := range testcase.civs {
+				civsToTest = append(civsToTest, cs.CivMap[k])
+			}
+			civMap := civ.GenCivMap(civsToTest)
+			cs.Civs = civsToTest
+			cs.CivMap = civMap
+
+			var playerMap = make(map[string]*discordgo.User)
+			for _, u := range testcase.players {
+				playerMap[u.ID] = u
+			}
+			cs.Players = testcase.players
+			cs.PlayerMap = playerMap
+
+			cs.Config.NumPicks = testcase.numPicks
+
+			var expectedPicks = make(map[string][]*civ.Civ)
+			for k, v := range testcase.expected {
+				for _, ck := range v {
+					expectedPicks[k] = append(expectedPicks[k], cs.CivMap[ck])
+				}
+			}
+
+			cs.makePicksWithoutTier()
+			assert.EqualValues(t, expectedPicks, cs.Picks)
+		})
+	}
+}
