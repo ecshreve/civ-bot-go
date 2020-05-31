@@ -78,20 +78,20 @@ func (cs *CivSession) getConfigEmbedFields() []*discordgo.MessageEmbedField {
 
 	return []*discordgo.MessageEmbedField{
 		{
-			Name:  "NumBans -- the number of Civs each player gets to ban",
-			Value: fmt.Sprintf("%d", cs.Config.NumBans),
+			Name:  "`NumBans` -- the number of Civs each player gets to ban",
+			Value: fmt.Sprintf("**%d**", cs.Config.NumBans),
 		},
 		{
-			Name:  "NumPicks -- the number of Civs each player gets to choose from",
-			Value: fmt.Sprintf("%d", cs.Config.NumPicks),
+			Name:  "`NumPicks` -- the number of Civs each player gets to choose from",
+			Value: fmt.Sprintf("**%d**", cs.Config.NumPicks),
 		},
 		{
-			Name:  "NumRepicks -- the max number of times allowed to re-pick Civs",
-			Value: fmt.Sprintf("%d", cs.Config.NumRepicks),
+			Name:  "`NumRepicks` -- the max number of times allowed to re-pick Civs",
+			Value: fmt.Sprintf("**%d**", cs.Config.NumRepicks),
 		},
 		{
-			Name:  "UseFilthyTiers -- true/false make picks based on Filthy's tier list\nsetting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
-			Value: fmt.Sprintf("%v", cs.Config.UseFilthyTiers),
+			Name:  "`UseFilthyTiers` -- make picks based on FilthyRobot's tier list -- setting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
+			Value: fmt.Sprintf("**%v**", cs.Config.UseFilthyTiers),
 		},
 		{
 			Name:  "Players",
