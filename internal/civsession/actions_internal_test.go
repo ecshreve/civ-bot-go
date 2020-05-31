@@ -87,6 +87,7 @@ func TestMakePick(t *testing.T) {
 	testcases := []struct {
 		description       string
 		civs              []constants.CivKey
+		initialBannedCivs []constants.CivKey
 		initialPickedCivs []constants.CivKey
 		expectPick        bool
 		expected          constants.CivKey
@@ -108,6 +109,26 @@ func TestMakePick(t *testing.T) {
 			initialPickedCivs: []constants.CivKey{constants.AMERICA},
 			expectPick:        false,
 		},
+		{
+			description:       "pick from slice of length 1 where that civ is banned returns nil",
+			civs:              []constants.CivKey{constants.AMERICA},
+			initialBannedCivs: []constants.CivKey{constants.AMERICA},
+			expectPick:        false,
+		},
+		{
+			description:       "pick from slice of length 2 where one civ is banned, one is picked, return nil",
+			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
+			initialBannedCivs: []constants.CivKey{constants.AMERICA},
+			initialPickedCivs: []constants.CivKey{constants.ARABIA},
+			expectPick:        false,
+		},
+		{
+			description:       "pick from slice of length 2 where one civ is banned returns the other civ",
+			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
+			initialBannedCivs: []constants.CivKey{constants.AMERICA},
+			expectPick:        true,
+			expected:          constants.ARABIA,
+		},
 		// This testcase is deterministic because we provide a MockClock to our
 		// CivSession, and we seed our random number generator in MakePick with
 		// the current time.
@@ -127,6 +148,10 @@ func TestMakePick(t *testing.T) {
 			var civsToTest []*civ.Civ
 			for _, k := range testcase.civs {
 				civsToTest = append(civsToTest, cs.CivMap[k])
+			}
+
+			for _, k := range testcase.initialBannedCivs {
+				cs.CivMap[k].Banned = true
 			}
 
 			for _, k := range testcase.initialPickedCivs {
@@ -152,33 +177,28 @@ func TestMakePicks(t *testing.T) {
 		civs              []constants.CivKey
 		numPicks          int
 		initialPickedCivs []constants.CivKey
-		expectPicks       bool
 		expected          []constants.CivKey
 	}{
 		{
 			description: "empty input slice returns nil",
 			civs:        []constants.CivKey{},
 			numPicks:    1,
-			expectPicks: false,
 		},
 		{
 			description: "input slice less than numPicks returns nil",
 			civs:        []constants.CivKey{constants.AMERICA},
 			numPicks:    2,
-			expectPicks: false,
 		},
 		{
 			description:       "picking 2 civs from list of 2 with one already picked returns nil",
 			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
 			numPicks:          2,
 			initialPickedCivs: []constants.CivKey{constants.AMERICA},
-			expectPicks:       false,
 		},
 		{
 			description: "input slice with numPicks items returns those items",
 			civs:        []constants.CivKey{constants.AMERICA, constants.ARABIA},
 			numPicks:    2,
-			expectPicks: true,
 			expected:    []constants.CivKey{constants.AMERICA, constants.ARABIA},
 		},
 		// This testcase is deterministic because we provide a MockClock to our
@@ -188,7 +208,6 @@ func TestMakePicks(t *testing.T) {
 			description: "picking three civs from the full list returns 3 expected civs",
 			civs:        constants.CivKeys,
 			numPicks:    3,
-			expectPicks: true,
 			expected:    []constants.CivKey{constants.INDONESIA, constants.IROQUOIS, constants.MAYANS},
 		},
 	}
@@ -213,11 +232,7 @@ func TestMakePicks(t *testing.T) {
 			}
 
 			actual := cs.makePicks(civsToTest, testcase.numPicks)
-			if testcase.expectPicks {
-				assert.EqualValues(t, expectedCivs, actual)
-			} else {
-				assert.Nil(t, actual)
-			}
+			assert.EqualValues(t, expectedCivs, actual)
 		})
 	}
 }
