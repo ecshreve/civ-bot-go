@@ -333,3 +333,14 @@ var CivFilthyTiers = map[CivKey]int{
 	VENICE:      6,
 	ZULUS:       2,
 }
+
+// MapOptions is a slice of map options to choose from.
+var MapOptions = []string{
+	"Archipeligo",
+	"Continents",
+	"Continents Plus",
+	"Globe",
+	"Pangea",
+	"Pangea Plus",
+	"Shuffle",
+}
