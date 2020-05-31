@@ -97,28 +97,32 @@ func (cs *CivSession) makePicks(civs []*civ.Civ, numPicks int) []*civ.Civ {
 	return picks
 }
 
+// makePicksWithTier returns random picks for each Player ensuring that each
+// Player gets at minimum one top tier Civ.
 func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
-	possibles := []*civ.Civ{}
-	for _, c := range cs.Civs {
-		if c.Banned == false {
-			possibles = append(possibles, c)
-		}
-	}
+	civsByTier := getCivsByTier(cs.Civs)
+	topTierCivs := append(civsByTier[1], civsByTier[2]...)
 
-	possiblesByTier := getCivsByTier(possibles)
-	topTierPossibles := append(possiblesByTier[1], possiblesByTier[2]...)
 	picks := make(map[string][]*civ.Civ)
 	for _, u := range cs.Players {
 		picks[u.ID] = []*civ.Civ{}
 
 		// Pick a top tier Civ for this player.
-		picks[u.ID] = append(picks[u.ID], cs.makePick(topTierPossibles))
+		topTierPick := cs.makePick(topTierCivs)
+		if topTierPick == nil {
+			return nil
+		}
+		picks[u.ID] = append(picks[u.ID], topTierPick)
 	}
 
 	// Pick remaining Civs for each Player.
-	for _, u := range cs.Players {
-		for i := 0; i < cs.Config.NumPicks-1; i++ {
-			picks[u.ID] = append(picks[u.ID], cs.makePick(possibles))
+	if cs.Config.NumPicks > 1 {
+		for _, u := range cs.Players {
+			lowTierPicks := cs.makePicks(cs.Civs, cs.Config.NumPicks-1)
+			if lowTierPicks == nil {
+				return nil
+			}
+			picks[u.ID] = append(picks[u.ID], lowTierPicks...)
 		}
 	}
 	cs.Picks = picks
