@@ -9,7 +9,8 @@ import (
 // newReactionHandler handles all new related reactions.
 func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discordgo.User) {
 	if r.Emoji.Name == "✋" {
-		cs.Players[user.ID] = user
+		cs.Players = append(cs.Players, user)
+		cs.PlayerMap[user.ID] = user
 	}
 	if r.Emoji.Name == "✅" {
 		s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
@@ -19,7 +20,7 @@ func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.Mess
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "Players",
-					Value: util.FormatUsers(cs.Players),
+					Value: util.FormatUsers(cs.PlayerMap),
 				},
 			},
 		})

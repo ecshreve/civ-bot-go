@@ -28,7 +28,8 @@ func (cs *CivSession) setCivSessionPlayersForTest(players []*discordgo.User) {
 	for _, p := range players {
 		playerMap[p.ID] = p
 	}
-	cs.Players = playerMap
+	cs.PlayerMap = playerMap
+	cs.Players = players
 }
 
 // setCivSessionBansForTest sets the CivSession's Bans field based on the
