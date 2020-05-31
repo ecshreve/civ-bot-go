@@ -31,7 +31,7 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	// Call the corresponding handler.
 	switch args[0] {
 	case "help":
-		helpCommandHandler(s, m, args)
+		helpCommandHandler(s, m)
 	case "config":
 		cs.configHandler(s, m)
 	case "new", "oops":
@@ -43,7 +43,7 @@ func (cs *CivSession) CommandsHandler(s *discordgo.Session, m *discordgo.Message
 	case "ban":
 		cs.banCommandHandler(s, m, args)
 	default:
-		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid command", "for a list of help topics, type `/civ help`"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid command", "for a list of available commands, type `/civ help`"))
 	}
 }
 
