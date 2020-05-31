@@ -92,3 +92,36 @@ func TestGenCivMap(t *testing.T) {
 		assert.Same(t, c, civMap[c.Key])
 	}
 }
+
+func TestSortCivs(t *testing.T) {
+	civs := civ.GenCivs()
+
+	testcases := []struct {
+		description string
+		input       []*civ.Civ
+		expected    []*civ.Civ
+	}{
+		{
+			description: "sorting nil slice returns nil",
+			input:       nil,
+			expected:    nil,
+		},
+		{
+			description: "sorting slice of length 1 returns that civ",
+			input:       []*civ.Civ{civs[0]},
+			expected:    []*civ.Civ{civs[0]},
+		},
+		{
+			description: "sorting slice of two out of order civs returns them in order",
+			input:       []*civ.Civ{civs[1], civs[0]},
+			expected:    []*civ.Civ{civs[0], civs[1]},
+		},
+	}
+
+	for _, testcase := range testcases {
+		t.Run(testcase.description, func(t *testing.T) {
+			civ.SortCivs(testcase.input)
+			assert.Equal(t, testcase.expected, testcase.input)
+		})
+	}
+}

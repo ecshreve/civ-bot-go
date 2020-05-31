@@ -2,6 +2,7 @@ package civ
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/schollz/closestmatch"
 
@@ -87,6 +88,13 @@ func GetCivByString(s string, civs []*Civ) *Civ {
 	}
 
 	return retCiv
+}
+
+// SortCivs sorts a slice of Civs based on the Key.
+func SortCivs(civs []*Civ) {
+	sort.Slice(civs, func(i, j int) bool {
+		return civs[i].Key < civs[j].Key
+	})
 }
 
 // FormatCiv returns a string for a single Civ in a readable format.
