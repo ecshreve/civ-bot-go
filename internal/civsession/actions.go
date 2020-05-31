@@ -41,23 +41,34 @@ func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 }
 
 // makePick returns a random Civ from the given slice of Civs that has not been
-// marked as Picked.
-func makePick(civs []*civ.Civ) *civ.Civ {
-	rand.Seed(time.Now().Unix())
+// marked as Picked. If the provided list is empty, or all Civs in the list have
+// already been picked then return nil.
+//
+// TODO: should this return an error code or log something instead of blindly
+// return nil?
+func (cs *CivSession) makePick(civs []*civ.Civ) *civ.Civ {
+	if len(civs) == 0 {
+		return nil
+	}
 
+	rand.Seed(cs.Clock.Now().Unix())
+	possibles := civs
 	var p *civ.Civ
 	foundPick := false
 
 	// Keep picking at random until we find a Civ that hasn't been picked yet.
 	// Once we find one, mark it as picked.
-	for !foundPick {
-		n := rand.Int() % len(civs)
-		p = civs[n]
-		if p.Picked != true {
+	for !foundPick && len(possibles) > 0 {
+		n := rand.Int() % len(possibles)
+		if civs[n].Picked != true {
+			p = civs[n]
+			p.Picked = true
 			foundPick = true
+
+		} else {
+			possibles = append(possibles[:n], possibles[n+1:]...)
 		}
 	}
-	p.Picked = true
 
 	return p
 }
@@ -77,13 +88,13 @@ func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 		picks[u.ID] = []*civ.Civ{}
 
 		// Pick a top tier Civ for this player.
-		picks[u.ID] = append(picks[u.ID], makePick(topTierPossibles))
+		picks[u.ID] = append(picks[u.ID], cs.makePick(topTierPossibles))
 	}
 
 	// Pick remaining Civs for each Player.
 	for _, u := range cs.Players {
 		for i := 0; i < cs.Config.NumPicks-1; i++ {
-			picks[u.ID] = append(picks[u.ID], makePick(possibles))
+			picks[u.ID] = append(picks[u.ID], cs.makePick(possibles))
 		}
 	}
 	cs.Picks = picks
