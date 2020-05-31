@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/samsarahq/go/oops"
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
@@ -16,16 +17,22 @@ import (
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
 //
 // FIXME: handle zero bans for civsession
-func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
-	if civToBan == "" || userID == "" {
-		return nil
+func (cs *CivSession) banCiv(civToBan string, userID string) (*civ.Civ, error) {
+	if civToBan == "" {
+		return nil, oops.Errorf("empty civToBan argument")
+	}
+	if userID == "" {
+		return nil, oops.Errorf("empty userID argument")
 	}
 
-	// If we didn't find a match, or the matched Civ is already banned then just
-	// return nil.
+	// If we didn't find a match, or the matched Civ is already banned then
+	// return nil and an error.
 	c := civ.GetCivByString(civToBan, cs.Civs)
-	if c == nil || c.Banned == true {
-		return nil
+	if c == nil {
+		return nil, oops.Errorf("unable to get civ by string: %s", civToBan)
+	}
+	if c.Banned {
+		return nil, oops.Errorf("found civ is already banned: %+v", c)
 	}
 
 	// If this player had previously banned the max number of Civs as defined by
@@ -39,7 +46,7 @@ func (cs *CivSession) banCiv(civToBan string, userID string) *civ.Civ {
 	c.Banned = true
 	cs.Bans[userID] = append(cs.Bans[userID], c)
 
-	return c
+	return c, nil
 }
 
 // makePick returns a random Civ from the given slice of Civs that has not been
