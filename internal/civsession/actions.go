@@ -163,6 +163,8 @@ func (cs *CivSession) makePicksWithoutTier() error {
 // pick selects Civs at random and assigns them to Players. It also handles the
 // logic surrounding re-picking. It returns an error if we encounter a problem
 // making picks at any point during the pick flow.
+//
+// TODO: add test
 func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) error {
 	embedDescription := "here's this round of picks"
 	if cs.RePicksRemaining > 0 {
@@ -219,6 +221,10 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) err
 	return nil
 }
 
+// countown handles editing the existing embed with Picks to display the
+// amount of time remaining before the option to vote for a re-pick expires.
+//
+// TODO: add test
 func (cs *CivSession) countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
 	end := start.Add(time.Duration(time.Second * time.Duration(seconds)))
 	channelID := msg.ChannelID
@@ -245,6 +251,11 @@ func (cs *CivSession) countdown(s *discordgo.Session, m *discordgo.MessageCreate
 	cs.handleRePick(s, m)
 }
 
+// handleRePick checks to see if the required number of re-pick votes have been
+// reached, if so then pick again, if not then reset the CivSession and display
+// a goodbye message.
+//
+// TODO: add test
 func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cs.RePicksRemaining--
 
