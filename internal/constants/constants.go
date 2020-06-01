@@ -1,5 +1,9 @@
 package constants
 
+import (
+	"strings"
+)
+
 // Color Enum.
 const (
 	ColorDEFAULT           = 0
@@ -49,6 +53,11 @@ var EmojiNumMap = map[string]int{
 
 // CivKey represents an integer key for a Civ.
 type CivKey int
+
+// String makes CivKey satisfy the Stringer interface.
+func (ck CivKey) String() string {
+	return strings.ToUpper(CivBase[ck])
+}
 
 // Consts defining the CivKeys this bot works with.
 const (
