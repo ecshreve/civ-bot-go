@@ -5,6 +5,7 @@ Features:
         
 Tooling:
     ☐ figure out a way to make golint order imports how i want
+    ☐ codecov / lgtm for repo
 
 Testing:
     ☐ fix the testdata thing it's dumb right now
