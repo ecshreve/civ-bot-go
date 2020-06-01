@@ -15,9 +15,10 @@ import (
 
 // banCiv does a fuzzy match on the given string, if it finds a match it sets that
 // Civ's Banned value to true and updates the CivSession's slice of Bans.
-//
-// FIXME: handle zero bans for civsession
 func (cs *CivSession) banCiv(civToBan string, userID string) (*civ.Civ, error) {
+	if cs.Config.NumBans == 0 {
+		return nil, oops.Errorf("config numBans set to 0")
+	}
 	if civToBan == "" {
 		return nil, oops.Errorf("empty civToBan argument")
 	}
