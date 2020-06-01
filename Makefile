@@ -7,4 +7,7 @@ run-only:
 run: build run-only
 
 test:
+	go test github.com/ecshreve/civ-bot-go/...
+
+testv:
 	go test -v github.com/ecshreve/civ-bot-go/...
