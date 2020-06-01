@@ -2,6 +2,7 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ecshreve/civ-bot-go/Go)
 ![Go Report Card](https://goreportcard.com/badge/github.com/ecshreve/civ-bot-go)
+![Go Version](https://img.shields.io/github/go-mod/go-version/ecshreve/civ-bot-go)
 
 This a multipurpose Discord bot for various operations related to Civilization 5, written in Go.
 
