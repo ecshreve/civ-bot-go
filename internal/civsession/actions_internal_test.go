@@ -23,40 +23,53 @@ func TestBanCiv(t *testing.T) {
 		description       string
 		civToBan          string
 		playerID          string
+		configNumBans     int
 		initialBannedCivs []constants.CivKey
 		expectError       bool
 		expected          constants.CivKey
 	}{
 		{
-			description: "empty civToBan expect error",
-			civToBan:    "",
-			playerID:    players[0].ID,
-			expectError: true,
+			description:   "config numBans 0 expect error",
+			civToBan:      "america",
+			playerID:      players[0].ID,
+			configNumBans: 0,
+			expectError:   true,
 		},
 		{
-			description: "empty userID expect error",
-			civToBan:    "america",
-			playerID:    "",
-			expectError: true,
+			description:   "empty civToBan expect error",
+			civToBan:      "",
+			playerID:      players[0].ID,
+			configNumBans: 1,
+			expectError:   true,
+		},
+		{
+			description:   "empty userID expect error",
+			civToBan:      "america",
+			playerID:      "",
+			configNumBans: 1,
+			expectError:   true,
 		},
 		{
 			description:       "civ already banned expect error",
 			civToBan:          "america",
 			playerID:          players[0].ID,
+			configNumBans:     1,
 			initialBannedCivs: []constants.CivKey{constants.AMERICA},
 			expectError:       true,
 		},
 		{
-			description: "ban by civ name",
-			civToBan:    "america",
-			playerID:    players[0].ID,
-			expected:    constants.AMERICA,
+			description:   "ban by civ name",
+			civToBan:      "america",
+			playerID:      players[0].ID,
+			configNumBans: 1,
+			expected:      constants.AMERICA,
 		},
 		{
-			description: "ban by leader name",
-			civToBan:    "washington",
-			playerID:    players[0].ID,
-			expected:    constants.AMERICA,
+			description:   "ban by leader name",
+			civToBan:      "washington",
+			playerID:      players[0].ID,
+			configNumBans: 1,
+			expected:      constants.AMERICA,
 		},
 	}
 
@@ -69,6 +82,8 @@ func TestBanCiv(t *testing.T) {
 			for _, b := range testcase.initialBannedCivs {
 				cs.CivMap[b].Banned = true
 			}
+
+			cs.Config.NumBans = testcase.configNumBans
 
 			expectedCiv := cs.CivMap[testcase.expected]
 			actual, err := cs.banCiv(testcase.civToBan, testcase.playerID)

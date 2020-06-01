@@ -5,14 +5,18 @@ import (
 	"log"
 
 	"github.com/bwmarrin/discordgo"
+
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
-// TODO: fix embed text to indicate number of bans, don't do banning if numBans
-// is set to 0.
+// TODO: fix embed text to indicate number of bans.
 func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	if cs.Config.NumBans == 0 {
+		// TODO: handle error here.
+		cs.pick(s, m)
+	}
 	if len(args) == 1 {
 		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+util.FormatUser(m.Author)+" you have to actually ban someone"))
 		return
