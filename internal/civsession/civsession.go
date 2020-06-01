@@ -34,21 +34,25 @@ type CivSession struct {
 	RePicksRemaining int
 }
 
+// DefaultCivConfig holds the default values for a CivConfig. This value is used
+// when a new CivSession is created.
+var DefaultCivConfig = CivConfig{
+	NumBans:        1,
+	NumPicks:       3,
+	NumRepicks:     3,
+	UseFilthyTiers: false,
+}
+
 // NewCivSession returns a new CivSession, note map fields are initialized to
 // empty zero lengtrh maps.
 func NewCivSession() *CivSession {
-	cfg := &CivConfig{
-		NumBans:        1,
-		NumPicks:       3,
-		NumRepicks:     3,
-		UseFilthyTiers: false,
-	}
+	cfg := DefaultCivConfig
 
 	civs := civ.GenCivs()
 	civMap := civ.GenCivMap(civs)
 
 	return &CivSession{
-		Config:           cfg,
+		Config:           &cfg,
 		Clock:            clock.New(),
 		Players:          make([]*discordgo.User, 0),
 		PlayerMap:        make(map[string]*discordgo.User),
@@ -60,7 +64,8 @@ func NewCivSession() *CivSession {
 	}
 }
 
-// Reset clears the CivSession referenced by the pointer receiver to the func.
+// Reset clears the CivSession referenced by the pointer receiver to the func,
+// and maintains the CivConfig.
 func (cs *CivSession) Reset() {
 	civs := civ.GenCivs()
 	civMap := civ.GenCivMap(civs)
@@ -76,6 +81,8 @@ func (cs *CivSession) Reset() {
 	cs.RePicksRemaining = cs.Config.NumRepicks
 }
 
+// getConfigEmbedFields builds and returns the MessageEmbedFields for the
+// CivSession's current CivConfig.
 func (cs *CivSession) getConfigEmbedFields() []*discordgo.MessageEmbedField {
 	maxPlayers := len(constants.CivKeys) / (cs.Config.NumBans + cs.Config.NumPicks)
 
