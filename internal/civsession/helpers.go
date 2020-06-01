@@ -9,3 +9,13 @@ func getCivsByTier(civs []*civ.Civ) map[int][]*civ.Civ {
 	}
 	return civsByTier
 }
+
+// resetPicks resets the Picked value to false for all Civs in the CivSession
+// and resets the CivSession Picks field to a nil map.
+func (cs *CivSession) resetPicks() {
+	for _, c := range cs.Civs {
+		c.Picked = false
+	}
+
+	cs.Picks = make(map[string][]*civ.Civ)
+}
