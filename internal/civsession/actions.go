@@ -50,14 +50,11 @@ func (cs *CivSession) banCiv(civToBan string, userID string) (*civ.Civ, error) {
 }
 
 // makePick returns a random Civ from the given slice of Civs that has not been
-// marked as Picked. If the provided list is empty, or all Civs in the list have
-// already been picked then return nil.
-//
-// TODO: should this return an error code or log something instead of blindly
-// return nil?
-func (cs *CivSession) makePick(civs []*civ.Civ) *civ.Civ {
+// marked as Picked. If the provided list is empty, or all Civs in the list are
+// already Banned or Picked then it returns nil and an error.
+func (cs *CivSession) makePick(civs []*civ.Civ) (*civ.Civ, error) {
 	if len(civs) == 0 {
-		return nil
+		return nil, oops.Errorf("empty civs arg")
 	}
 
 	rand.Seed(cs.Clock.Now().Unix())
@@ -79,36 +76,39 @@ func (cs *CivSession) makePick(civs []*civ.Civ) *civ.Civ {
 		}
 	}
 
-	return p
+	if p == nil {
+		return nil, oops.Errorf("all civs are already Banned or Picked")
+	}
+
+	return p, nil
 }
 
 // makePicks returns a slice of numPicks random Civs from the given slice of
-// Civs that have not been marked as Picked. If the provided slice is empty it
-// or if we are unable to get numPicks random Civs it returns nil.
-func (cs *CivSession) makePicks(civs []*civ.Civ, numPicks int) []*civ.Civ {
+// Civs. If the provided slice is empty or if we are unable to get numPicks
+// random Civs, it returns nil and an error.
+func (cs *CivSession) makePicks(civs []*civ.Civ, numPicks int) ([]*civ.Civ, error) {
 	if len(civs) < numPicks {
-		return nil
+		return nil, oops.Errorf("can't make %d picks from a slice of length %d", numPicks, len(civs))
 	}
 
 	var picks []*civ.Civ
 	for i := 0; i < numPicks; i++ {
-		pick := cs.makePick(civs)
-		if pick == nil {
-			for _, p := range picks {
-				p.Picked = false
-			}
-			return nil
+		pick, err := cs.makePick(civs)
+		if err != nil {
+			return nil, oops.Wrapf(err, "unable to make picks")
 		}
 		picks = append(picks, pick)
 	}
 
 	civ.SortCivs(picks)
-	return picks
+	return picks, nil
 }
 
 // makePicksWithTier returns random picks for each Player ensuring that each
-// Player gets at minimum one top tier Civ.
-func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
+// Player gets at minimum one top tier Civ. It directly alters the CivSession
+// that's the pointer receiver of the function. If unable to make picks for all
+// Players then it returns an error.
+func (cs *CivSession) makePicksWithTier() error {
 	civsByTier := getCivsByTier(cs.Civs)
 	topTierCivs := append(civsByTier[1], civsByTier[2]...)
 
@@ -117,9 +117,10 @@ func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 		picks[u.ID] = []*civ.Civ{}
 
 		// Pick a top tier Civ for this player.
-		topTierPick := cs.makePick(topTierCivs)
-		if topTierPick == nil {
-			return nil
+		topTierPick, err := cs.makePick(topTierCivs)
+		if err != nil {
+			cs.resetPicks()
+			return oops.Wrapf(err, "unable to pick top tier civ for player: %s", u.Username)
 		}
 		picks[u.ID] = append(picks[u.ID], topTierPick)
 	}
@@ -127,69 +128,59 @@ func (cs *CivSession) makePicksWithTier() []*discordgo.MessageEmbedField {
 	// Pick remaining Civs for each Player.
 	if cs.Config.NumPicks > 1 {
 		for _, u := range cs.Players {
-			lowTierPicks := cs.makePicks(cs.Civs, cs.Config.NumPicks-1)
-			if lowTierPicks == nil {
-				return nil
+			lowTierPicks, err := cs.makePicks(cs.Civs, cs.Config.NumPicks-1)
+			if err != nil {
+				cs.resetPicks()
+				return oops.Wrapf(err, "unable to pick remaining civs for player: %s", u.Username)
 			}
 			picks[u.ID] = append(picks[u.ID], lowTierPicks...)
 		}
 	}
 	cs.Picks = picks
 	cs.PickTime = time.Now()
-
-	// Generate MessageEmbedFields for the Picks.
-	var p []*discordgo.MessageEmbedField
-	for k, v := range picks {
-		f := &discordgo.MessageEmbedField{
-			Name:  cs.PlayerMap[k].Username,
-			Value: civ.FormatCivs(v),
-		}
-		p = append(p, f)
-	}
-
-	return p
+	return nil
 }
 
 // makePicksWithoutTier returns random picks for each Player with no guarantees
 // related to the Civ tiers.
-func (cs *CivSession) makePicksWithoutTier() []*discordgo.MessageEmbedField {
+func (cs *CivSession) makePicksWithoutTier() error {
 	picks := make(map[string][]*civ.Civ)
 	for _, u := range cs.Players {
 		// Pick Civs for this player.
-		picksForPlayer := cs.makePicks(cs.Civs, cs.Config.NumPicks)
-		if picksForPlayer == nil {
-			return nil
+		picksForPlayer, err := cs.makePicks(cs.Civs, cs.Config.NumPicks)
+		if err != nil {
+			return oops.Wrapf(err, "unable to make picks for player: %s", u.Username)
 		}
 		picks[u.ID] = picksForPlayer
 	}
 	cs.Picks = picks
 	cs.PickTime = time.Now()
 
-	var p []*discordgo.MessageEmbedField
-	for k, v := range picks {
-		f := &discordgo.MessageEmbedField{
-			Name:  cs.PlayerMap[k].Username,
-			Value: civ.FormatCivs(v),
-		}
-		p = append(p, f)
-	}
-
-	return p
+	return nil
 }
 
 // pick selects Civs at random and assigns them to Players. It also handles the
-// logic surrounding re-picking.
-func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
+// logic surrounding re-picking. It returns an error if we encounter a problem
+// making picks at any point during the pick flow.
+func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) error {
 	embedDescription := "here's this round of picks"
 	if cs.RePicksRemaining > 0 {
 		rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
 		embedDescription = embedDescription + fmt.Sprintf(", if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining])
 	}
 
+	var err error
 	if cs.Config.UseFilthyTiers {
-		cs.makePicksWithTier()
+		err = cs.makePicksWithTier()
 	} else {
-		cs.makePicksWithoutTier()
+		err = cs.makePicksWithoutTier()
+	}
+
+	// If we encounter an error making picks then make sure to reset pick values
+	// for the CivSession and return the error.
+	if err != nil {
+		cs.resetPicks()
+		return oops.Wrapf(err, "unable to make picks")
 	}
 
 	var embedFields []*discordgo.MessageEmbedField
@@ -223,6 +214,8 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Color: constants.ColorORANGE,
 		})
 	}
+
+	return nil
 }
 
 func (cs *CivSession) countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {

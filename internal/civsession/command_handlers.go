@@ -49,6 +49,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 				return
 			}
 		}
+		// TODO: handle error here.
 		cs.pick(s, m)
 	}
 }

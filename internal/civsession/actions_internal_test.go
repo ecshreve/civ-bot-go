@@ -112,44 +112,42 @@ func TestMakePick(t *testing.T) {
 		civs              []constants.CivKey
 		initialBannedCivs []constants.CivKey
 		initialPickedCivs []constants.CivKey
-		expectPick        bool
+		expectError       bool
 		expected          constants.CivKey
 	}{
 		{
-			description: "empty input slice returns nil",
+			description: "empty input slice returns error",
 			civs:        []constants.CivKey{},
-			expectPick:  false,
+			expectError: true,
+		},
+		{
+			description:       "pick from slice of length 1 where that civ is already picked returns error",
+			civs:              []constants.CivKey{constants.AMERICA},
+			initialPickedCivs: []constants.CivKey{constants.AMERICA},
+			expectError:       true,
+		},
+		{
+			description:       "pick from slice of length 1 where that civ is banned returns error",
+			civs:              []constants.CivKey{constants.AMERICA},
+			initialBannedCivs: []constants.CivKey{constants.AMERICA},
+			expectError:       true,
+		},
+		{
+			description:       "pick from slice of length 2 where one civ is banned, one is picked returns error",
+			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
+			initialBannedCivs: []constants.CivKey{constants.AMERICA},
+			initialPickedCivs: []constants.CivKey{constants.ARABIA},
+			expectError:       true,
 		},
 		{
 			description: "pick from slice of length 1 returns that item",
 			civs:        []constants.CivKey{constants.AMERICA},
-			expectPick:  true,
 			expected:    constants.AMERICA,
-		},
-		{
-			description:       "pick from slice of length 1 where that civ is already picked returns nil",
-			civs:              []constants.CivKey{constants.AMERICA},
-			initialPickedCivs: []constants.CivKey{constants.AMERICA},
-			expectPick:        false,
-		},
-		{
-			description:       "pick from slice of length 1 where that civ is banned returns nil",
-			civs:              []constants.CivKey{constants.AMERICA},
-			initialBannedCivs: []constants.CivKey{constants.AMERICA},
-			expectPick:        false,
-		},
-		{
-			description:       "pick from slice of length 2 where one civ is banned, one is picked, return nil",
-			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
-			initialBannedCivs: []constants.CivKey{constants.AMERICA},
-			initialPickedCivs: []constants.CivKey{constants.ARABIA},
-			expectPick:        false,
 		},
 		{
 			description:       "pick from slice of length 2 where one civ is banned returns the other civ",
 			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
 			initialBannedCivs: []constants.CivKey{constants.AMERICA},
-			expectPick:        true,
 			expected:          constants.ARABIA,
 		},
 		// This testcase is deterministic because we provide a MockClock to our
@@ -158,7 +156,6 @@ func TestMakePick(t *testing.T) {
 		{
 			description: "pick from slice of all civs returns indonesia",
 			civs:        constants.CivKeys,
-			expectPick:  true,
 			expected:    constants.INDONESIA,
 		},
 	}
@@ -181,12 +178,14 @@ func TestMakePick(t *testing.T) {
 				cs.CivMap[k].Picked = true
 			}
 
-			actual := cs.makePick(civsToTest)
-			if testcase.expectPick {
+			actual, err := cs.makePick(civsToTest)
+			if !testcase.expectError {
+				assert.NoError(t, err)
 				assert.Equal(t, cs.CivMap[testcase.expected], actual)
 				assert.Same(t, cs.CivMap[testcase.expected], actual)
 			} else {
 				assert.Nil(t, actual)
+				assert.Error(t, err)
 			}
 		})
 	}
@@ -200,23 +199,27 @@ func TestMakePicks(t *testing.T) {
 		civs              []constants.CivKey
 		numPicks          int
 		initialPickedCivs []constants.CivKey
+		expectError       bool
 		expected          []constants.CivKey
 	}{
 		{
-			description: "empty input slice returns nil",
+			description: "empty input slice returns error",
 			civs:        []constants.CivKey{},
 			numPicks:    1,
+			expectError: true,
 		},
 		{
-			description: "input slice less than numPicks returns nil",
+			description: "input slice less than numPicks returns error",
 			civs:        []constants.CivKey{constants.AMERICA},
 			numPicks:    2,
+			expectError: true,
 		},
 		{
-			description:       "picking 2 civs from list of 2 with one already picked returns nil",
+			description:       "picking 2 civs from list of 2 with one already picked returns error",
 			civs:              []constants.CivKey{constants.AMERICA, constants.ARABIA},
 			numPicks:          2,
 			initialPickedCivs: []constants.CivKey{constants.AMERICA},
+			expectError:       true,
 		},
 		{
 			description: "input slice with numPicks items returns those items",
@@ -254,7 +257,13 @@ func TestMakePicks(t *testing.T) {
 				expectedCivs = append(expectedCivs, cs.CivMap[k])
 			}
 
-			actual := cs.makePicks(civsToTest, testcase.numPicks)
+			actual, err := cs.makePicks(civsToTest, testcase.numPicks)
+			if testcase.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+
 			assert.EqualValues(t, expectedCivs, actual)
 		})
 	}
@@ -270,21 +279,22 @@ func TestMakePicksWithTier(t *testing.T) {
 		civs        []constants.CivKey
 		players     []*discordgo.User
 		numPicks    int
+		expectError bool
 		expected    map[string][]constants.CivKey
 	}{
 		{
-			description: "nil civ list returns nil",
+			description: "nil civ list returns error",
 			civs:        nil,
 			players:     players[:1],
 			numPicks:    1,
-			expected:    nil,
+			expectError: true,
 		},
 		{
-			description: "one pick, one player, one low tier civ returns nil",
+			description: "one pick, one player, one low tier civ returns error",
 			civs:        []constants.CivKey{constants.AMERICA},
 			players:     players[:1],
 			numPicks:    1,
-			expected:    nil,
+			expectError: true,
 		},
 		{
 			description: "one pick, one player, one top tier civ returns that civ",
@@ -294,6 +304,13 @@ func TestMakePicksWithTier(t *testing.T) {
 			expected: map[string][]constants.CivKey{
 				players[0].ID: {constants.ARABIA},
 			},
+		},
+		{
+			description: "two picks, one player, one top tier civ, zero low tier civ returns error",
+			civs:        []constants.CivKey{constants.ARABIA},
+			players:     players[:1],
+			numPicks:    2,
+			expectError: true,
 		},
 		{
 			description: "two picks, one player, one top tier civ, one low tier civ returns those civs",
@@ -357,9 +374,14 @@ func TestMakePicksWithTier(t *testing.T) {
 				}
 			}
 
-			cs.makePicksWithTier()
-			assert.EqualValues(t, expectedPicks, cs.Picks)
+			err := cs.makePicksWithTier()
+			if testcase.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
 
+			assert.EqualValues(t, expectedPicks, cs.Picks)
 			for _, v := range cs.Picks {
 				assert.True(t, v[0].FilthyTier == 1 || v[0].FilthyTier == 2)
 			}
@@ -377,14 +399,15 @@ func TestMakePicksWithoutTier(t *testing.T) {
 		civs        []constants.CivKey
 		players     []*discordgo.User
 		numPicks    int
+		expectError bool
 		expected    map[string][]constants.CivKey
 	}{
 		{
-			description: "nil civ list returns nil",
+			description: "nil civ list returns error",
 			civs:        nil,
 			players:     players[:1],
 			numPicks:    1,
-			expected:    nil,
+			expectError: true,
 		},
 		{
 			description: "one pick, one player, one civ returns that civ",
@@ -456,7 +479,13 @@ func TestMakePicksWithoutTier(t *testing.T) {
 				}
 			}
 
-			cs.makePicksWithoutTier()
+			err := cs.makePicksWithoutTier()
+			if testcase.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+
 			assert.EqualValues(t, expectedPicks, cs.Picks)
 		})
 	}
