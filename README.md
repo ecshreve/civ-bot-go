@@ -3,6 +3,8 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ecshreve/civ-bot-go/Go)
 ![Go Report Card](https://goreportcard.com/badge/github.com/ecshreve/civ-bot-go)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/ecshreve/civ-bot-go)
+[![API reference](https://img.shields.io/badge/godoc-reference-5272B4)](https://pkg.go.dev/github.com/ecshreve/civ-bot-go?tab=doc)
+
 
 ## Description
 
@@ -22,7 +24,7 @@ Players can enter the configuration flow by entering the `/civ config` command i
 
 ### Starting a new session
 
-Players can start a new session by entering the `/civ new` command. Players join the game by reacting with the ✋reaction. When all players are ready someone just needs to react with the ✅reaction.
+Players can start a new session by entering the `/civ new` command. Players join the game by reacting with the ✋ reaction. When all players are ready someone just needs to react with the ✅ reaction.
 
 ![civ new](static/new.gif "civ new")
 
@@ -40,7 +42,7 @@ After all players have selected their bans the bot chooses a random set of civs 
 
 ### Re-Picks
 
-If the session is configured to allow for re-picks, and at least half the players react with ♻️then, then the bot will randomly choose again.
+If the session is configured to allow for re-picks, and at least half the players react with ♻️ then, then the bot will randomly choose again.
 
 ![civ repick](static/repick.gif "civ repick")
 
@@ -54,7 +56,9 @@ Once the allotted number of repicks is reached, or the timer runs out then you'r
 
 - make a discord application in the [discord developer portal][1]
 - create a bot for you application and set permissions
+
   ![bot perms](static/botperms.png "bot perms")
+
 - add the bot to your discord server
   - go to the "OAuth2" tab, select scope "bot", navigate to the URL that gets generated
 - copy the bot token from the "Bot" tab and set the `CIV_BOT_TOKEN` environment variable
