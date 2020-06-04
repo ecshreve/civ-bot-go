@@ -1,10 +1,11 @@
 # civ-bot-go
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ecshreve/civ-bot-go/Go)
-![Go Report Card](https://goreportcard.com/badge/github.com/ecshreve/civ-bot-go)
-![Go Version](https://img.shields.io/github/go-mod/go-version/ecshreve/civ-bot-go)
-[![API reference](https://img.shields.io/badge/godoc-reference-5272B4)](https://pkg.go.dev/github.com/ecshreve/civ-bot-go?tab=doc)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ecshreve/civ-bot-go/Go) 
+![Go Report Card](https://goreportcard.com/badge/github.com/ecshreve/civ-bot-go) 
+![Go Version](https://img.shields.io/github/go-mod/go-version/ecshreve/civ-bot-go) 
 ![Last Commit](https://img.shields.io/github/last-commit/ecshreve/civ-bot-go)
+<br>
+[![API reference](https://img.shields.io/badge/godoc-reference-5272B4)](https://pkg.go.dev/github.com/ecshreve/civ-bot-go?tab=doc)
 
 
 ## Description
