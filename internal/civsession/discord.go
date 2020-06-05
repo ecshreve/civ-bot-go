@@ -70,7 +70,7 @@ func (cs *CivSession) ReactionsHandler(s *discordgo.Session, r *discordgo.Messag
 	}
 
 	// Ignore reactions that haven't been set by the bot.
-	if !util.IsBotReaction(s, m.Reactions, &r.Emoji) {
+	if !util.IsBotReaction(m.Reactions, &r.Emoji) {
 		return
 	}
 

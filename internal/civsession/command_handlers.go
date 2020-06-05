@@ -13,7 +13,7 @@ import (
 )
 
 // TODO: fix embed text to indicate number of bans.
-func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+func (cs *CivSession) banCommandHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate, args []string) {
 	if cs.Config.NumBans == 0 {
 		// TODO: handle error here.
 		cs.pick(s, m)
@@ -60,7 +60,7 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 }
 
 // helpCommandHandler sends a help message showing the available commands.
-func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func helpCommandHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate) {
 	var title string
 	var description string
 	var fields []*discordgo.MessageEmbedField
@@ -102,7 +102,7 @@ func helpCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	})
 }
 
-func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) infoCommandHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate) {
 	title := "ℹ️ current civ session info"
 	players := util.FormatUsers(cs.PlayerMap)
 	if players == "" {
@@ -130,7 +130,7 @@ func (cs *CivSession) infoCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	}
 }
 
-func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) listCommandHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate) {
 	var fields []*discordgo.MessageEmbedField
 	for _, c := range cs.Civs {
 		f := &discordgo.MessageEmbedField{
@@ -151,7 +151,7 @@ func (cs *CivSession) listCommandHandler(s *discordgo.Session, m *discordgo.Mess
 	}
 }
 
-func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) configHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate) {
 	title := "⚙️ configuration"
 	description := "- select 🛠 to change config\n- select ✅ to accept config"
 	fields := cs.getConfigEmbedFields()
@@ -174,7 +174,7 @@ func (cs *CivSession) configHandler(s *discordgo.Session, m *discordgo.MessageCr
 	s.MessageReactionAdd(m.ChannelID, configMsg.ID, "✅")
 }
 
-func (cs *CivSession) newCommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) newCommandHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate) {
 	title := "🆕 starting a new civ picker session"
 	description := "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view / update the configuration \n- enter `/civ oops` at any point to completely start over\n- enter `/civ help` to see a list of available commands"
 

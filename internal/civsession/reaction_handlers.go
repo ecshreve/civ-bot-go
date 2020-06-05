@@ -8,7 +8,7 @@ import (
 )
 
 // newReactionHandler handles all new related reactions.
-func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discord.User) {
+func (cs *CivSession) newReactionHandler(s discord.DataAccessLayer, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discord.User) {
 	if r.Emoji.Name == "✋" {
 		cs.Players = append(cs.Players, user)
 		cs.PlayerMap[user.ID] = user
@@ -32,13 +32,13 @@ func (cs *CivSession) newReactionHandler(s *discordgo.Session, r *discordgo.Mess
 	}
 }
 
-func addNumberReactionHelper(s *discordgo.Session, m *discordgo.Message, nums []int) {
+func addNumberReactionHelper(s discord.DataAccessLayer, m *discordgo.Message, nums []int) {
 	for _, n := range nums {
 		s.MessageReactionAdd(m.ChannelID, m.ID, constants.NumEmojiMap[n])
 	}
 }
 
-func (cfg *CivConfig) setConfigFieldHelper(s *discordgo.Session, m *discordgo.Message, r string) {
+func (cfg *CivConfig) setConfigFieldHelper(s discord.DataAccessLayer, m *discordgo.Message, r string) {
 	embed := m.Embeds[0]
 	if cfg.NumBans < 0 {
 		cfg.NumBans = constants.EmojiNumMap[r]
@@ -67,7 +67,7 @@ func (cfg *CivConfig) setConfigFieldHelper(s *discordgo.Session, m *discordgo.Me
 	}
 }
 
-func (cs *CivSession) configReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discord.User) {
+func (cs *CivSession) configReactionHandler(s discord.DataAccessLayer, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discord.User) {
 	embed := m.Embeds[0]
 	if r.Emoji.Name == "✅" {
 		embed.Description = "✅ **starting new civ picker session with the current config** ✅"
@@ -103,7 +103,7 @@ func (cs *CivSession) configReactionHandler(s *discordgo.Session, r *discordgo.M
 	}
 }
 
-func (cs *CivSession) pickReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discord.User) {
+func (cs *CivSession) pickReactionHandler(s discord.DataAccessLayer, r *discordgo.MessageReactionAdd, m *discordgo.Message, user *discord.User) {
 	if r.Emoji.Name == "♻️" {
 		cs.RePickVotes++
 	}

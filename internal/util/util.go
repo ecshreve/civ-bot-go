@@ -8,7 +8,7 @@ import (
 )
 
 // IsBotReaction checks if users reaction is one preset by the bot.
-func IsBotReaction(s *discordgo.Session, reactions []*discordgo.MessageReactions, emoji *discordgo.Emoji) bool {
+func IsBotReaction(reactions []*discordgo.MessageReactions, emoji *discordgo.Emoji) bool {
 	for _, r := range reactions {
 		if r.Emoji.Name == emoji.Name && r.Me {
 			return true

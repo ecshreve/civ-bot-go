@@ -11,6 +11,7 @@ import (
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
+	"github.com/ecshreve/civ-bot-go/internal/discord"
 )
 
 // banCiv does a fuzzy match on the given string, if it finds a match it sets that
@@ -165,7 +166,7 @@ func (cs *CivSession) makePicksWithoutTier() error {
 // making picks at any point during the pick flow.
 //
 // TODO: add test
-func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) error {
+func (cs *CivSession) pick(s discord.DataAccessLayer, m *discordgo.MessageCreate) error {
 	embedDescription := "here's this round of picks"
 	if cs.RePicksRemaining > 0 {
 		rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
@@ -225,7 +226,7 @@ func (cs *CivSession) pick(s *discordgo.Session, m *discordgo.MessageCreate) err
 // amount of time remaining before the option to vote for a re-pick expires.
 //
 // TODO: add test
-func (cs *CivSession) countdown(s *discordgo.Session, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
+func (cs *CivSession) countdown(s discord.DataAccessLayer, m *discordgo.MessageCreate, msg *discordgo.Message, start time.Time, seconds int64) {
 	end := start.Add(time.Duration(time.Second * time.Duration(seconds)))
 	channelID := msg.ChannelID
 	messageID := msg.ID
@@ -256,7 +257,7 @@ func (cs *CivSession) countdown(s *discordgo.Session, m *discordgo.MessageCreate
 // a goodbye message.
 //
 // TODO: add test
-func (cs *CivSession) handleRePick(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (cs *CivSession) handleRePick(s discord.DataAccessLayer, m *discordgo.MessageCreate) {
 	cs.RePicksRemaining--
 
 	if cs.RePickVotes*2 >= len(cs.Players) {

@@ -7,9 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/bwmarrin/discordgo"
-
 	"github.com/ecshreve/civ-bot-go/internal/civsession"
+	"github.com/ecshreve/civ-bot-go/internal/discord"
 )
 
 func main() {
@@ -17,7 +16,7 @@ func main() {
 
 	// Create a new Discord session using the provided bot token, if we
 	// encounter an error log it and exit.
-	dg, err := discordgo.New("Bot " + token)
+	dg, err := discord.NewSessDAL("Bot " + token)
 	if err != nil {
 		log.Fatalf("error creating Discord session - %+v", err)
 	}
