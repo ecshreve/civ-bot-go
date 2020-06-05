@@ -1,13 +1,13 @@
 package civsession
 
 import (
-	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/civ"
+	"github.com/ecshreve/civ-bot-go/internal/discord"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
 // FormatPicks returns a string in a readable format for each player's picks.
-func FormatPicks(picks map[*discordgo.User][]*civ.Civ) string {
+func FormatPicks(picks map[*discord.User][]*civ.Civ) string {
 	ret := ""
 	for k, v := range picks {
 		ret = ret + "\n" + util.FormatUser(k) + ":\n" + civ.FormatCivs(v) + "\n-----\n"

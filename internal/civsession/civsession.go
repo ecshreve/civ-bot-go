@@ -9,7 +9,12 @@ import (
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
+	"github.com/ecshreve/civ-bot-go/internal/discord"
 )
+
+type civSession interface {
+	banCiv(string, string) (*civ.Civ, error)
+}
 
 // CivConfig holds a config for a CivSession.
 type CivConfig struct {
@@ -23,8 +28,8 @@ type CivConfig struct {
 type CivSession struct {
 	Config           *CivConfig
 	Clock            clock.Clock
-	Players          []*discordgo.User
-	PlayerMap        map[string]*discordgo.User
+	Players          []*discord.User
+	PlayerMap        map[string]*discord.User
 	Civs             []*civ.Civ
 	CivMap           map[constants.CivKey]*civ.Civ
 	Bans             map[string][]*civ.Civ
@@ -54,8 +59,8 @@ func NewCivSession() *CivSession {
 	return &CivSession{
 		Config:           &cfg,
 		Clock:            clock.New(),
-		Players:          make([]*discordgo.User, 0),
-		PlayerMap:        make(map[string]*discordgo.User),
+		Players:          make([]*discord.User, 0),
+		PlayerMap:        make(map[string]*discord.User),
 		Civs:             civs,
 		CivMap:           civMap,
 		Bans:             make(map[string][]*civ.Civ),
@@ -70,8 +75,8 @@ func (cs *CivSession) Reset() {
 	civs := civ.GenCivs()
 	civMap := civ.GenCivMap(civs)
 
-	cs.Players = make([]*discordgo.User, 0)
-	cs.PlayerMap = make(map[string]*discordgo.User)
+	cs.Players = make([]*discord.User, 0)
+	cs.PlayerMap = make(map[string]*discord.User)
 	cs.Civs = civs
 	cs.CivMap = civMap
 	cs.Bans = make(map[string][]*civ.Civ)

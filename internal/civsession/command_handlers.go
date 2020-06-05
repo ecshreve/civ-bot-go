@@ -8,6 +8,7 @@ import (
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
+	"github.com/ecshreve/civ-bot-go/internal/discord"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
@@ -18,13 +19,13 @@ func (cs *CivSession) banCommandHandler(s *discordgo.Session, m *discordgo.Messa
 		cs.pick(s, m)
 	}
 	if len(args) == 1 {
-		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+util.FormatUser(m.Author)+" you have to actually ban someone"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+util.FormatUser(&discord.User{m.Author})+" you have to actually ban someone"))
 		return
 	}
 
 	_, err := cs.banCiv(args[1], m.Author.ID)
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(m.Author)+" can you pick a valid civ to ban?"))
+		s.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+util.FormatUser(&discord.User{m.Author})+" can you pick a valid civ to ban?"))
 		log.Print(err)
 		return
 	}

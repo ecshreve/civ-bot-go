@@ -3,6 +3,8 @@ package civsession
 import (
 	"strings"
 
+	"github.com/ecshreve/civ-bot-go/internal/discord"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
@@ -73,10 +75,11 @@ func (cs *CivSession) ReactionsHandler(s *discordgo.Session, r *discordgo.Messag
 	}
 
 	// Ignore when sender is invalid or is a bot.
-	user, err := s.User(r.UserID)
-	if err != nil || user == nil || user.Bot {
+	dgoUser, err := s.User(r.UserID)
+	if err != nil || dgoUser == nil || dgoUser.Bot {
 		return
 	}
+	user := &discord.User{dgoUser}
 
 	args := m.Embeds[0].Footer.Text
 

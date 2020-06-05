@@ -4,17 +4,17 @@ import (
 	"testing"
 
 	"github.com/benbjohnson/clock"
-	"github.com/bwmarrin/discordgo"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
+	"github.com/ecshreve/civ-bot-go/internal/discord"
 )
 
 func TestBanCiv(t *testing.T) {
 	testdata := NewTestData()
 	players := testdata.Players
-	playerMap := make(map[string]*discordgo.User)
+	playerMap := make(map[string]*discord.User)
 	for _, p := range players {
 		playerMap[p.ID] = p
 	}
@@ -292,7 +292,7 @@ func TestMakePicksWithTier(t *testing.T) {
 	testcases := []struct {
 		description string
 		civs        []constants.CivKey
-		players     []*discordgo.User
+		players     []*discord.User
 		numPicks    int
 		expectError bool
 		expected    map[string][]constants.CivKey
@@ -372,7 +372,7 @@ func TestMakePicksWithTier(t *testing.T) {
 			cs.Civs = civsToTest
 			cs.CivMap = civMap
 
-			var playerMap = make(map[string]*discordgo.User)
+			var playerMap = make(map[string]*discord.User)
 			for _, u := range testcase.players {
 				playerMap[u.ID] = u
 			}
@@ -412,7 +412,7 @@ func TestMakePicksWithoutTier(t *testing.T) {
 	testcases := []struct {
 		description string
 		civs        []constants.CivKey
-		players     []*discordgo.User
+		players     []*discord.User
 		numPicks    int
 		expectError bool
 		expected    map[string][]constants.CivKey
@@ -478,7 +478,7 @@ func TestMakePicksWithoutTier(t *testing.T) {
 			cs.Civs = civsToTest
 			cs.CivMap = civMap
 
-			var playerMap = make(map[string]*discordgo.User)
+			var playerMap = make(map[string]*discord.User)
 			for _, u := range testcase.players {
 				playerMap[u.ID] = u
 			}
