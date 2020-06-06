@@ -11,7 +11,7 @@ import (
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
-	"github.com/ecshreve/civ-bot-go/internal/discord"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 )
 
 // banCiv does a fuzzy match on the given string, if it finds a match it sets that

@@ -8,12 +8,12 @@ import (
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
-	"github.com/ecshreve/civ-bot-go/internal/discord"
 	"github.com/ecshreve/civ-bot-go/internal/util"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 )
 
 // TODO: fix embed text to indicate number of bans.
-func (cs *CivSession) banCommandHandler(s discord.DataAccessLayer, m *discordgo.MessageCreate, args []string) {
+func (cs *CivSession) banCommandHandler(s discord.DataAccessLayer, m discord.MessageCreate, args []string) {
 	if cs.Config.NumBans == 0 {
 		// TODO: handle error here.
 		cs.pick(s, m)

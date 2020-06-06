@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/ecshreve/civ-bot-go/internal/discord"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 )
 
 // IsBotReaction checks if users reaction is one preset by the bot.

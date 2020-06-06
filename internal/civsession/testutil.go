@@ -6,7 +6,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/civ"
-	"github.com/ecshreve/civ-bot-go/internal/discord"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 )
 
 func genPlayersForTest() []*discord.User {

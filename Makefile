@@ -1,3 +1,9 @@
+DIRECTORIES=$(sort $(dir $(wildcard pkg/*/*/)))
+MOCKS=$(foreach x, $(DIRECTORIES), mocks/$(x))
+
+out:
+	@echo $(DIRECTORIES)
+
 build:
 	go build -o bin/civ-bot github.com/ecshreve/civ-bot-go/cmd/civ-bot-go
 
@@ -6,11 +12,19 @@ run-only:
 
 run: build run-only
 
-test:
+test: | mocks
 	go test github.com/ecshreve/civ-bot-go/...
 
-testc:
+testc: | mocks
 	go test -race -coverprofile=coverage.txt -covermode=atomic github.com/ecshreve/civ-bot-go/...
 
-testv:
+testv: | mocks
 	go test -v github.com/ecshreve/civ-bot-go/...
+
+clean-mocks:
+	rm -rf mocks
+
+mocks: $(MOCKS)
+  
+$(MOCKS): mocks/% : %
+	mockery -output=$@ -dir=$^ -all

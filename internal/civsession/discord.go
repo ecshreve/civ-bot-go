@@ -3,7 +3,7 @@ package civsession
 import (
 	"strings"
 
-	"github.com/ecshreve/civ-bot-go/internal/discord"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/util"

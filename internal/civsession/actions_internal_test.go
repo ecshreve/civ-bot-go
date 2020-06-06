@@ -8,7 +8,7 @@ import (
 
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
-	"github.com/ecshreve/civ-bot-go/internal/discord"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 )
 
 func TestBanCiv(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/ecshreve/civ-bot-go/internal/civsession"
-	"github.com/ecshreve/civ-bot-go/internal/discord"
+	"github.com/ecshreve/civ-bot-go/pkg/discord"
 )
 
 func main() {
