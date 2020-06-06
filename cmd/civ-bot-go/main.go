@@ -14,13 +14,19 @@ func main() {
 	token := os.Getenv("CIV_BOT_TOKEN")
 
 	// Create a new Bot, exit if we encounter an error.
-	bot, err := bot.NewBot(token)
+	b, err := bot.NewBot(token)
 	if err != nil {
 		log.Fatalf("error creating bot - %+v", err)
 	}
 
+	// Attach handler functions to the Bot.
+	err = b.AddHandlers()
+	if err != nil {
+		log.Fatalf("error attaching handlers to session")
+	}
+
 	// Open the discordgo.Session for the Bot.
-	err = bot.StartSession()
+	err = b.StartSession()
 	if err != nil {
 		log.Fatalf("error starting bot session - %+v", err)
 	}
@@ -32,5 +38,5 @@ func main() {
 	<-sc
 
 	// Close the Discord session for the Bot.
-	bot.EndSession()
+	b.EndSession()
 }

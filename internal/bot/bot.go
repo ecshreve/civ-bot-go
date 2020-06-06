@@ -6,9 +6,9 @@ import (
 
 // Bot holds data and implements functions for an instance of the civ-bot.
 type Bot struct {
-	*DiscordSession
-	*Config
-	*CivState
+	DS       *DiscordSession
+	Config   *Config
+	CivState *CivState
 }
 
 // NewBot takes a DiscordToken and returns a Bot.
@@ -22,18 +22,27 @@ func NewBot(token string) (*Bot, error) {
 
 	// Initialize and return a new bot with command and reaction handlers.
 	b := &Bot{
-		DiscordSession: ds,
-		Config:         config,
-		CivState:       NewCivState(config),
+		DS:       ds,
+		Config:   config,
+		CivState: NewCivState(config),
 	}
-	b.Session.AddHandler(b.CommandHandler)
-	b.Session.AddHandler(b.ReactionHandler)
 
 	return b, nil
 }
 
+func (b *Bot) AddHandlers() error {
+	if b.DS == nil {
+		return oops.Errorf("unable to add handlers to nil discordgo.Session")
+	}
+
+	b.DS.AddHandler(b.CommandHandler)
+	b.DS.AddHandler(b.ReactionHandler)
+
+	return nil
+}
+
 func (b *Bot) StartSession() error {
-	err := b.Session.Open()
+	err := b.DS.Open()
 	if err != nil {
 		return oops.Wrapf(err, "unable to open discord session")
 	}
@@ -42,7 +51,7 @@ func (b *Bot) StartSession() error {
 }
 
 func (b *Bot) EndSession() error {
-	err := b.Session.Close()
+	err := b.DS.Close()
 	if err != nil {
 		return oops.Wrapf(err, "unable to close discord session")
 	}
