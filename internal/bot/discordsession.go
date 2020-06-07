@@ -6,7 +6,7 @@ import (
 )
 
 type DiscordSession struct {
-	discordgo.Session
+	*discordgo.Session
 }
 
 func NewDiscordSession(token string) (*DiscordSession, error) {
@@ -16,6 +16,6 @@ func NewDiscordSession(token string) (*DiscordSession, error) {
 		return nil, oops.Wrapf(err, "unable to create new discordgo.Session")
 	}
 
-	ds := DiscordSession{*dg}
+	ds := DiscordSession{dg}
 	return &ds, nil
 }

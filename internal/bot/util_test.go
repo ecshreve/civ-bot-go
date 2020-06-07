@@ -260,7 +260,7 @@ func mockDiscordGuild(index int) *discordgo.Guild {
 }
 func mockDiscordSession() *DiscordSession {
 	dg, _ := discordgo.New()
-	ds := &DiscordSession{*dg}
+	ds := &DiscordSession{dg}
 	ds.State.GuildAdd(mockDiscordGuild(1))
 	return ds
 }
