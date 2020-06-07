@@ -97,6 +97,15 @@ func SortCivs(civs []*Civ) {
 	})
 }
 
+// GetCivsByTier returns a map of [FilthyTier][]*Civ for the given list of Civs.
+func GetCivsByTier(civs []*Civ) map[int][]*Civ {
+	civsByTier := make(map[int][]*Civ)
+	for _, c := range civs {
+		civsByTier[c.FilthyTier] = append(civsByTier[c.FilthyTier], c)
+	}
+	return civsByTier
+}
+
 // FormatCiv returns a string for a single Civ in a readable format.
 func FormatCiv(c *Civ) string {
 	formatStr := "{ t-%d } -- [%s -- %s](%s)"
