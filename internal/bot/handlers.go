@@ -8,7 +8,7 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
-func (b *Bot) validateCommandHandlerArgs(mi MessageInterface) []string {
+func (b *Bot) validateCommandHandlerArgs(mi MessageInterface) *discordgo.MessageEmbed {
 	m, ok := mi.(MessCreate)
 	if !ok {
 		return nil
@@ -33,17 +33,23 @@ func (b *Bot) validateCommandHandlerArgs(mi MessageInterface) []string {
 		return nil
 	}
 
-	return args
+	c, ok := b.Commands[CommandID(args[0])]
+	if !ok {
+		b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid command", "for a list of commands type `/civ help`"))
+		return nil
+	}
+
+	return c.Process(m.Message)
 }
 
 func (b *Bot) CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var mess MessageInterface = MessCreate{m}
-	args := b.validateCommandHandlerArgs(mess)
-	if args == nil {
+	embed := b.validateCommandHandlerArgs(mess)
+	if embed == nil {
 		return
 	}
 
-	fmt.Printf("command: %+v\n", args)
+	b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
 }
 
 func (b *Bot) ReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd) {

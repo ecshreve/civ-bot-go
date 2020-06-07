@@ -9,6 +9,7 @@ type Bot struct {
 	DS       *DiscordSession
 	Config   *Config
 	CivState *CivState
+	Commands map[CommandID]Command
 }
 
 // NewBot takes a DiscordToken and returns a Bot.
@@ -25,6 +26,9 @@ func NewBot(token string) (*Bot, error) {
 		DS:       ds,
 		Config:   config,
 		CivState: NewCivState(config),
+		Commands: map[CommandID]Command{
+			CommandID("help"): &helpCommand{},
+		},
 	}
 
 	return b, nil
