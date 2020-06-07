@@ -67,3 +67,21 @@ func (b *Bot) Reset(keepConfig bool) {
 	b.CivConfig = NewCivConfig()
 	b.CivState = NewCivState()
 }
+
+// ReadyToPick returns a boolean based on the Bot's CivState indicating if the Bot
+// should proceed to picking Civs. True if all players have entered the number of bans
+// defined in the CivConfig then, otherwise false.
+func (b *Bot) ReadyToPick() bool {
+	bans := b.CivState.Bans
+	if len(bans) != len(b.CivState.Players) {
+		return false
+	}
+
+	for _, bansForPlayer := range bans {
+		if len(bansForPlayer) < b.CivConfig.Bans {
+			return false
+		}
+	}
+
+	return true
+}
