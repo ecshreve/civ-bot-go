@@ -1,41 +1,46 @@
 package bot
 
-import "fmt"
+import (
+	"fmt"
 
-type Config struct {
+	"github.com/bwmarrin/discordgo"
+)
+
+type CivConfig struct {
 	Bans     int
 	Picks    int
 	RePicks  int
 	UseTiers bool
 }
 
-var DefaultConfig = &Config{
+var DefaultCivConfig = &CivConfig{
 	Bans:     1,
 	Picks:    3,
 	RePicks:  3,
 	UseTiers: false,
 }
 
-func NewConfig() *Config {
-	return DefaultConfig
+func NewCivConfig() *CivConfig {
+	return DefaultCivConfig
 }
 
-func (b *Bot) GetConfigEmbedFields() []*EmbedField {
-	banEmbedField := NewEmbedField(
-		"`Bans` -- the number of Civs each player gets to ban",
-		fmt.Sprintf("**%d**", b.Config.Bans),
-	)
-	picksEmbedField := NewEmbedField(
-		"`Picks` -- the number of Civs each player gets to choose from",
-		fmt.Sprintf("**%d**", b.Config.Picks),
-	)
-	rePicksEmbedField := NewEmbedField(
-		"`RePicks` -- the max number of times allowed to re-pick Civs",
-		fmt.Sprintf("**%d**", b.Config.RePicks),
-	)
-	useTiersEmbedField := NewEmbedField(
-		"`UseTiers` -- make picks based on FilthyRobot's tier list -- setting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
-		fmt.Sprintf("**%v**", b.Config.UseTiers),
-	)
-	return []*EmbedField{banEmbedField, picksEmbedField, rePicksEmbedField, useTiersEmbedField}
+func (c *CivConfig) GetEmbedFields() []*discordgo.MessageEmbedField {
+	return []*discordgo.MessageEmbedField{
+		{
+			Name:  "`Bans` -- the number of Civs each player gets to ban",
+			Value: fmt.Sprintf("**%d**", c.Bans),
+		},
+		{
+			Name:  "`Picks` -- the number of Civs each player gets to choose from",
+			Value: fmt.Sprintf("**%d**", c.Picks),
+		},
+		{
+			Name:  "`RePicks` -- the max number of times allowed to re-pick Civs",
+			Value: fmt.Sprintf("**%d**", c.RePicks),
+		},
+		{
+			Name:  "`UseTiers` -- make picks based on FilthyRobot's tier list -- setting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
+			Value: fmt.Sprintf("**%v**", c.UseTiers),
+		},
+	}
 }

@@ -10,14 +10,12 @@ type DiscordSession struct {
 }
 
 func NewDiscordSession(token string) (*DiscordSession, error) {
-	// Create a new Discord session using the provided bot token, if we
-	// encounter an error log it and exit.
+	// Create a new Discord session using the provided token.
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
 		return nil, oops.Wrapf(err, "unable to create new discordgo.Session")
 	}
 
-	ds := &DiscordSession{*dg}
-
-	return ds, nil
+	ds := DiscordSession{*dg}
+	return &ds, nil
 }

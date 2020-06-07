@@ -5,6 +5,19 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
+type CommandID string
+
+type CommandInfo struct {
+	Name        string
+	Emoji       string
+	Description string
+	Usage       string
+}
+type Command interface {
+	Info() *CommandInfo
+	Process(*discordgo.Message) *discordgo.MessageEmbed
+}
+
 type helpCommand struct{}
 
 func (c *helpCommand) Info() *CommandInfo {

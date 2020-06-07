@@ -8,12 +8,7 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
-func (b *Bot) validateCommandHandlerArgs(mi MessageInterface) *discordgo.MessageEmbed {
-	m, ok := mi.(MessCreate)
-	if !ok {
-		return nil
-	}
-
+func (b *Bot) validateCommandHandlerArgs(m *discordgo.Message) *discordgo.MessageEmbed {
 	// Ignore all messages created by the bot itself.
 	if m.Author.ID == b.DS.State.User.ID {
 		return nil
@@ -39,12 +34,11 @@ func (b *Bot) validateCommandHandlerArgs(mi MessageInterface) *discordgo.Message
 		return nil
 	}
 
-	return c.Process(m.Message)
+	return c.Process(m)
 }
 
 func (b *Bot) CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var mess MessageInterface = MessCreate{m}
-	embed := b.validateCommandHandlerArgs(mess)
+	embed := b.validateCommandHandlerArgs(m.Message)
 	if embed == nil {
 		return
 	}

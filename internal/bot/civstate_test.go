@@ -11,8 +11,7 @@ import (
 )
 
 func TestNewState(t *testing.T) {
-	cfg := bot.NewConfig()
-	state := bot.NewCivState(cfg)
+	state := bot.NewCivState()
 	assert.NotNil(t, state)
 
 	assert.Nil(t, state.Players)
@@ -27,5 +26,5 @@ func TestNewState(t *testing.T) {
 	assert.NotNil(t, state.PickState)
 	assert.Equal(t, time.Time{}, state.PickState.PickTime)
 	assert.Equal(t, 0, state.PickState.RePickVotes)
-	assert.Equal(t, cfg.RePicks, state.PickState.RePicksRemaining)
+	assert.Equal(t, bot.DefaultCivConfig.RePicks, state.PickState.RePicksRemaining)
 }

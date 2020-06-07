@@ -266,11 +266,10 @@ func mockDiscordSession() *DiscordSession {
 }
 
 func MockBot(t *testing.T) (*Bot, *Mock) {
-	config := NewConfig()
 	b := &Bot{
-		DS:       mockDiscordSession(),
-		Config:   config,
-		CivState: NewCivState(config),
+		DS:        mockDiscordSession(),
+		CivConfig: NewCivConfig(),
+		CivState:  NewCivState(),
 	}
 
 	mock = NewMock(t)

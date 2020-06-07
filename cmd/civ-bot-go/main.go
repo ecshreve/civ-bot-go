@@ -19,12 +19,6 @@ func main() {
 		log.Fatalf("error creating bot - %+v", err)
 	}
 
-	// Attach handler functions to the Bot.
-	err = b.AddHandlers()
-	if err != nil {
-		log.Fatalf("error attaching handlers to session")
-	}
-
 	// Open the discordgo.Session for the Bot.
 	err = b.StartSession()
 	if err != nil {

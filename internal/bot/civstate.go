@@ -14,7 +14,7 @@ type PickState struct {
 	RePicksRemaining int
 }
 
-func NewPickState(config *Config) *PickState {
+func NewPickState(config *CivConfig) *PickState {
 	return &PickState{
 		RePicksRemaining: config.RePicks,
 	}
@@ -31,15 +31,11 @@ type CivState struct {
 	*PickState
 }
 
-func NewCivState(config *Config) *CivState {
+func NewCivState() *CivState {
 	return &CivState{
 		Clk:       clock.New(),
 		Civs:      civ.GenCivs(),
 		CivMap:    civ.GenCivMap(civ.GenCivs()),
-		PickState: NewPickState(config),
+		PickState: NewPickState(DefaultCivConfig),
 	}
-}
-
-func (b *Bot) ClearState() {
-	b.CivState = NewCivState(b.Config)
 }

@@ -6,29 +6,34 @@ import (
 
 // Bot holds data and implements functions for an instance of the civ-bot.
 type Bot struct {
-	DS       *DiscordSession
-	Config   *Config
-	CivState *CivState
-	Commands map[CommandID]Command
+	DS        *DiscordSession
+	Commands  map[CommandID]Command
+	CivConfig *CivConfig
+	CivState  *CivState
 }
 
-// NewBot takes a DiscordToken and returns a Bot.
+// NewBot takes a token and returns a Bot.
 func NewBot(token string) (*Bot, error) {
+	// Create a new DiscordSession for the bot, return if we encounter an error.
 	ds, err := NewDiscordSession(token)
 	if err != nil {
 		return nil, oops.Wrapf(err, "unable to create DiscordSession")
 	}
 
-	config := NewConfig()
-
-	// Initialize and return a new bot with command and reaction handlers.
+	// Initialize and return a new Bot.
 	b := &Bot{
-		DS:       ds,
-		Config:   config,
-		CivState: NewCivState(config),
+		DS:        ds,
+		CivConfig: NewCivConfig(),
+		CivState:  NewCivState(),
 		Commands: map[CommandID]Command{
 			CommandID("help"): &helpCommand{},
 		},
+	}
+
+	// Attach command and reaction handlers to the bot.
+	err = b.AddHandlers()
+	if err != nil {
+		return nil, oops.Wrapf(err, "unable to add handlers to Bot")
 	}
 
 	return b, nil
