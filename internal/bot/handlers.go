@@ -55,7 +55,7 @@ func (b *Bot) MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// pick
+	b.Pick(m.ChannelID)
 }
 
 func (b *Bot) validateReactionHandlerArgs(r *discordgo.MessageReaction) Reaction {

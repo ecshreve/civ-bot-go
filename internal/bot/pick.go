@@ -1,10 +1,14 @@
 package bot
 
 import (
+	"fmt"
+	"math"
 	"math/rand"
 	"time"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/civ"
+	"github.com/ecshreve/civ-bot-go/internal/constants"
 	"github.com/samsarahq/go/oops"
 )
 
@@ -129,6 +133,119 @@ func (b *Bot) makePicksWithoutTier() error {
 	return nil
 }
 
-func (b *Bot) Pick() {
-	// Pick
+// Pick selects Civs at random and assigns them to Players. It also handles the
+// logic surrounding re-picking. It returns an error if we encounter a problem
+// making picks at any point during the pick flow.
+//
+// TODO: add test
+func (b *Bot) Pick(channelID string) error {
+	cs := b.CivState
+	embedDescription := "here's this round of picks"
+	if cs.RePicksRemaining > 0 {
+		rePickThreshold := int(math.Ceil(float64(len(cs.Players)) / 2))
+		embedDescription = embedDescription + fmt.Sprintf(", if %d or more players react with ♻️ in the next 60 seconds then we'll pick again\n\n%s re-picks remainging", rePickThreshold, constants.NumEmojiMap[cs.RePicksRemaining])
+	}
+
+	var err error
+	if b.CivConfig.UseTiers {
+		err = b.makePicksWithTier()
+	} else {
+		err = b.makePicksWithoutTier()
+	}
+
+	// If we encounter an error making picks then make sure to reset pick values
+	// for the CivSession and return the error.
+	if err != nil {
+		cs.resetPicks()
+		return oops.Wrapf(err, "unable to make picks")
+	}
+
+	var embedFields []*discordgo.MessageEmbedField
+	for k, v := range cs.Picks {
+		f := &discordgo.MessageEmbedField{
+			Name:  cs.PlayerMap[k].Username,
+			Value: civ.FormatCivs(v),
+		}
+		embedFields = append(embedFields, f)
+	}
+
+	pickMessage, err := b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
+		Title:       "picks",
+		Description: embedDescription,
+		Color:       constants.ColorDARKBLUE,
+		Fields:      embedFields,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "pick",
+		},
+	})
+	if err != nil {
+		fmt.Println("error sending pick message")
+	}
+
+	if cs.RePicksRemaining > 0 {
+		b.DS.MessageReactionAdd(channelID, pickMessage.ID, "♻️")
+		b.countdown(pickMessage, cs.PickTime, 60)
+	} else {
+		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
+			Title: "no more re-picks, those are your choices, deal with it",
+			Color: constants.ColorORANGE,
+		})
+	}
+
+	return nil
+}
+
+// countown handles editing the existing embed with Picks to display the
+// amount of time remaining before the option to vote for a re-pick expires.
+//
+// TODO: add test
+func (b *Bot) countdown(msg *discordgo.Message, start time.Time, seconds int64) {
+	end := start.Add(time.Duration(time.Second * time.Duration(seconds)))
+	channelID := msg.ChannelID
+	messageID := msg.ID
+
+	if len(msg.Embeds) != 1 {
+		return
+	}
+	embed := msg.Embeds[0]
+
+	for range time.Tick(1 * time.Second) {
+		timeRemaining := int(end.Sub(time.Now()).Seconds())
+		siren := ""
+		if timeRemaining <= 10 && timeRemaining > 0 {
+			siren = "🚨"
+		}
+		embed.Title = fmt.Sprintf("picks     %s -- %d seconds remaining -- %s", siren, timeRemaining, siren)
+		b.DS.ChannelMessageEditEmbed(channelID, messageID, embed)
+		if timeRemaining <= 0 {
+			break
+		}
+	}
+
+	b.handleRePick(channelID)
+}
+
+// handleRePick checks to see if the required number of re-pick votes have been
+// reached, if so then pick again, if not then reset the CivSession and display
+// a goodbye message.
+//
+// TODO: add test
+func (b *Bot) handleRePick(channelID string) {
+	cs := b.CivState
+	cs.RePicksRemaining--
+
+	if cs.RePickVotes*2 >= len(cs.Players) {
+		cs.Picks = make(map[PlayerID][]*civ.Civ)
+		cs.RePickVotes = 0
+		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
+			Title: "alright looks like we're picking again",
+			Color: constants.ColorORANGE,
+		})
+		b.Pick(channelID)
+	} else {
+		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
+			Title: "great, have fun! see y'all next time 👋",
+			Color: constants.ColorORANGE,
+		})
+	}
 }
