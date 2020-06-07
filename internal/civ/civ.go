@@ -79,7 +79,7 @@ func GetCivByString(s string, civs []*Civ) *Civ {
 	cm := closestmatch.New(strsToTest, bagSizes)
 	closest := cm.Closest(s)
 
-	retCiv := &Civ{}
+	var retCiv *Civ
 	for _, c := range civs {
 		if c.CivBase == closest || c.LeaderBase == closest {
 			retCiv = c

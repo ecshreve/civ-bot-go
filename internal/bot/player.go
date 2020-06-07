@@ -27,6 +27,8 @@ func NewPlayer(u *discordgo.User) *Player {
 	}
 }
 
+// BanCiv handles banning a Civ based on the current CivState in the given Bot and
+// the given toBan argument.
 func (p *Player) BanCiv(b *Bot, toBan string) (*civ.Civ, error) {
 	if toBan == "" {
 		return nil, oops.Errorf("empty toBan argument for player: %s", p.PlayerID)
