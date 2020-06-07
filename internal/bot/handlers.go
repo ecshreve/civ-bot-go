@@ -45,6 +45,17 @@ func (b *Bot) MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	command.Process(b, m.Message)
+
+	readyToPick := false
+	if _, ok := command.(*banCommand); ok == true {
+		readyToPick = b.ReadyToPick()
+	}
+
+	if !readyToPick {
+		return
+	}
+
+	// pick
 }
 
 func (b *Bot) validateReactionHandlerArgs(r *discordgo.MessageReaction) Reaction {
