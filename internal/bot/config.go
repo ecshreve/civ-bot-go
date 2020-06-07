@@ -15,16 +15,17 @@ type CivConfig struct {
 }
 
 // DefaultCivConfig defines the default CivConfig used when creating a new Bot.
-var DefaultCivConfig = &CivConfig{
+var DefaultCivConfig = CivConfig{
 	Bans:     1,
 	Picks:    3,
 	RePicks:  3,
 	UseTiers: false,
 }
 
-// NewCivConfig simply returns the DefaultCivConfig.
+// NewCivConfig simply returns a pointer to a copy of the DefaultCivConfig.
 func NewCivConfig() *CivConfig {
-	return DefaultCivConfig
+	cfg := DefaultCivConfig
+	return &cfg
 }
 
 // GetEmbedFields returns a slice of MessageEmbedFields for the given CivConfig.

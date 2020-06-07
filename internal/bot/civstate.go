@@ -41,7 +41,7 @@ func NewCivState() *CivState {
 		Clk:       clock.New(),
 		Civs:      civ.GenCivs(),
 		CivMap:    civ.GenCivMap(civ.GenCivs()),
-		PickState: NewPickState(DefaultCivConfig),
+		PickState: NewPickState(&DefaultCivConfig),
 	}
 }
 
@@ -50,4 +50,18 @@ func NewCivStateWithConfig(cfg *CivConfig) *CivState {
 	cs := NewCivState()
 	cs.PickState = NewPickState(cfg)
 	return cs
+}
+
+// Reset clears the Bot's CivState conditionally maintains the CivConfig based on
+// the keepConfig argument.
+func (b *Bot) Reset(keepConfig bool) {
+	cfg := b.CivConfig
+
+	if keepConfig {
+		b.CivState = NewCivStateWithConfig(cfg)
+		return
+	}
+
+	b.CivConfig = NewCivConfig()
+	b.CivState = NewCivState()
 }
