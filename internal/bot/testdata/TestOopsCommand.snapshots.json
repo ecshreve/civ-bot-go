@@ -1,0 +1,39 @@
+[
+  {
+    "Name": "Oops -- Info()",
+    "Values": [
+      {
+        "Description": "start a new civ-bot session maintaining the current config",
+        "Emoji": "🤷‍♀️",
+        "Name": "Oops",
+        "Usage": "`/civ oops`"
+      }
+    ]
+  },
+  {
+    "Name": "Oops -- Process() embeds",
+    "Values": [
+      [
+        {
+          "color": 7419530,
+          "description": "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view or update the configuration \n- enter `/civ oops` at any point to completely start over\n- enter `/civ help` to see a list of available commands",
+          "footer": {
+            "text": "new"
+          },
+          "title": "🆕 starting a new civ picker session"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "Oops -- Bot CivConfig",
+    "Values": [
+      {
+        "Bans": 77,
+        "Picks": 88,
+        "RePicks": 99,
+        "UseTiers": false
+      }
+    ]
+  }
+]

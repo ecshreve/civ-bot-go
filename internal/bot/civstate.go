@@ -45,7 +45,9 @@ func NewCivState() *CivState {
 	}
 }
 
-func (cs *CivState) Reset(cfg *CivConfig) {
-	cs = NewCivState()
+// NewCivStateWithConfig returns a CivState based on the given CivConfig.
+func NewCivStateWithConfig(cfg *CivConfig) *CivState {
+	cs := NewCivState()
 	cs.PickState = NewPickState(cfg)
+	return cs
 }

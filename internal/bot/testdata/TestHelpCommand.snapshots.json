@@ -25,11 +25,26 @@
             {
               "name": "🆕 New",
               "value": "`/civ new`: start a new civ-bot session"
+            },
+            {
+              "name": "🤷‍♀️ Oops",
+              "value": "`/civ oops`: start a new civ-bot session maintaining the current config"
             }
           ],
           "title": "available bot commands"
         }
       ]
+    ]
+  },
+  {
+    "Name": "Help -- Bot CivConfig",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
     ]
   }
 ]

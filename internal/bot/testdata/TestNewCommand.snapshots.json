@@ -24,5 +24,16 @@
         }
       ]
     ]
+  },
+  {
+    "Name": "New -- Bot CivConfig",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
+    ]
   }
 ]

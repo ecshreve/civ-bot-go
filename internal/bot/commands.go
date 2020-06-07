@@ -32,6 +32,7 @@ type Command interface {
 var AllCommands = []Command{
 	&helpCommand{},
 	&newCommand{},
+	&oopsCommand{},
 }
 
 // Command interface implementation for the "help" command.
@@ -83,8 +84,6 @@ func (c *newCommand) Info() *CommandInfo {
 }
 
 func (c *newCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, error) {
-	b.CivState.Reset(b.CivConfig)
-
 	title := "🆕 starting a new civ picker session"
 	description := "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view or update the configuration \n- enter `/civ oops` at any point to completely start over\n- enter `/civ help` to see a list of available commands"
 
@@ -112,7 +111,36 @@ func (c *newCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, 
 		return newMessage, oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✅", embed)
 	}
 
+	b.CivState = NewCivState()
 	return newMessage, nil
+}
+
+// Command interface implementation for the "oops" command.
+type oopsCommand struct{}
+
+func (c *oopsCommand) Info() *CommandInfo {
+	return &CommandInfo{
+		Name:        "Oops",
+		Emoji:       "🤷‍♀️",
+		Description: "start a new civ-bot session maintaining the current config",
+		Usage:       "`/civ oops`",
+	}
+}
+
+func (c *oopsCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, error) {
+	currentCivConfig := b.CivConfig
+
+	// Reuse the Process func for the newCommand.
+	var newHelper newCommand
+	oopsMessage, err := newHelper.Process(b, m)
+	if err != nil {
+		return oopsMessage, oops.Wrapf(err, "error processing oops command")
+	}
+
+	// Set the Bot's CivState based on the CivConfig it had when the oopsCommand
+	// was entered.
+	b.CivState = NewCivStateWithConfig(currentCivConfig)
+	return oopsMessage, nil
 }
 
 // getHelpEmbedField returns a MessageEmbedField for the given Command that's used
