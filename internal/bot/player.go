@@ -15,6 +15,7 @@ type Player struct {
 	*discordgo.User
 }
 
+// NewPlayer returns a Player for the given discordgo.User.
 func NewPlayer(u *discordgo.User) *Player {
 	return &Player{
 		PlayerID(u.ID),
@@ -32,10 +33,12 @@ func GetPlayerIDToPlayerMap(players []*Player) map[PlayerID]*Player {
 	return playerIDToPlayerMap
 }
 
+// FormatPlayer returns the string representation for the given Player.
 func FormatPlayer(player *Player) string {
 	return fmt.Sprintf("<@%s>", player.PlayerID)
 }
 
+// FormatPlayers returns the string representation for the given slice of Players.
 func FormatPlayers(players []*Player) string {
 	ret := ""
 	for _, p := range players {

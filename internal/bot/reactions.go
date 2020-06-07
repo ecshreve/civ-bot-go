@@ -6,20 +6,25 @@ import (
 	"github.com/samsarahq/go/oops"
 )
 
+// ReactionInfo defines the properties of a Reaction.
 type ReactionInfo struct {
 	Command CommandID
 	Emojis  []string
 }
 
+// Reaction is a reaction on a Message that the Bot sent.
 type Reaction interface {
 	Info() *ReactionInfo
 	Process(*Bot, *discordgo.MessageReaction) (*discordgo.Message, error)
 }
 
+// AllReactions is a slice contianing all the valid Reactions for the Bot.
 var AllReactions = []Reaction{
 	&newReaction{},
 }
 
+// Reaction interface implementation for reactions on the Message that results from
+// processing the newCommand.
 type newReaction struct{}
 
 func (r *newReaction) Info() *ReactionInfo {
