@@ -17,6 +17,14 @@ func (s *DiscordSession) AddHandler(handler interface{}) func() {
 	return func() {}
 }
 
+func (s *DiscordSession) ChannelMessageSend(channelID string, content string) (*discordgo.Message, error) {
+	mock.Input(interface{}(s.ChannelMessageSend), channelID, content)
+	return &discordgo.Message{
+		ChannelID: channelID,
+		Content:   content,
+	}, nil
+}
+
 func (s *DiscordSession) ChannelMessageSendEmbed(channelID string, embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	mock.Input(interface{}(s.ChannelMessageSendEmbed), channelID, embed)
 	return &discordgo.Message{

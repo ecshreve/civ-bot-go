@@ -42,6 +42,7 @@ func NewCivState() *CivState {
 		PlayerMap: make(map[PlayerID]*Player),
 		Civs:      civ.GenCivs(),
 		CivMap:    civ.GenCivMap(civ.GenCivs()),
+		Bans:      make(map[PlayerID][]*civ.Civ),
 		PickState: NewPickState(&DefaultCivConfig),
 	}
 }

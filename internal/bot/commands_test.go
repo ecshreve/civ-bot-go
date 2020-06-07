@@ -91,3 +91,99 @@ func TestOopsCommand(t *testing.T) {
 
 	commandTestHelper(t, snap, oops, b, testMessage)
 }
+
+func TestBanCommand(t *testing.T) {
+	snap := snapshotter.New(t)
+	defer snap.Verify()
+
+	b, mock := MockBot(t)
+	ban := b.CommandMap["ban"].(*banCommand)
+	testChannelID := "testChannelID"
+
+	var testUsers []*discordgo.User
+	testUserIDs := []string{"testPlayer1", "testPlayer2"}
+	for _, id := range testUserIDs {
+		testUser := &discordgo.User{ID: id}
+		testUsers = append(testUsers, testUser)
+
+		testPlayer := NewPlayer(testUser)
+		b.CivState.Players = append(b.CivState.Players, testPlayer)
+		b.CivState.PlayerMap[testPlayer.PlayerID] = testPlayer
+	}
+
+	testcases := []struct {
+		description string
+		content     string
+		author      *discordgo.User
+		setMocks    func()
+	}{
+		{
+			description: "no civ provided",
+			content:     "/civ ban",
+			author:      testUsers[0],
+			setMocks: func() {
+				mock.Expect(b.DS.ChannelMessageSend, testChannelID, MockAny{})
+			},
+		},
+		{
+			description: "ban civ",
+			content:     "/civ ban america",
+			author:      testUsers[0],
+			setMocks: func() {
+				mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, MockAny{})
+			},
+		},
+		{
+			description: "ban an already banned civ",
+			content:     "/civ ban america",
+			author:      testUsers[0],
+			setMocks: func() {
+				mock.Expect(b.DS.ChannelMessageSend, testChannelID, MockAny{})
+			},
+		},
+		{
+			description: "ban a different civ",
+			content:     "/civ ban korea",
+			author:      testUsers[0],
+			setMocks: func() {
+				mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, MockAny{})
+			},
+		},
+		{
+			description: "different player ban a different civ",
+			content:     "/civ ban america",
+			author:      testUsers[1],
+			setMocks: func() {
+				mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, MockAny{})
+			},
+		},
+		{
+			description: "player not in session tries to ban",
+			content:     "/civ ban brazil",
+			author:      &discordgo.User{ID: "testInvalidUser"},
+			setMocks: func() {
+				mock.Expect(b.DS.ChannelMessageSend, testChannelID, MockAny{})
+			},
+		},
+	}
+
+	for _, testcase := range testcases {
+		t.Run(testcase.description, func(t *testing.T) {
+			testMessage := &discordgo.Message{
+				ChannelID: testChannelID,
+				Author:    testcase.author,
+				Content:   testcase.content,
+			}
+
+			testcase.setMocks()
+			banMessage, err := ban.Process(b, testMessage)
+			assert.NoError(t, err)
+			Check(mock.Check(), true, t)
+
+			snap.Snapshot(fmt.Sprintf("%s - message content", testcase.description), banMessage.Content)
+			snap.Snapshot(fmt.Sprintf("%s - message embeds", testcase.description), banMessage.Embeds)
+			snap.Snapshot(fmt.Sprintf("%s - civ state bans", testcase.description), b.CivState.Bans)
+		})
+	}
+
+}

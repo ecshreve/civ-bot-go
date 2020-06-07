@@ -1,12 +1,15 @@
 package bot
 
 import (
+	"log"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/samsarahq/go/oops"
 
+	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
+	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
 // CommandID is a wrapper around the string representation of the command.
@@ -34,6 +37,7 @@ var AllCommands = []Command{
 	&configCommand{},
 	&newCommand{},
 	&oopsCommand{},
+	&banCommand{},
 }
 
 // Command interface implementation for the "help" command.
@@ -161,6 +165,59 @@ func (c *oopsCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message,
 
 	b.Reset(true)
 	return oopsMessage, nil
+}
+
+// Command interface implementation for the "ban" command.
+type banCommand struct{}
+
+func (c *banCommand) Info() *CommandInfo {
+	return &CommandInfo{
+		Name:        "Ban",
+		Emoji:       "🍌",
+		Description: "ban the Civ that most closely matches the string argument",
+		Usage:       "`/civ ban <string>`",
+	}
+}
+
+func (c *banCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, error) {
+	// If a player not in the Bot session tries to ban then return an error message.
+	player, ok := b.CivState.PlayerMap[PlayerID(m.Author.ID)]
+	if !ok {
+		return b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("uhhh... ", "yo <@"+m.Author.ID+"> you aren't in this game, enter `/civ oops` to restart the session"))
+	}
+
+	// If no Civ was provided then return an error message.
+	args := strings.Split(m.Content, " ")[1:]
+	if len(args) == 1 {
+		return b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("ban missing", "🤔  "+FormatPlayer(player)+" you have to actually ban someone"))
+	}
+
+	_, err := player.BanCiv(b, args[1])
+	if err != nil {
+		log.Println(err)
+		return b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+FormatPlayer(player)+" can you pick a valid civ to ban?"))
+	}
+
+	var embedFields []*discordgo.MessageEmbedField
+	for k, v := range b.CivState.Bans {
+		f := &discordgo.MessageEmbedField{
+			Name:  b.CivState.PlayerMap[k].Username,
+			Value: civ.FormatCivs(v),
+		}
+		embedFields = append(embedFields, f)
+	}
+	embed := &discordgo.MessageEmbed{
+		Title:  "🍌 current bans",
+		Color:  constants.ColorRED,
+		Fields: embedFields,
+	}
+
+	banMessage, err := b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
+	if err != nil {
+		return nil, oops.Wrapf(err, "error sending embed: %+v", embed)
+	}
+
+	return banMessage, nil
 }
 
 // newSessionHelper is called when we Process either a newCommand or an oopsCommand.

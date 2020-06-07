@@ -1,0 +1,225 @@
+[
+  {
+    "Name": "no civ provided - message content",
+    "Values": [
+      "❌  **ban missing**\n🤔  \u003c@testPlayer1\u003e you have to actually ban someone"
+    ]
+  },
+  {
+    "Name": "no civ provided - message embeds",
+    "Values": [
+      null
+    ]
+  },
+  {
+    "Name": "no civ provided - civ state bans",
+    "Values": [
+      {}
+    ]
+  },
+  {
+    "Name": "ban civ - message content",
+    "Values": [
+      ""
+    ]
+  },
+  {
+    "Name": "ban civ - message embeds",
+    "Values": [
+      [
+        {
+          "color": 15158332,
+          "fields": [
+            {
+              "value": "\n{ t-3 } -- [america -- washington](http://steamcommunity.com/sharedfiles/filedetails/?id=180689240)"
+            }
+          ],
+          "title": "🍌 current bans"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "ban civ - civ state bans",
+    "Values": [
+      {
+        "testPlayer1": [
+          {
+            "Banned": true,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "ban an already banned civ - message content",
+    "Values": [
+      "❌  **invalid ban**\n🤔  \u003c@testPlayer1\u003e can you pick a valid civ to ban?"
+    ]
+  },
+  {
+    "Name": "ban an already banned civ - message embeds",
+    "Values": [
+      null
+    ]
+  },
+  {
+    "Name": "ban an already banned civ - civ state bans",
+    "Values": [
+      {
+        "testPlayer1": [
+          {
+            "Banned": true,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "ban a different civ - message content",
+    "Values": [
+      ""
+    ]
+  },
+  {
+    "Name": "ban a different civ - message embeds",
+    "Values": [
+      [
+        {
+          "color": 15158332,
+          "fields": [
+            {
+              "value": "\n{ t-1 } -- [korea -- sejong](http://steamcommunity.com/sharedfiles/filedetails/?id=218395239)"
+            }
+          ],
+          "title": "🍌 current bans"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "ban a different civ - civ state bans",
+    "Values": [
+      {
+        "testPlayer1": [
+          {
+            "Banned": true,
+            "CivBase": "korea",
+            "FilthyTier": 1,
+            "Key": 24,
+            "LeaderBase": "sejong",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=218395239"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "different player ban a different civ - message content",
+    "Values": [
+      ""
+    ]
+  },
+  {
+    "Name": "different player ban a different civ - message embeds",
+    "Values": [
+      [
+        {
+          "color": 15158332,
+          "fields": [
+            {
+              "value": "\n{ t-1 } -- [korea -- sejong](http://steamcommunity.com/sharedfiles/filedetails/?id=218395239)"
+            },
+            {
+              "value": "\n{ t-3 } -- [america -- washington](http://steamcommunity.com/sharedfiles/filedetails/?id=180689240)"
+            }
+          ],
+          "title": "🍌 current bans"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "different player ban a different civ - civ state bans",
+    "Values": [
+      {
+        "testPlayer1": [
+          {
+            "Banned": true,
+            "CivBase": "korea",
+            "FilthyTier": 1,
+            "Key": 24,
+            "LeaderBase": "sejong",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=218395239"
+          }
+        ],
+        "testPlayer2": [
+          {
+            "Banned": true,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "player not in session tries to ban - message content",
+    "Values": [
+      "❌  **uhhh... **\nyo \u003c@testInvalidUser\u003e you aren't in this game, enter `/civ oops` to restart the session"
+    ]
+  },
+  {
+    "Name": "player not in session tries to ban - message embeds",
+    "Values": [
+      null
+    ]
+  },
+  {
+    "Name": "player not in session tries to ban - civ state bans",
+    "Values": [
+      {
+        "testPlayer1": [
+          {
+            "Banned": true,
+            "CivBase": "korea",
+            "FilthyTier": 1,
+            "Key": 24,
+            "LeaderBase": "sejong",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=218395239"
+          }
+        ],
+        "testPlayer2": [
+          {
+            "Banned": true,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          }
+        ]
+      }
+    ]
+  }
+]
