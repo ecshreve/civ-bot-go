@@ -39,6 +39,7 @@ type CivState struct {
 func NewCivState() *CivState {
 	return &CivState{
 		Clk:       clock.New(),
+		PlayerMap: make(map[PlayerID]*Player),
 		Civs:      civ.GenCivs(),
 		CivMap:    civ.GenCivMap(civ.GenCivs()),
 		PickState: NewPickState(&DefaultCivConfig),

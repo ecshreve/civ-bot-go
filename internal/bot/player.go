@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -13,6 +15,13 @@ type Player struct {
 	*discordgo.User
 }
 
+func NewPlayer(u *discordgo.User) *Player {
+	return &Player{
+		PlayerID(u.ID),
+		u,
+	}
+}
+
 // GetPlayerIDToPlayerMap returns a map of [PlayerID]*Player for the given slice of Players.
 func GetPlayerIDToPlayerMap(players []*Player) map[PlayerID]*Player {
 	playerIDToPlayerMap := make(map[PlayerID]*Player)
@@ -21,4 +30,16 @@ func GetPlayerIDToPlayerMap(players []*Player) map[PlayerID]*Player {
 	}
 
 	return playerIDToPlayerMap
+}
+
+func FormatPlayer(player *Player) string {
+	return fmt.Sprintf("<@%s>", player.PlayerID)
+}
+
+func FormatPlayers(players []*Player) string {
+	ret := ""
+	for _, p := range players {
+		ret = ret + FormatPlayer(p) + "\n"
+	}
+	return ret
 }

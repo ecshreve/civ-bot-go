@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -48,7 +47,52 @@ func (b *Bot) MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	command.Process(b, m.Message)
 }
 
+func (b *Bot) validateReactionHandlerArgs(r *discordgo.MessageReaction) Reaction {
+	// Ignore all reactions created by the bot itself.
+	if r.UserID == b.DS.State.User.ID {
+		return nil
+	}
+
+	// Fetch some extra information about the message associated to the reaction.
+	m, err := b.DS.ChannelMessage(r.ChannelID, r.MessageID)
+
+	// Ignore reactions on messages that have an error or that have not been sent by the bot.
+	if err != nil || m == nil || m.Author.ID != b.DS.State.User.ID {
+		return nil
+	}
+
+	// Ignore messages that are not embeds with a command in the footer.
+	if len(m.Embeds) != 1 || m.Embeds[0].Footer == nil || m.Embeds[0].Footer.Text == "" {
+		return nil
+	}
+
+	// Ignore reactions that haven't been set by the bot.
+	if !util.IsBotReaction(b.DS.Session, m.Reactions, &r.Emoji) {
+		return nil
+	}
+
+	// Ignore when sender is invalid or is a bot.
+	user, err := b.DS.User(r.UserID)
+	if err != nil || user == nil || user.Bot {
+		return nil
+	}
+
+	args := m.Embeds[0].Footer.Text
+	rr, ok := b.ReactionMap[CommandID(args)]
+	if !ok {
+		b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid reaction", "this should never happen lol"))
+		return nil
+	}
+
+	return rr
+}
+
 // ReactionHandler processes any ReactionAdds in a channel where the Bot is a Member.
 func (b *Bot) ReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
-	fmt.Println("reactionhandler")
+	reaction := b.validateReactionHandlerArgs(r.MessageReaction)
+	if reaction == nil {
+		return
+	}
+
+	reaction.Process(b, r.MessageReaction)
 }

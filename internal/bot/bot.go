@@ -6,11 +6,12 @@ import (
 
 // Bot holds data and implements functions for an instance of the civ-bot.
 type Bot struct {
-	DS         *DiscordSession
-	Commands   []Command
-	CommandMap map[CommandID]Command
-	CivConfig  *CivConfig
-	CivState   *CivState
+	DS          *DiscordSession
+	Commands    []Command
+	CommandMap  map[CommandID]Command
+	ReactionMap map[CommandID]Reaction
+	CivConfig   *CivConfig
+	CivState    *CivState
 }
 
 // NewBot takes a token and returns a Bot.
@@ -29,6 +30,7 @@ func NewBot(token string) (*Bot, error) {
 		Commands:  AllCommands,
 	}
 	b.CommandMap = getCommandIDToCommandMap(b.Commands)
+	b.ReactionMap = getCommandIDToReactionMap(AllReactions)
 
 	// Attach message and reaction handlers to the bot.
 	err = b.AddHandlers()
