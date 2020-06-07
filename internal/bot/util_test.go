@@ -270,7 +270,12 @@ func MockBot(t *testing.T) (*Bot, *Mock) {
 		DS:        mockDiscordSession(),
 		CivConfig: NewCivConfig(),
 		CivState:  NewCivState(),
+		Commands: []Command{
+			&helpCommand{},
+			&newCommand{},
+		},
 	}
+	b.CommandMap = getCommandIDToCommandMap(b.Commands)
 
 	mock = NewMock(t)
 	return b, mock

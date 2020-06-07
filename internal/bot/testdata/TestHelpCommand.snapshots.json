@@ -1,0 +1,35 @@
+[
+  {
+    "Name": "Help -- Info()",
+    "Values": [
+      {
+        "Description": "view list of commands",
+        "Emoji": "ℹ️",
+        "Name": "Help",
+        "Usage": "`/civ help`"
+      }
+    ]
+  },
+  {
+    "Name": "Help -- Process() embeds",
+    "Values": [
+      [
+        {
+          "color": 3447003,
+          "description": "---",
+          "fields": [
+            {
+              "name": "ℹ️ Help",
+              "value": "`/civ help`: view list of commands"
+            },
+            {
+              "name": "🆕 New",
+              "value": "`/civ new`: start a new civ-bot session"
+            }
+          ],
+          "title": "available bot commands"
+        }
+      ]
+    ]
+  }
+]
