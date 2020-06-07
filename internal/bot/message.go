@@ -4,6 +4,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+type MessageInterface interface{}
+
+type MessCreate struct {
+	*discordgo.MessageCreate
+}
+
 type EmbedField struct {
 	*discordgo.MessageEmbedField
 }
