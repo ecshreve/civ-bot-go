@@ -23,7 +23,7 @@ type CommandInfo struct {
 // Command is any command sent to the Bot.
 type Command interface {
 	Info() *CommandInfo
-	Process(*Bot, *discordgo.Message) error
+	Process(*Bot, *discordgo.Message) (*discordgo.Message, error)
 }
 
 // Command interface implementation for the "help" command.
@@ -38,7 +38,7 @@ func (c *helpCommand) Info() *CommandInfo {
 	}
 }
 
-func (c *helpCommand) Process(b *Bot, m *discordgo.Message) error {
+func (c *helpCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, error) {
 	title := "available bot commands"
 	description := "---"
 
@@ -54,12 +54,12 @@ func (c *helpCommand) Process(b *Bot, m *discordgo.Message) error {
 		Color:       constants.ColorBLUE,
 	}
 
-	_, err := b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
+	helpMessage, err := b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
 	if err != nil {
-		return oops.Wrapf(err, "error sending embed %+v", embed)
+		return nil, oops.Wrapf(err, "error sending embed %+v", embed)
 	}
 
-	return nil
+	return helpMessage, nil
 }
 
 // Command interface implementation for the "new" command.
@@ -74,7 +74,7 @@ func (c *newCommand) Info() *CommandInfo {
 	}
 }
 
-func (c *newCommand) Process(b *Bot, m *discordgo.Message) error {
+func (c *newCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, error) {
 	b.CivState.Reset(b.CivConfig)
 
 	title := "🆕 starting a new civ picker session"
@@ -89,22 +89,22 @@ func (c *newCommand) Process(b *Bot, m *discordgo.Message) error {
 		},
 	}
 
-	newEmbed, err := b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
+	newMessage, err := b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
 	if err != nil {
-		return oops.Wrapf(err, "error sending embed: %+v", embed)
+		return nil, oops.Wrapf(err, "error sending embed: %+v", embed)
 	}
 
-	err = b.DS.MessageReactionAdd(m.ChannelID, newEmbed.ID, "✋")
+	err = b.DS.MessageReactionAdd(m.ChannelID, newMessage.ID, "✋")
 	if err != nil {
-		return oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✋", embed)
+		return newMessage, oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✋", embed)
 	}
 
-	err = b.DS.MessageReactionAdd(m.ChannelID, newEmbed.ID, "✅")
+	err = b.DS.MessageReactionAdd(m.ChannelID, newMessage.ID, "✅")
 	if err != nil {
-		return oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✅", embed)
+		return newMessage, oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✅", embed)
 	}
 
-	return nil
+	return newMessage, nil
 }
 
 // getHelpEmbedField returns a MessageEmbedField for the given Command that's used
