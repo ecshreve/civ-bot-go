@@ -9,7 +9,7 @@ import (
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
-func (b *Bot) validateMessageHandlerArgs(m *discordgo.Message) *discordgo.MessageEmbed {
+func (b *Bot) validateMessageHandlerArgs(m *discordgo.Message) Command {
 	// Ignore all messages created by the bot itself.
 	if m.Author.ID == b.DS.State.User.ID {
 		return nil
@@ -29,23 +29,23 @@ func (b *Bot) validateMessageHandlerArgs(m *discordgo.Message) *discordgo.Messag
 		return nil
 	}
 
-	c, ok := b.Commands[CommandID(args[0])]
+	c, ok := b.CommandMap[CommandID(args[0])]
 	if !ok {
 		b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid command", "for a list of commands type `/civ help`"))
 		return nil
 	}
 
-	return c.Process(m)
+	return c
 }
 
 // MessageHandler processes any new Messages in a channel where the Bot is a Member.
 func (b *Bot) MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	embed := b.validateMessageHandlerArgs(m.Message)
-	if embed == nil {
+	command := b.validateMessageHandlerArgs(m.Message)
+	if command == nil {
 		return
 	}
 
-	b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
+	command.Process(b, m.Message)
 }
 
 // ReactionHandler processes any ReactionAdds in a channel where the Bot is a Member.

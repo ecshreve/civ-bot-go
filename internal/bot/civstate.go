@@ -44,3 +44,8 @@ func NewCivState() *CivState {
 		PickState: NewPickState(DefaultCivConfig),
 	}
 }
+
+func (cs *CivState) Reset(cfg *CivConfig) {
+	cs = NewCivState()
+	cs.PickState = NewPickState(cfg)
+}
