@@ -2,7 +2,7 @@
   {
     "Name": "empty toBan arg - error",
     "Values": [
-      "empty toBan argument for player: testPlayer\n\ngithub.com/ecshreve/civ-bot-go/internal/bot.(*Player).BanCiv\n\t/Users/ericshreve/projects/civ-bot-go/internal/bot/player.go:32\ngithub.com/ecshreve/civ-bot-go/internal/bot.TestBanCiv.func1\n\t/Users/ericshreve/projects/civ-bot-go/internal/bot/player_test.go:56\ntesting.tRunner\n\ttesting/testing.go:991\n"
+      "empty toBan argument for player: testPlayer"
     ]
   },
   {
@@ -14,19 +14,13 @@
   {
     "Name": "toBan arg doesn't match any civs - error",
     "Values": [
-      "unable to get toBan by string: 34523\n\ngithub.com/ecshreve/civ-bot-go/internal/bot.(*Player).BanCiv\n\t/Users/ericshreve/projects/civ-bot-go/internal/bot/player.go:39\ngithub.com/ecshreve/civ-bot-go/internal/bot.TestBanCiv.func1\n\t/Users/ericshreve/projects/civ-bot-go/internal/bot/player_test.go:56\ntesting.tRunner\n\ttesting/testing.go:991\n"
+      "unable to get toBan by string: 34523"
     ]
   },
   {
     "Name": "toBan arg doesn't match any civs - bans",
     "Values": [
       {}
-    ]
-  },
-  {
-    "Name": "valid toBan arg - error",
-    "Values": [
-      "\u003cnil\u003e"
     ]
   },
   {
@@ -50,7 +44,7 @@
   {
     "Name": "toBan arg is already banned - error",
     "Values": [
-      "found toBan is already banned: \u0026{Key:AMERICA CivBase:america LeaderBase:washington ZigURL:http://steamcommunity.com/sharedfiles/filedetails/?id=180689240 FilthyTier:3 Banned:true Picked:false}\n\ngithub.com/ecshreve/civ-bot-go/internal/bot.(*Player).BanCiv\n\t/Users/ericshreve/projects/civ-bot-go/internal/bot/player.go:42\ngithub.com/ecshreve/civ-bot-go/internal/bot.TestBanCiv.func1\n\t/Users/ericshreve/projects/civ-bot-go/internal/bot/player_test.go:56\ntesting.tRunner\n\ttesting/testing.go:991\n"
+      "found toBan is already banned: \u0026{Key:AMERICA CivBase:america LeaderBase:washington ZigURL:http://steamcommunity.com/sharedfiles/filedetails/?id=180689240 FilthyTier:3 Banned:true Picked:false}"
     ]
   },
   {
@@ -69,12 +63,6 @@
           }
         ]
       }
-    ]
-  },
-  {
-    "Name": "different valid toBan arg - error",
-    "Values": [
-      "\u003cnil\u003e"
     ]
   },
   {

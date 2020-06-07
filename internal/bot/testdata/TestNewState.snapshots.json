@@ -3,7 +3,7 @@
     "Name": "default civ state",
     "Values": [
       {
-        "Bans": null,
+        "Bans": {},
         "CivMap": {
           "0": {
             "Banned": false,
@@ -784,8 +784,8 @@
         ],
         "Clk": {},
         "PickTime": "0001-01-01T00:00:00Z",
-        "Picks": null,
-        "PlayerMap": null,
+        "Picks": {},
+        "PlayerMap": {},
         "Players": null,
         "RePickVotes": 0,
         "RePicksRemaining": 3

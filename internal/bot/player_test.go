@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/samsarahq/go/oops"
 	"github.com/samsarahq/go/snapshotter"
 	"github.com/stretchr/testify/assert"
 )
@@ -74,12 +75,12 @@ func TestBanCiv(t *testing.T) {
 			if testcase.expectError {
 				assert.Error(t, err)
 				assert.Nil(t, civ)
+				snap.Snapshot(fmt.Sprintf("%s - error", testcase.description), fmt.Sprintf("%v", oops.Cause(err).Error()))
 			} else {
 				assert.NoError(t, err)
 				assert.NotNil(t, civ)
 			}
 
-			snap.Snapshot(fmt.Sprintf("%s - error", testcase.description), fmt.Sprintf("%v", err))
 			snap.Snapshot(fmt.Sprintf("%s - bans", testcase.description), b.CivState.Bans)
 		})
 	}

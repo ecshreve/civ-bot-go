@@ -3,13 +3,13 @@
     "Name": "new state",
     "Values": [
       {
-        "Bans": null,
+        "Bans": {},
         "CivMap": null,
         "Civs": null,
         "Clk": {},
         "PickTime": "0001-01-01T00:00:00Z",
-        "Picks": null,
-        "PlayerMap": null,
+        "Picks": {},
+        "PlayerMap": {},
         "Players": null,
         "RePickVotes": 0,
         "RePicksRemaining": 3
@@ -31,13 +31,13 @@
     "Name": "altered state",
     "Values": [
       {
-        "Bans": null,
+        "Bans": {},
         "CivMap": null,
         "Civs": null,
         "Clk": {},
         "PickTime": "0001-01-01T00:00:00Z",
-        "Picks": null,
-        "PlayerMap": null,
+        "Picks": {},
+        "PlayerMap": {},
         "Players": null,
         "RePickVotes": 99,
         "RePicksRemaining": 0
@@ -59,13 +59,13 @@
     "Name": "state after reset - keepConfig true",
     "Values": [
       {
-        "Bans": null,
+        "Bans": {},
         "CivMap": null,
         "Civs": null,
         "Clk": {},
         "PickTime": "0001-01-01T00:00:00Z",
-        "Picks": null,
-        "PlayerMap": null,
+        "Picks": {},
+        "PlayerMap": {},
         "Players": null,
         "RePickVotes": 0,
         "RePicksRemaining": 99
@@ -87,13 +87,13 @@
     "Name": "state after reset - keepConfig false",
     "Values": [
       {
-        "Bans": null,
+        "Bans": {},
         "CivMap": null,
         "Civs": null,
         "Clk": {},
         "PickTime": "0001-01-01T00:00:00Z",
-        "Picks": null,
-        "PlayerMap": null,
+        "Picks": {},
+        "PlayerMap": {},
         "Players": null,
         "RePickVotes": 0,
         "RePicksRemaining": 3

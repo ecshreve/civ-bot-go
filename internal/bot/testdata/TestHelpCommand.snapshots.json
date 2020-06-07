@@ -33,6 +33,10 @@
             {
               "name": "🤷‍♀️ Oops",
               "value": "`/civ oops`: start a new civ-bot session maintaining the current config"
+            },
+            {
+              "name": "🍌 Ban",
+              "value": "`/civ ban \u003cstring\u003e`: ban the Civ that most closely matches the string argument"
             }
           ],
           "title": "available bot commands"
