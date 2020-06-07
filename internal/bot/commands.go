@@ -26,6 +26,14 @@ type Command interface {
 	Process(*Bot, *discordgo.Message) (*discordgo.Message, error)
 }
 
+// AllCommands is a slice containing all the valid Commands for the Bot. It's mainly
+// for convenience so we can maintain parity between the actual Bot implementation
+// and the MockBot we use for testing.
+var AllCommands = []Command{
+	&helpCommand{},
+	&newCommand{},
+}
+
 // Command interface implementation for the "help" command.
 type helpCommand struct{}
 

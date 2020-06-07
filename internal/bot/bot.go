@@ -26,10 +26,7 @@ func NewBot(token string) (*Bot, error) {
 		DS:        ds,
 		CivConfig: NewCivConfig(),
 		CivState:  NewCivState(),
-		Commands: []Command{
-			&helpCommand{},
-			&newCommand{},
-		},
+		Commands:  AllCommands,
 	}
 	b.CommandMap = getCommandIDToCommandMap(b.Commands)
 
