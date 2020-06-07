@@ -273,6 +273,7 @@ func MockBot(t *testing.T) (*Bot, *Mock) {
 		Commands:  AllCommands,
 	}
 	b.CommandMap = getCommandIDToCommandMap(b.Commands)
+	b.ReactionMap = getCommandIDToReactionMap(AllReactions)
 
 	mock = NewMock(t)
 	return b, mock

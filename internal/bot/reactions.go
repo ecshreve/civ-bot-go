@@ -35,6 +35,8 @@ func (r *newReaction) Info() *ReactionInfo {
 }
 
 func (r *newReaction) Process(b *Bot, mr *discordgo.MessageReaction) (*discordgo.Message, error) {
+	var embed *discordgo.MessageEmbed
+
 	if mr.Emoji.Name == "✋" {
 		user, err := b.DS.User(mr.UserID)
 		if err != nil {
@@ -46,8 +48,9 @@ func (r *newReaction) Process(b *Bot, mr *discordgo.MessageReaction) (*discordgo
 		b.CivState.PlayerMap[player.PlayerID] = player
 		return nil, nil
 	}
+
 	if mr.Emoji.Name == "✅" {
-		b.DS.ChannelMessageSendEmbed(mr.ChannelID, &discordgo.MessageEmbed{
+		embed = &discordgo.MessageEmbed{
 			Title:       "ℹ️ okay, now that we have our players",
 			Description: "- everyone gets to ban a civ, enter `/civ ban <civ name>` to choose\n- if you change your mind just enter `/civ ban <new civ name>` to update your choice\n\nnote: you can enter a ban by either the civ or leader name",
 			Color:       constants.ColorGREEN,
@@ -57,9 +60,19 @@ func (r *newReaction) Process(b *Bot, mr *discordgo.MessageReaction) (*discordgo
 					Value: FormatPlayers(b.CivState.Players),
 				},
 			},
-		})
+		}
 	}
-	return nil, nil
+
+	if embed == nil {
+		return nil, oops.Errorf("invalid reaction")
+	}
+
+	newReactionMessage, err := b.DS.ChannelMessageSendEmbed(mr.ChannelID, embed)
+	if err != nil {
+		return nil, oops.Errorf("error sending embed %+v", embed)
+	}
+
+	return newReactionMessage, nil
 }
 
 func getCommandIDToReactionMap(reactions []Reaction) map[CommandID]Reaction {

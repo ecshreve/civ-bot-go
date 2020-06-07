@@ -29,3 +29,10 @@ func (s *DiscordSession) MessageReactionAdd(channelID string, messageID string, 
 	mock.Input(interface{}(s.MessageReactionAdd), channelID, messageID, emojiID)
 	return nil
 }
+
+func (s *DiscordSession) User(userID string) (*discordgo.User, error) {
+	mock.Input(interface{}(s.User), userID)
+	return &discordgo.User{
+		ID: userID,
+	}, nil
+}
