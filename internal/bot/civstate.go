@@ -4,22 +4,26 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
+
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
 )
 
+// PickState state information specific to making picks for an instance of the Bot.
 type PickState struct {
 	PickTime         time.Time
 	RePickVotes      int
 	RePicksRemaining int
 }
 
+// NewPickState returns a new PickState based on the given CivConfig.
 func NewPickState(config *CivConfig) *PickState {
 	return &PickState{
 		RePicksRemaining: config.RePicks,
 	}
 }
 
+// CivState stores state information for an instance of the Bot.
 type CivState struct {
 	Clk       clock.Clock
 	Players   []*Player
@@ -31,6 +35,7 @@ type CivState struct {
 	*PickState
 }
 
+// NewCivState returns a CivState based on the DefaultCivConfig.
 func NewCivState() *CivState {
 	return &CivState{
 		Clk:       clock.New(),

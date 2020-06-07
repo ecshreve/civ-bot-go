@@ -6,6 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// CivConfig stores configuratoin information for an instance of the Bot.
 type CivConfig struct {
 	Bans     int
 	Picks    int
@@ -13,6 +14,7 @@ type CivConfig struct {
 	UseTiers bool
 }
 
+// DefaultCivConfig defines the default CivConfig used when creating a new Bot.
 var DefaultCivConfig = &CivConfig{
 	Bans:     1,
 	Picks:    3,
@@ -20,10 +22,12 @@ var DefaultCivConfig = &CivConfig{
 	UseTiers: false,
 }
 
+// NewCivConfig simply returns the DefaultCivConfig.
 func NewCivConfig() *CivConfig {
 	return DefaultCivConfig
 }
 
+// GetEmbedFields returns a slice of MessageEmbedFields for the given CivConfig.
 func (c *CivConfig) GetEmbedFields() []*discordgo.MessageEmbedField {
 	return []*discordgo.MessageEmbedField{
 		{

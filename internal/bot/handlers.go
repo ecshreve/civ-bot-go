@@ -5,10 +5,11 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+
 	"github.com/ecshreve/civ-bot-go/internal/util"
 )
 
-func (b *Bot) validateCommandHandlerArgs(m *discordgo.Message) *discordgo.MessageEmbed {
+func (b *Bot) validateMessageHandlerArgs(m *discordgo.Message) *discordgo.MessageEmbed {
 	// Ignore all messages created by the bot itself.
 	if m.Author.ID == b.DS.State.User.ID {
 		return nil
@@ -37,8 +38,9 @@ func (b *Bot) validateCommandHandlerArgs(m *discordgo.Message) *discordgo.Messag
 	return c.Process(m)
 }
 
-func (b *Bot) CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	embed := b.validateCommandHandlerArgs(m.Message)
+// MessageHandler processes any new Messages in a channel where the Bot is a Member.
+func (b *Bot) MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	embed := b.validateMessageHandlerArgs(m.Message)
 	if embed == nil {
 		return
 	}
@@ -46,6 +48,7 @@ func (b *Bot) CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
 }
 
+// ReactionHandler processes any ReactionAdds in a channel where the Bot is a Member.
 func (b *Bot) ReactionHandler(s *discordgo.Session, r *discordgo.MessageReactionAdd) {
 	fmt.Println("reactionhandler")
 }

@@ -10,7 +10,7 @@ func TestAddHandlers(t *testing.T) {
 	b, mock := MockBot(t)
 
 	t.Run("add handlers to intialized bot", func(t *testing.T) {
-		mock.Expect(b.DS.AddHandler, b.CommandHandler)
+		mock.Expect(b.DS.AddHandler, b.MessageHandler)
 		mock.Expect(b.DS.AddHandler, b.ReactionHandler)
 		b.AddHandlers()
 		Check(mock.Check(), true, t)

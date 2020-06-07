@@ -39,17 +39,19 @@ func NewBot(token string) (*Bot, error) {
 	return b, nil
 }
 
+// AddHandlers attaches handler functions to the Bot's DiscordSession.
 func (b *Bot) AddHandlers() error {
 	if b.DS == nil {
 		return oops.Errorf("unable to add handlers to nil discordgo.Session")
 	}
 
-	b.DS.AddHandler(b.CommandHandler)
+	b.DS.AddHandler(b.MessageHandler)
 	b.DS.AddHandler(b.ReactionHandler)
 
 	return nil
 }
 
+// StartSession is a wrapper around the DiscordSession Open() func.
 func (b *Bot) StartSession() error {
 	err := b.DS.Open()
 	if err != nil {
@@ -59,6 +61,7 @@ func (b *Bot) StartSession() error {
 	return nil
 }
 
+// EndSession is a wrapper around the DisccordSession Close() func.
 func (b *Bot) EndSession() error {
 	err := b.DS.Close()
 	if err != nil {
