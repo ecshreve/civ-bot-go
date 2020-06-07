@@ -31,6 +31,7 @@ type Command interface {
 // and the MockBot we use for testing.
 var AllCommands = []Command{
 	&helpCommand{},
+	&configCommand{},
 	&newCommand{},
 	&oopsCommand{},
 }
@@ -69,6 +70,51 @@ func (c *helpCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message,
 	}
 
 	return helpMessage, nil
+}
+
+// Command interface implementation for the "config" command.
+type configCommand struct{}
+
+func (c *configCommand) Info() *CommandInfo {
+	return &CommandInfo{
+		Name:        "Config",
+		Emoji:       "⚙️",
+		Description: "enter the session configuration menu",
+		Usage:       "`/civ config`",
+	}
+}
+
+func (c *configCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, error) {
+	title := "⚙️ configuration"
+	description := "- select 🛠 to change config\n- select ✅ to accept config"
+	fields := b.CivConfig.GetEmbedFields()
+
+	embed := &discordgo.MessageEmbed{
+		Title:       title,
+		Description: description,
+		Fields:      fields,
+		Color:       constants.ColorDARKGREY,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "config",
+		},
+	}
+
+	configMessage, err := b.DS.ChannelMessageSendEmbed(m.ChannelID, embed)
+	if err != nil {
+		return nil, oops.Wrapf(err, "error sending embed: %+v", embed)
+	}
+
+	err = b.DS.MessageReactionAdd(m.ChannelID, configMessage.ID, "🛠")
+	if err != nil {
+		return configMessage, oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✋", embed)
+	}
+
+	err = b.DS.MessageReactionAdd(m.ChannelID, configMessage.ID, "✅")
+	if err != nil {
+		return configMessage, oops.Wrapf(err, "unable to add reaction %s to embed: %+v", "✅", embed)
+	}
+
+	return configMessage, nil
 }
 
 // Command interface implementation for the "new" command.

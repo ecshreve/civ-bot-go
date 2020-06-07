@@ -20,6 +20,23 @@ func commandTestHelper(t *testing.T, snap *snapshotter.Snapshotter, c Command, b
 	snap.Snapshot(fmt.Sprintf("%s -- Bot CivConfig", infoResponse.Name), b.CivConfig)
 }
 
+func TestConfigCommand(t *testing.T) {
+	snap := snapshotter.New(t)
+	defer snap.Verify()
+
+	b, mock := MockBot(t)
+	config := b.CommandMap["config"].(*configCommand)
+
+	testMessage := &discordgo.Message{
+		ChannelID: "testChannelID",
+	}
+	mock.Expect(b.DS.ChannelMessageSendEmbed, testMessage.ChannelID, MockAny{})
+	mock.Expect(b.DS.MessageReactionAdd, testMessage.ChannelID, MockAny{}, "🛠")
+	mock.Expect(b.DS.MessageReactionAdd, testMessage.ChannelID, MockAny{}, "✅")
+
+	commandTestHelper(t, snap, config, b, testMessage)
+}
+
 func TestHelpCommand(t *testing.T) {
 	snap := snapshotter.New(t)
 	defer snap.Verify()

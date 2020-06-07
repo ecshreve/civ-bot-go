@@ -1,0 +1,57 @@
+[
+  {
+    "Name": "Config -- Info()",
+    "Values": [
+      {
+        "Description": "enter the session configuration menu",
+        "Emoji": "⚙️",
+        "Name": "Config",
+        "Usage": "`/civ config`"
+      }
+    ]
+  },
+  {
+    "Name": "Config -- Process() embeds",
+    "Values": [
+      [
+        {
+          "color": 9936031,
+          "description": "- select 🛠 to change config\n- select ✅ to accept config",
+          "fields": [
+            {
+              "name": "`Bans` -- the number of Civs each player gets to ban",
+              "value": "**1**"
+            },
+            {
+              "name": "`Picks` -- the number of Civs each player gets to choose from",
+              "value": "**3**"
+            },
+            {
+              "name": "`RePicks` -- the max number of times allowed to re-pick Civs",
+              "value": "**3**"
+            },
+            {
+              "name": "`UseTiers` -- make picks based on FilthyRobot's tier list -- setting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
+              "value": "**false**"
+            }
+          ],
+          "footer": {
+            "text": "config"
+          },
+          "title": "⚙️ configuration"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "Config -- Bot CivConfig",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
+    ]
+  }
+]
