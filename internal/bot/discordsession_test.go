@@ -33,6 +33,15 @@ func (s *DiscordSession) ChannelMessageSendEmbed(channelID string, embed *discor
 	}, nil
 }
 
+func (s *DiscordSession) ChannelMessageEditEmbed(channelID string, messageID string, embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
+	mock.Input(interface{}(s.ChannelMessageEditEmbed), channelID, messageID, embed)
+	return &discordgo.Message{
+		ID:        messageID,
+		ChannelID: channelID,
+		Embeds:    []*discordgo.MessageEmbed{embed},
+	}, nil
+}
+
 func (s *DiscordSession) MessageReactionAdd(channelID string, messageID string, emojiID string) error {
 	mock.Input(interface{}(s.MessageReactionAdd), channelID, messageID, emojiID)
 	return nil

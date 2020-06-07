@@ -14,6 +14,7 @@ type PickState struct {
 	PickTime         time.Time
 	RePickVotes      int
 	RePicksRemaining int
+	DoRepick         bool
 }
 
 // NewPickState returns a new PickState based on the given CivConfig.

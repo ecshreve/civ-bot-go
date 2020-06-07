@@ -21,6 +21,7 @@ type Reaction interface {
 // AllReactions is a slice contianing all the valid Reactions for the Bot.
 var AllReactions = []Reaction{
 	&newReaction{},
+	&pickReaction{},
 }
 
 // Reaction interface implementation for reactions on the Message that results from
@@ -73,6 +74,27 @@ func (r *newReaction) Process(b *Bot, mr *discordgo.MessageReaction) (*discordgo
 	}
 
 	return newReactionMessage, nil
+}
+
+type pickReaction struct{}
+
+func (r *pickReaction) Info() *ReactionInfo {
+	return &ReactionInfo{
+		Command: CommandID("pick"),
+		Emojis:  []string{"♻️"},
+	}
+}
+
+func (r *pickReaction) Process(b *Bot, mr *discordgo.MessageReaction) (*discordgo.Message, error) {
+	if mr.Emoji.Name == "♻️" {
+		b.CivState.RePickVotes++
+	}
+
+	if b.CivState.RePickVotes*2 > len(b.CivState.Players) {
+		b.CivState.DoRepick = true
+	}
+
+	return nil, nil
 }
 
 func getCommandIDToReactionMap(reactions []Reaction) map[CommandID]Reaction {

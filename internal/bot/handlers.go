@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"log"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -55,7 +56,14 @@ func (b *Bot) MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	b.Pick(m.ChannelID)
+	b.CivState.DoRepick = true
+	for b.CivState.DoRepick {
+		err := b.Pick(m.ChannelID)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 }
 
 func (b *Bot) validateReactionHandlerArgs(r *discordgo.MessageReaction) Reaction {

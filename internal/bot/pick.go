@@ -183,8 +183,13 @@ func (b *Bot) Pick(channelID string) error {
 	}
 
 	if cs.RePicksRemaining > 0 {
+		b.CivState.DoRepick = false
 		b.DS.MessageReactionAdd(channelID, pickMessage.ID, "♻️")
-		b.countdown(pickMessage, cs.PickTime, 60)
+
+		err := b.countdown(pickMessage, cs.PickTime, 60)
+		if err != nil {
+			return oops.Wrapf(err, "error during countdown")
+		}
 	} else {
 		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
 			Title: "no more re-picks, those are your choices, deal with it",
@@ -197,55 +202,43 @@ func (b *Bot) Pick(channelID string) error {
 
 // countown handles editing the existing embed with Picks to display the
 // amount of time remaining before the option to vote for a re-pick expires.
-//
-// TODO: add test
-func (b *Bot) countdown(msg *discordgo.Message, start time.Time, seconds int64) {
+func (b *Bot) countdown(msg *discordgo.Message, start time.Time, seconds int64) error {
 	end := start.Add(time.Duration(time.Second * time.Duration(seconds)))
 	channelID := msg.ChannelID
 	messageID := msg.ID
 
 	if len(msg.Embeds) != 1 {
-		return
+		return oops.Errorf("message should contain 1 embed, actually contains: %d", len(msg.Embeds))
 	}
 	embed := msg.Embeds[0]
 
-	for range time.Tick(1 * time.Second) {
-		timeRemaining := int(end.Sub(time.Now()).Seconds())
+	for range b.CivState.Clk.Tick(1 * time.Second) {
+		timeRemaining := int(end.Sub(b.CivState.Clk.Now()).Seconds())
+
 		siren := ""
 		if timeRemaining <= 10 && timeRemaining > 0 {
 			siren = "🚨"
 		}
 		embed.Title = fmt.Sprintf("picks     %s -- %d seconds remaining -- %s", siren, timeRemaining, siren)
 		b.DS.ChannelMessageEditEmbed(channelID, messageID, embed)
-		if timeRemaining <= 0 {
+		if b.CivState.DoRepick || timeRemaining <= 0 {
 			break
 		}
 	}
 
-	b.handleRePick(channelID)
-}
-
-// handleRePick checks to see if the required number of re-pick votes have been
-// reached, if so then pick again, if not then reset the CivSession and display
-// a goodbye message.
-//
-// TODO: add test
-func (b *Bot) handleRePick(channelID string) {
-	cs := b.CivState
-	cs.RePicksRemaining--
-
-	if cs.RePickVotes*2 >= len(cs.Players) {
-		cs.Picks = make(map[PlayerID][]*civ.Civ)
-		cs.RePickVotes = 0
+	if b.CivState.DoRepick {
+		b.CivState.RePicksRemaining--
+		b.CivState.RePickVotes = 0
 		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
 			Title: "alright looks like we're picking again",
 			Color: constants.ColorORANGE,
 		})
-		b.Pick(channelID)
 	} else {
 		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
 			Title: "great, have fun! see y'all next time 👋",
 			Color: constants.ColorORANGE,
 		})
 	}
+
+	return nil
 }

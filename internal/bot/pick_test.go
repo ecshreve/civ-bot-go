@@ -1,12 +1,17 @@
 package bot
 
 import (
+	"fmt"
+	"runtime"
 	"testing"
+	"time"
 
 	"github.com/benbjohnson/clock"
 	"github.com/bwmarrin/discordgo"
 	"github.com/ecshreve/civ-bot-go/internal/civ"
 	"github.com/ecshreve/civ-bot-go/internal/constants"
+	"github.com/samsarahq/go/oops"
+	"github.com/samsarahq/go/snapshotter"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -411,4 +416,107 @@ func TestMakePicksWithoutTier(t *testing.T) {
 			assert.EqualValues(t, expectedPicks, cs.Picks)
 		})
 	}
+}
+
+func TestCountdown(t *testing.T) {
+	snap := snapshotter.New(t)
+	defer snap.Verify()
+
+	clk := clock.NewMock()
+	b, mock := MockBot(t)
+	b.CivState.Clk = clk
+	testStart := clk.Now()
+
+	embedFields := []*discordgo.MessageEmbedField{
+		{
+			Name:  "name1",
+			Value: "value1",
+		},
+		{
+			Name:  "name2",
+			Value: "value2",
+		},
+	}
+
+	pickEmbed := &discordgo.MessageEmbed{
+		Title:       "picks",
+		Description: "pick description for test",
+		Color:       constants.ColorDARKBLUE,
+		Fields:      embedFields,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "pick",
+		},
+	}
+
+	pickMessage := &discordgo.Message{
+		ID:        "messageID",
+		ChannelID: "testChannelID",
+	}
+
+	err := b.countdown(pickMessage, testStart, 10)
+	assert.Error(t, err)
+	snap.Snapshot("0 embeds", fmt.Sprintf(oops.Cause(err).Error()))
+
+	pickMessage.Embeds = []*discordgo.MessageEmbed{pickEmbed, pickEmbed}
+	err = b.countdown(pickMessage, testStart, 10)
+	assert.Error(t, err)
+	snap.Snapshot("2 embeds", fmt.Sprintf(oops.Cause(err).Error()))
+
+	pickMessage.Embeds = []*discordgo.MessageEmbed{pickEmbed}
+	go func() {
+		for {
+			err = b.countdown(pickMessage, testStart, 10)
+			assert.NoError(t, err)
+		}
+	}()
+	runtime.Gosched()
+
+	// Countdown from 10 to 5 and snapshot the Message and CivState.
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	clk.Add(5 * time.Second)
+	snap.Snapshot("pickMessage before timer runs out", pickMessage)
+	snap.Snapshot("PickState before timer runs out", b.CivState.PickState)
+
+	// Countdown from 5 to 0 and snapshot the Message.
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageSendEmbed, pickMessage.ChannelID, MockAny{})
+	clk.Add(5 * time.Second)
+	snap.Snapshot("pickMessage when timer runs out", pickMessage)
+	snap.Snapshot("PickState when timer runs out", b.CivState.PickState)
+
+	// Reset the clock.
+	clk = clock.NewMock()
+	b.CivState.Clk = clk
+	go func() {
+		for {
+			err = b.countdown(pickMessage, testStart, 10)
+			assert.NoError(t, err)
+		}
+	}()
+	runtime.Gosched()
+
+	// Countdown from 10 to 5.
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	clk.Add(5 * time.Second)
+
+	// Set DoRepick to true and countdown from 5 to 4.
+	b.CivState.DoRepick = true
+	mock.Expect(b.DS.ChannelMessageEditEmbed, pickMessage.ChannelID, pickMessage.ID, MockAny{})
+	mock.Expect(b.DS.ChannelMessageSendEmbed, pickMessage.ChannelID, MockAny{})
+	clk.Add(1 * time.Second)
+	snap.Snapshot("picks remaining decremented to 2", b.CivState.PickState)
+
+	Check(mock.Check(), true, t)
 }
