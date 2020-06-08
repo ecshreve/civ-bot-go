@@ -262,6 +262,9 @@ func mockDiscordSession() *DiscordSession {
 	dg, _ := discordgo.New()
 	ds := &DiscordSession{dg}
 	ds.State.GuildAdd(mockDiscordGuild(1))
+	ds.State.User = &discordgo.User{
+		ID: "botuser",
+	}
 	return ds
 }
 
