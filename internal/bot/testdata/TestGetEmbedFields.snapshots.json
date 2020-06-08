@@ -1,0 +1,25 @@
+[
+  {
+    "Name": "default civ config embed fields",
+    "Values": [
+      [
+        {
+          "name": "`Bans` -- the number of Civs each player gets to ban",
+          "value": "**1**"
+        },
+        {
+          "name": "`Picks` -- the number of Civs each player gets to choose from",
+          "value": "**3**"
+        },
+        {
+          "name": "`RePicks` -- the max number of times allowed to re-pick Civs",
+          "value": "**3**"
+        },
+        {
+          "name": "`UseTiers` -- make picks based on FilthyRobot's tier list -- setting this to `true` ensures that each Player gets at minimum one t1/t2 Civ in their list of Picks",
+          "value": "**false**"
+        }
+      ]
+    ]
+  }
+]

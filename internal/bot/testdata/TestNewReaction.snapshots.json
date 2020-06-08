@@ -1,0 +1,20 @@
+[
+  {
+    "Name": "message embed after confirming",
+    "Values": [
+      [
+        {
+          "color": 3066993,
+          "description": "- everyone gets to ban a civ, enter `/civ ban \u003cciv name\u003e` to choose\n- if you change your mind just enter `/civ ban \u003cnew civ name\u003e` to update your choice\n\nnote: you can enter a ban by either the civ or leader name",
+          "fields": [
+            {
+              "name": "Players",
+              "value": "\u003c@testUser\u003e\n"
+            }
+          ],
+          "title": "ℹ️ okay, now that we have our players"
+        }
+      ]
+    ]
+  }
+]

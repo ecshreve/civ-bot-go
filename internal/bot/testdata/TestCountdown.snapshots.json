@@ -1,0 +1,143 @@
+[
+  {
+    "Name": "0 embeds",
+    "Values": [
+      "message should contain 1 embed, actually contains: 0"
+    ]
+  },
+  {
+    "Name": "2 embeds",
+    "Values": [
+      "message should contain 1 embed, actually contains: 2"
+    ]
+  },
+  {
+    "Name": "pickMessage before timer runs out",
+    "Values": [
+      {
+        "activity": null,
+        "application": null,
+        "attachments": null,
+        "author": null,
+        "channel_id": "testChannelID",
+        "content": "",
+        "edited_timestamp": "",
+        "embeds": [
+          {
+            "color": 2123412,
+            "description": "pick description for test",
+            "fields": [
+              {
+                "name": "name1",
+                "value": "value1"
+              },
+              {
+                "name": "name2",
+                "value": "value2"
+              }
+            ],
+            "footer": {
+              "text": "pick"
+            },
+            "title": "picks     🚨 -- 5 seconds remaining -- 🚨"
+          }
+        ],
+        "flags": 0,
+        "id": "messageID",
+        "member": null,
+        "mention_channels": null,
+        "mention_everyone": false,
+        "mention_roles": null,
+        "mentions": null,
+        "message_reference": null,
+        "pinned": false,
+        "reactions": null,
+        "timestamp": "",
+        "tts": false,
+        "type": 0,
+        "webhook_id": ""
+      }
+    ]
+  },
+  {
+    "Name": "PickState before timer runs out",
+    "Values": [
+      {
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "RePickVotes": 0,
+        "RePicksRemaining": 3
+      }
+    ]
+  },
+  {
+    "Name": "pickMessage when timer runs out",
+    "Values": [
+      {
+        "activity": null,
+        "application": null,
+        "attachments": null,
+        "author": null,
+        "channel_id": "testChannelID",
+        "content": "",
+        "edited_timestamp": "",
+        "embeds": [
+          {
+            "color": 2123412,
+            "description": "pick description for test",
+            "fields": [
+              {
+                "name": "name1",
+                "value": "value1"
+              },
+              {
+                "name": "name2",
+                "value": "value2"
+              }
+            ],
+            "footer": {
+              "text": "pick"
+            },
+            "title": "picks      -- 0 seconds remaining -- "
+          }
+        ],
+        "flags": 0,
+        "id": "messageID",
+        "member": null,
+        "mention_channels": null,
+        "mention_everyone": false,
+        "mention_roles": null,
+        "mentions": null,
+        "message_reference": null,
+        "pinned": false,
+        "reactions": null,
+        "timestamp": "",
+        "tts": false,
+        "type": 0,
+        "webhook_id": ""
+      }
+    ]
+  },
+  {
+    "Name": "PickState when timer runs out",
+    "Values": [
+      {
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "RePickVotes": 0,
+        "RePicksRemaining": 3
+      }
+    ]
+  },
+  {
+    "Name": "picks remaining decremented to 2",
+    "Values": [
+      {
+        "DoRepick": true,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "RePickVotes": 0,
+        "RePicksRemaining": 2
+      }
+    ]
+  }
+]

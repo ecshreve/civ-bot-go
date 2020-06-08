@@ -79,7 +79,7 @@ func GetCivByString(s string, civs []*Civ) *Civ {
 	cm := closestmatch.New(strsToTest, bagSizes)
 	closest := cm.Closest(s)
 
-	retCiv := &Civ{}
+	var retCiv *Civ
 	for _, c := range civs {
 		if c.CivBase == closest || c.LeaderBase == closest {
 			retCiv = c
@@ -95,6 +95,15 @@ func SortCivs(civs []*Civ) {
 	sort.Slice(civs, func(i, j int) bool {
 		return civs[i].Key < civs[j].Key
 	})
+}
+
+// GetCivsByTier returns a map of [FilthyTier][]*Civ for the given list of Civs.
+func GetCivsByTier(civs []*Civ) map[int][]*Civ {
+	civsByTier := make(map[int][]*Civ)
+	for _, c := range civs {
+		civsByTier[c.FilthyTier] = append(civsByTier[c.FilthyTier], c)
+	}
+	return civsByTier
 }
 
 // FormatCiv returns a string for a single Civ in a readable format.

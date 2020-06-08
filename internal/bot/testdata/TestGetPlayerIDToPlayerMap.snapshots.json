@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "playerIdToPlayerMap",
+    "Values": [
+      {
+        "testPlayer1": {
+          "BannedCivs": [],
+          "PlayerID": "testPlayer1",
+          "avatar": "",
+          "bot": false,
+          "discriminator": "",
+          "email": "",
+          "id": "testPlayer1",
+          "locale": "",
+          "mfa_enabled": false,
+          "token": "",
+          "username": "",
+          "verified": false
+        },
+        "testPlayer2": {
+          "BannedCivs": [],
+          "PlayerID": "testPlayer2",
+          "avatar": "",
+          "bot": false,
+          "discriminator": "",
+          "email": "",
+          "id": "testPlayer2",
+          "locale": "",
+          "mfa_enabled": false,
+          "token": "",
+          "username": "",
+          "verified": false
+        }
+      }
+    ]
+  }
+]

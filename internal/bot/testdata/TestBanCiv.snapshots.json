@@ -1,0 +1,86 @@
+[
+  {
+    "Name": "empty toBan arg - error",
+    "Values": [
+      "empty toBan argument for player: testPlayer"
+    ]
+  },
+  {
+    "Name": "empty toBan arg - bans",
+    "Values": [
+      {}
+    ]
+  },
+  {
+    "Name": "toBan arg doesn't match any civs - error",
+    "Values": [
+      "unable to get toBan by string: 34523"
+    ]
+  },
+  {
+    "Name": "toBan arg doesn't match any civs - bans",
+    "Values": [
+      {}
+    ]
+  },
+  {
+    "Name": "valid toBan arg - bans",
+    "Values": [
+      {
+        "testPlayer": [
+          {
+            "Banned": true,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "toBan arg is already banned - error",
+    "Values": [
+      "found toBan is already banned: \u0026{Key:AMERICA CivBase:america LeaderBase:washington ZigURL:http://steamcommunity.com/sharedfiles/filedetails/?id=180689240 FilthyTier:3 Banned:true Picked:false}"
+    ]
+  },
+  {
+    "Name": "toBan arg is already banned - bans",
+    "Values": [
+      {
+        "testPlayer": [
+          {
+            "Banned": true,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "different valid toBan arg - bans",
+    "Values": [
+      {
+        "testPlayer": [
+          {
+            "Banned": true,
+            "CivBase": "korea",
+            "FilthyTier": 1,
+            "Key": 24,
+            "LeaderBase": "sejong",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=218395239"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,39 @@
+[
+  {
+    "Name": "New -- Info()",
+    "Values": [
+      {
+        "Description": "start a new civ-bot session",
+        "Emoji": "🆕",
+        "Name": "New",
+        "Usage": "`/civ new`"
+      }
+    ]
+  },
+  {
+    "Name": "New -- Process() embeds",
+    "Values": [
+      [
+        {
+          "color": 7419530,
+          "description": "- whoever wants to play react with  ✋\n- someone add a  ✅ react when ready to continue \n\n- enter `/civ config` to view or update the configuration \n- enter `/civ oops` at any point to completely start over\n- enter `/civ help` to see a list of available commands",
+          "footer": {
+            "text": "new"
+          },
+          "title": "🆕 starting a new civ bot session"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "New -- Bot CivConfig",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
+    ]
+  }
+]

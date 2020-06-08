@@ -1,0 +1,118 @@
+[
+  {
+    "Name": "new state",
+    "Values": [
+      {
+        "Bans": {},
+        "CivMap": null,
+        "Civs": null,
+        "Clk": {},
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "Picks": {},
+        "PlayerMap": {},
+        "Players": null,
+        "RePickVotes": 0,
+        "RePicksRemaining": 3
+      }
+    ]
+  },
+  {
+    "Name": "new config",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
+    ]
+  },
+  {
+    "Name": "altered state",
+    "Values": [
+      {
+        "Bans": {},
+        "CivMap": null,
+        "Civs": null,
+        "Clk": {},
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "Picks": {},
+        "PlayerMap": {},
+        "Players": null,
+        "RePickVotes": 99,
+        "RePicksRemaining": 0
+      }
+    ]
+  },
+  {
+    "Name": "altered config",
+    "Values": [
+      {
+        "Bans": 77,
+        "Picks": 88,
+        "RePicks": 99,
+        "UseTiers": false
+      }
+    ]
+  },
+  {
+    "Name": "state after reset - keepConfig true",
+    "Values": [
+      {
+        "Bans": {},
+        "CivMap": null,
+        "Civs": null,
+        "Clk": {},
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "Picks": {},
+        "PlayerMap": {},
+        "Players": null,
+        "RePickVotes": 0,
+        "RePicksRemaining": 99
+      }
+    ]
+  },
+  {
+    "Name": "config after reset - keepConfig true",
+    "Values": [
+      {
+        "Bans": 77,
+        "Picks": 88,
+        "RePicks": 99,
+        "UseTiers": false
+      }
+    ]
+  },
+  {
+    "Name": "state after reset - keepConfig false",
+    "Values": [
+      {
+        "Bans": {},
+        "CivMap": null,
+        "Civs": null,
+        "Clk": {},
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "Picks": {},
+        "PlayerMap": {},
+        "Players": null,
+        "RePickVotes": 0,
+        "RePicksRemaining": 3
+      }
+    ]
+  },
+  {
+    "Name": "config after reset - keepConfig false",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
+    ]
+  }
+]

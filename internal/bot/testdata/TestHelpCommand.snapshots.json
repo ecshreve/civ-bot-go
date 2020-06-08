@@ -1,0 +1,58 @@
+[
+  {
+    "Name": "Help -- Info()",
+    "Values": [
+      {
+        "Description": "view list of commands",
+        "Emoji": "ℹ️",
+        "Name": "Help",
+        "Usage": "`/civ help`"
+      }
+    ]
+  },
+  {
+    "Name": "Help -- Process() embeds",
+    "Values": [
+      [
+        {
+          "color": 3447003,
+          "description": "---",
+          "fields": [
+            {
+              "name": "ℹ️ Help",
+              "value": "`/civ help`: view list of commands"
+            },
+            {
+              "name": "⚙️ Config",
+              "value": "`/civ config`: enter the session configuration menu"
+            },
+            {
+              "name": "🆕 New",
+              "value": "`/civ new`: start a new civ-bot session"
+            },
+            {
+              "name": "🤷‍♀️ Oops",
+              "value": "`/civ oops`: start a new civ-bot session maintaining the current config"
+            },
+            {
+              "name": "🍌 Ban",
+              "value": "`/civ ban \u003cstring\u003e`: ban the Civ that most closely matches the string argument"
+            }
+          ],
+          "title": "available bot commands"
+        }
+      ]
+    ]
+  },
+  {
+    "Name": "Help -- Bot CivConfig",
+    "Values": [
+      {
+        "Bans": 1,
+        "Picks": 3,
+        "RePicks": 3,
+        "UseTiers": false
+      }
+    ]
+  }
+]

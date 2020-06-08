@@ -1,0 +1,796 @@
+[
+  {
+    "Name": "default civ state",
+    "Values": [
+      {
+        "Bans": {},
+        "CivMap": {
+          "0": {
+            "Banned": false,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          },
+          "1": {
+            "Banned": false,
+            "CivBase": "arabia",
+            "FilthyTier": 2,
+            "Key": 1,
+            "LeaderBase": "harun al-rashad",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=253052919"
+          },
+          "10": {
+            "Banned": false,
+            "CivBase": "china",
+            "FilthyTier": 2,
+            "Key": 10,
+            "LeaderBase": "wu zetian",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=307785412"
+          },
+          "11": {
+            "Banned": false,
+            "CivBase": "denmark",
+            "FilthyTier": 3,
+            "Key": 11,
+            "LeaderBase": "harald bluetooth",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=195456207"
+          },
+          "12": {
+            "Banned": false,
+            "CivBase": "egypt",
+            "FilthyTier": 1,
+            "Key": 12,
+            "LeaderBase": "ramesse ii",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=309519240"
+          },
+          "13": {
+            "Banned": false,
+            "CivBase": "england",
+            "FilthyTier": 1,
+            "Key": 13,
+            "LeaderBase": "elizabeth",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=265598080"
+          },
+          "14": {
+            "Banned": false,
+            "CivBase": "ethiopia",
+            "FilthyTier": 1,
+            "Key": 14,
+            "LeaderBase": "haile selassie",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=292079843"
+          },
+          "15": {
+            "Banned": false,
+            "CivBase": "france",
+            "FilthyTier": 5,
+            "Key": 15,
+            "LeaderBase": "napolean",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=247998433"
+          },
+          "16": {
+            "Banned": false,
+            "CivBase": "germany",
+            "FilthyTier": 3,
+            "Key": 16,
+            "LeaderBase": "bismarck",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=289435385"
+          },
+          "17": {
+            "Banned": false,
+            "CivBase": "greece",
+            "FilthyTier": 2,
+            "Key": 17,
+            "LeaderBase": "alexander",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=228474478"
+          },
+          "18": {
+            "Banned": false,
+            "CivBase": "huns",
+            "FilthyTier": 1,
+            "Key": 18,
+            "LeaderBase": "attila",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=160159907"
+          },
+          "19": {
+            "Banned": false,
+            "CivBase": "inca",
+            "FilthyTier": 1,
+            "Key": 19,
+            "LeaderBase": "pachacuti",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=178525583"
+          },
+          "2": {
+            "Banned": false,
+            "CivBase": "assyria",
+            "FilthyTier": 4,
+            "Key": 2,
+            "LeaderBase": "ashurbanipal",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=172318070"
+          },
+          "20": {
+            "Banned": false,
+            "CivBase": "india",
+            "FilthyTier": 3,
+            "Key": 20,
+            "LeaderBase": "gandhi",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=326395281"
+          },
+          "21": {
+            "Banned": false,
+            "CivBase": "indonesia",
+            "FilthyTier": 3,
+            "Key": 21,
+            "LeaderBase": "gajah mada",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=189621929"
+          },
+          "22": {
+            "Banned": false,
+            "CivBase": "iroquois",
+            "FilthyTier": 6,
+            "Key": 22,
+            "LeaderBase": "hiawatha",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=233028579"
+          },
+          "23": {
+            "Banned": false,
+            "CivBase": "japan",
+            "FilthyTier": 5,
+            "Key": 23,
+            "LeaderBase": "oda nobunaga",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=326386343"
+          },
+          "24": {
+            "Banned": false,
+            "CivBase": "korea",
+            "FilthyTier": 1,
+            "Key": 24,
+            "LeaderBase": "sejong",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=218395239"
+          },
+          "25": {
+            "Banned": false,
+            "CivBase": "mayans",
+            "FilthyTier": 1,
+            "Key": 25,
+            "LeaderBase": "pacal",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=171480391"
+          },
+          "26": {
+            "Banned": false,
+            "CivBase": "mongolia",
+            "FilthyTier": 3,
+            "Key": 26,
+            "LeaderBase": "genghis khan",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=226647277"
+          },
+          "27": {
+            "Banned": false,
+            "CivBase": "morocco",
+            "FilthyTier": 4,
+            "Key": 27,
+            "LeaderBase": "ahmad al-mansur",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=169423225"
+          },
+          "28": {
+            "Banned": false,
+            "CivBase": "netherlands",
+            "FilthyTier": 5,
+            "Key": 28,
+            "LeaderBase": "william",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=184478987"
+          },
+          "29": {
+            "Banned": false,
+            "CivBase": "ottomans",
+            "FilthyTier": 5,
+            "Key": 29,
+            "LeaderBase": "suleiman",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=170395256"
+          },
+          "3": {
+            "Banned": false,
+            "CivBase": "austria",
+            "FilthyTier": 3,
+            "Key": 3,
+            "LeaderBase": "maria theresa",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=326390646"
+          },
+          "30": {
+            "Banned": false,
+            "CivBase": "persia",
+            "FilthyTier": 1,
+            "Key": 30,
+            "LeaderBase": "darius i",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=301762318"
+          },
+          "31": {
+            "Banned": false,
+            "CivBase": "poland",
+            "FilthyTier": 1,
+            "Key": 31,
+            "LeaderBase": "casimir",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=199444074"
+          },
+          "32": {
+            "Banned": false,
+            "CivBase": "polynesia",
+            "FilthyTier": 5,
+            "Key": 32,
+            "LeaderBase": "kamehameha",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=166561870"
+          },
+          "33": {
+            "Banned": false,
+            "CivBase": "portugal",
+            "FilthyTier": 4,
+            "Key": 33,
+            "LeaderBase": "maria i",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=250413300"
+          },
+          "34": {
+            "Banned": false,
+            "CivBase": "rome",
+            "FilthyTier": 3,
+            "Key": 34,
+            "LeaderBase": "augustus",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=243501208"
+          },
+          "35": {
+            "Banned": false,
+            "CivBase": "russia",
+            "FilthyTier": 2,
+            "Key": 35,
+            "LeaderBase": "catherine",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=323707819"
+          },
+          "36": {
+            "Banned": false,
+            "CivBase": "shoshone",
+            "FilthyTier": 2,
+            "Key": 36,
+            "LeaderBase": "pocatello",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=295870476"
+          },
+          "37": {
+            "Banned": false,
+            "CivBase": "siam",
+            "FilthyTier": 3,
+            "Key": 37,
+            "LeaderBase": "ramkhamhaeng",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=237640016"
+          },
+          "38": {
+            "Banned": false,
+            "CivBase": "songhai",
+            "FilthyTier": 3,
+            "Key": 38,
+            "LeaderBase": "askia",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=259764070"
+          },
+          "39": {
+            "Banned": false,
+            "CivBase": "spain",
+            "FilthyTier": 2,
+            "Key": 39,
+            "LeaderBase": "isabella",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=163278284"
+          },
+          "4": {
+            "Banned": false,
+            "CivBase": "aztecs",
+            "FilthyTier": 2,
+            "Key": 4,
+            "LeaderBase": "montezuma",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=245376405"
+          },
+          "40": {
+            "Banned": false,
+            "CivBase": "sweden",
+            "FilthyTier": 4,
+            "Key": 40,
+            "LeaderBase": "gustavus adolphus",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=164655675"
+          },
+          "41": {
+            "Banned": false,
+            "CivBase": "venice",
+            "FilthyTier": 6,
+            "Key": 41,
+            "LeaderBase": "enrico dandolo",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=197613117"
+          },
+          "42": {
+            "Banned": false,
+            "CivBase": "zulu",
+            "FilthyTier": 2,
+            "Key": 42,
+            "LeaderBase": "shaka",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=161335260"
+          },
+          "5": {
+            "Banned": false,
+            "CivBase": "babylon",
+            "FilthyTier": 1,
+            "Key": 5,
+            "LeaderBase": "nebuchadnezzar ii",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=288312726"
+          },
+          "6": {
+            "Banned": false,
+            "CivBase": "brazil",
+            "FilthyTier": 4,
+            "Key": 6,
+            "LeaderBase": "pedro ii",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=175266266"
+          },
+          "7": {
+            "Banned": false,
+            "CivBase": "byzantium",
+            "FilthyTier": 3,
+            "Key": 7,
+            "LeaderBase": "theodora",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=212340768"
+          },
+          "8": {
+            "Banned": false,
+            "CivBase": "carthage",
+            "FilthyTier": 5,
+            "Key": 8,
+            "LeaderBase": "dido",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=167304884"
+          },
+          "9": {
+            "Banned": false,
+            "CivBase": "celts",
+            "FilthyTier": 3,
+            "Key": 9,
+            "LeaderBase": "boudicca",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=224148988"
+          }
+        },
+        "Civs": [
+          {
+            "Banned": false,
+            "CivBase": "america",
+            "FilthyTier": 3,
+            "Key": 0,
+            "LeaderBase": "washington",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=180689240"
+          },
+          {
+            "Banned": false,
+            "CivBase": "arabia",
+            "FilthyTier": 2,
+            "Key": 1,
+            "LeaderBase": "harun al-rashad",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=253052919"
+          },
+          {
+            "Banned": false,
+            "CivBase": "assyria",
+            "FilthyTier": 4,
+            "Key": 2,
+            "LeaderBase": "ashurbanipal",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=172318070"
+          },
+          {
+            "Banned": false,
+            "CivBase": "austria",
+            "FilthyTier": 3,
+            "Key": 3,
+            "LeaderBase": "maria theresa",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=326390646"
+          },
+          {
+            "Banned": false,
+            "CivBase": "aztecs",
+            "FilthyTier": 2,
+            "Key": 4,
+            "LeaderBase": "montezuma",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=245376405"
+          },
+          {
+            "Banned": false,
+            "CivBase": "babylon",
+            "FilthyTier": 1,
+            "Key": 5,
+            "LeaderBase": "nebuchadnezzar ii",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=288312726"
+          },
+          {
+            "Banned": false,
+            "CivBase": "brazil",
+            "FilthyTier": 4,
+            "Key": 6,
+            "LeaderBase": "pedro ii",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=175266266"
+          },
+          {
+            "Banned": false,
+            "CivBase": "byzantium",
+            "FilthyTier": 3,
+            "Key": 7,
+            "LeaderBase": "theodora",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=212340768"
+          },
+          {
+            "Banned": false,
+            "CivBase": "carthage",
+            "FilthyTier": 5,
+            "Key": 8,
+            "LeaderBase": "dido",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=167304884"
+          },
+          {
+            "Banned": false,
+            "CivBase": "celts",
+            "FilthyTier": 3,
+            "Key": 9,
+            "LeaderBase": "boudicca",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=224148988"
+          },
+          {
+            "Banned": false,
+            "CivBase": "china",
+            "FilthyTier": 2,
+            "Key": 10,
+            "LeaderBase": "wu zetian",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=307785412"
+          },
+          {
+            "Banned": false,
+            "CivBase": "denmark",
+            "FilthyTier": 3,
+            "Key": 11,
+            "LeaderBase": "harald bluetooth",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=195456207"
+          },
+          {
+            "Banned": false,
+            "CivBase": "egypt",
+            "FilthyTier": 1,
+            "Key": 12,
+            "LeaderBase": "ramesse ii",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=309519240"
+          },
+          {
+            "Banned": false,
+            "CivBase": "england",
+            "FilthyTier": 1,
+            "Key": 13,
+            "LeaderBase": "elizabeth",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=265598080"
+          },
+          {
+            "Banned": false,
+            "CivBase": "ethiopia",
+            "FilthyTier": 1,
+            "Key": 14,
+            "LeaderBase": "haile selassie",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=292079843"
+          },
+          {
+            "Banned": false,
+            "CivBase": "france",
+            "FilthyTier": 5,
+            "Key": 15,
+            "LeaderBase": "napolean",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=247998433"
+          },
+          {
+            "Banned": false,
+            "CivBase": "germany",
+            "FilthyTier": 3,
+            "Key": 16,
+            "LeaderBase": "bismarck",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=289435385"
+          },
+          {
+            "Banned": false,
+            "CivBase": "greece",
+            "FilthyTier": 2,
+            "Key": 17,
+            "LeaderBase": "alexander",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=228474478"
+          },
+          {
+            "Banned": false,
+            "CivBase": "huns",
+            "FilthyTier": 1,
+            "Key": 18,
+            "LeaderBase": "attila",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=160159907"
+          },
+          {
+            "Banned": false,
+            "CivBase": "inca",
+            "FilthyTier": 1,
+            "Key": 19,
+            "LeaderBase": "pachacuti",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=178525583"
+          },
+          {
+            "Banned": false,
+            "CivBase": "india",
+            "FilthyTier": 3,
+            "Key": 20,
+            "LeaderBase": "gandhi",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=326395281"
+          },
+          {
+            "Banned": false,
+            "CivBase": "indonesia",
+            "FilthyTier": 3,
+            "Key": 21,
+            "LeaderBase": "gajah mada",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=189621929"
+          },
+          {
+            "Banned": false,
+            "CivBase": "iroquois",
+            "FilthyTier": 6,
+            "Key": 22,
+            "LeaderBase": "hiawatha",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=233028579"
+          },
+          {
+            "Banned": false,
+            "CivBase": "japan",
+            "FilthyTier": 5,
+            "Key": 23,
+            "LeaderBase": "oda nobunaga",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=326386343"
+          },
+          {
+            "Banned": false,
+            "CivBase": "korea",
+            "FilthyTier": 1,
+            "Key": 24,
+            "LeaderBase": "sejong",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=218395239"
+          },
+          {
+            "Banned": false,
+            "CivBase": "mayans",
+            "FilthyTier": 1,
+            "Key": 25,
+            "LeaderBase": "pacal",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=171480391"
+          },
+          {
+            "Banned": false,
+            "CivBase": "mongolia",
+            "FilthyTier": 3,
+            "Key": 26,
+            "LeaderBase": "genghis khan",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=226647277"
+          },
+          {
+            "Banned": false,
+            "CivBase": "morocco",
+            "FilthyTier": 4,
+            "Key": 27,
+            "LeaderBase": "ahmad al-mansur",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=169423225"
+          },
+          {
+            "Banned": false,
+            "CivBase": "netherlands",
+            "FilthyTier": 5,
+            "Key": 28,
+            "LeaderBase": "william",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=184478987"
+          },
+          {
+            "Banned": false,
+            "CivBase": "ottomans",
+            "FilthyTier": 5,
+            "Key": 29,
+            "LeaderBase": "suleiman",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=170395256"
+          },
+          {
+            "Banned": false,
+            "CivBase": "persia",
+            "FilthyTier": 1,
+            "Key": 30,
+            "LeaderBase": "darius i",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=301762318"
+          },
+          {
+            "Banned": false,
+            "CivBase": "poland",
+            "FilthyTier": 1,
+            "Key": 31,
+            "LeaderBase": "casimir",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=199444074"
+          },
+          {
+            "Banned": false,
+            "CivBase": "polynesia",
+            "FilthyTier": 5,
+            "Key": 32,
+            "LeaderBase": "kamehameha",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=166561870"
+          },
+          {
+            "Banned": false,
+            "CivBase": "portugal",
+            "FilthyTier": 4,
+            "Key": 33,
+            "LeaderBase": "maria i",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=250413300"
+          },
+          {
+            "Banned": false,
+            "CivBase": "rome",
+            "FilthyTier": 3,
+            "Key": 34,
+            "LeaderBase": "augustus",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=243501208"
+          },
+          {
+            "Banned": false,
+            "CivBase": "russia",
+            "FilthyTier": 2,
+            "Key": 35,
+            "LeaderBase": "catherine",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=323707819"
+          },
+          {
+            "Banned": false,
+            "CivBase": "shoshone",
+            "FilthyTier": 2,
+            "Key": 36,
+            "LeaderBase": "pocatello",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=295870476"
+          },
+          {
+            "Banned": false,
+            "CivBase": "siam",
+            "FilthyTier": 3,
+            "Key": 37,
+            "LeaderBase": "ramkhamhaeng",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=237640016"
+          },
+          {
+            "Banned": false,
+            "CivBase": "songhai",
+            "FilthyTier": 3,
+            "Key": 38,
+            "LeaderBase": "askia",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=259764070"
+          },
+          {
+            "Banned": false,
+            "CivBase": "spain",
+            "FilthyTier": 2,
+            "Key": 39,
+            "LeaderBase": "isabella",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=163278284"
+          },
+          {
+            "Banned": false,
+            "CivBase": "sweden",
+            "FilthyTier": 4,
+            "Key": 40,
+            "LeaderBase": "gustavus adolphus",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=164655675"
+          },
+          {
+            "Banned": false,
+            "CivBase": "venice",
+            "FilthyTier": 6,
+            "Key": 41,
+            "LeaderBase": "enrico dandolo",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=197613117"
+          },
+          {
+            "Banned": false,
+            "CivBase": "zulu",
+            "FilthyTier": 2,
+            "Key": 42,
+            "LeaderBase": "shaka",
+            "Picked": false,
+            "ZigURL": "http://steamcommunity.com/sharedfiles/filedetails/?id=161335260"
+          }
+        ],
+        "Clk": {},
+        "DoRepick": false,
+        "PickTime": "0001-01-01T00:00:00Z",
+        "Picks": {},
+        "PlayerMap": {},
+        "Players": null,
+        "RePickVotes": 0,
+        "RePicksRemaining": 3
+      }
+    ]
+  }
+]
