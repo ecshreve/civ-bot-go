@@ -90,7 +90,7 @@ func (r *pickReaction) Process(b *Bot, mr *discordgo.MessageReaction) (*discordg
 		b.CivState.RePickVotes++
 	}
 
-	if b.CivState.RePickVotes*2 > len(b.CivState.Players) {
+	if b.CivState.RePickVotes*2 > len(b.CivState.Players) && b.CivState.RePicksRemaining > 0 {
 		b.CivState.DoRepick = true
 	}
 

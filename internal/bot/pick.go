@@ -187,6 +187,7 @@ func (b *Bot) Pick(channelID string) error {
 			return oops.Wrapf(err, "error during countdown")
 		}
 	} else {
+		b.CivState.DoRepick = false
 		b.DS.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
 			Title: "no more re-picks, those are your choices, deal with it",
 			Color: constants.ColorORANGE,
