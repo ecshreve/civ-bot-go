@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"log"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -194,7 +193,6 @@ func (c *banCommand) Process(b *Bot, m *discordgo.Message) (*discordgo.Message, 
 
 	_, err := player.BanCiv(b, args[1])
 	if err != nil {
-		log.Println(err)
 		return b.DS.ChannelMessageSend(m.ChannelID, util.ErrorMessage("invalid ban", "🤔  "+FormatPlayer(player)+" can you pick a valid civ to ban?"))
 	}
 
