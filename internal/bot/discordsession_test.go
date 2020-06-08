@@ -28,6 +28,7 @@ func (s *DiscordSession) ChannelMessageSend(channelID string, content string) (*
 func (s *DiscordSession) ChannelMessageSendEmbed(channelID string, embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	mock.Input(interface{}(s.ChannelMessageSendEmbed), channelID, embed)
 	return &discordgo.Message{
+		ID:        "testMessageID",
 		ChannelID: channelID,
 		Embeds:    []*discordgo.MessageEmbed{embed},
 	}, nil

@@ -74,27 +74,26 @@ func TestMakePick(t *testing.T) {
 	for _, testcase := range testcases {
 		t.Run(testcase.description, func(t *testing.T) {
 			b, _ := MockBot(t)
-			cs := b.CivState
-			cs.Clk = clk
+			b.CivState.Clk = clk
 
 			var civsToTest []*civ.Civ
 			for _, k := range testcase.civs {
-				civsToTest = append(civsToTest, cs.CivMap[k])
+				civsToTest = append(civsToTest, b.CivState.CivMap[k])
 			}
 
 			for _, k := range testcase.initialBannedCivs {
-				cs.CivMap[k].Banned = true
+				b.CivState.CivMap[k].Banned = true
 			}
 
 			for _, k := range testcase.initialPickedCivs {
-				cs.CivMap[k].Picked = true
+				b.CivState.CivMap[k].Picked = true
 			}
 
-			actual, err := cs.makePick(civsToTest)
+			actual, err := b.makePick(civsToTest)
 			if !testcase.expectError {
 				assert.NoError(t, err)
-				assert.Equal(t, cs.CivMap[testcase.expected], actual)
-				assert.Same(t, cs.CivMap[testcase.expected], actual)
+				assert.Equal(t, b.CivState.CivMap[testcase.expected], actual)
+				assert.Same(t, b.CivState.CivMap[testcase.expected], actual)
 			} else {
 				assert.Nil(t, actual)
 				assert.Error(t, err)
@@ -153,24 +152,23 @@ func TestMakePicks(t *testing.T) {
 	for _, testcase := range testcases {
 		t.Run(testcase.description, func(t *testing.T) {
 			b, _ := MockBot(t)
-			cs := b.CivState
-			cs.Clk = clk
+			b.CivState.Clk = clk
 
 			var civsToTest []*civ.Civ
 			for _, k := range testcase.civs {
-				civsToTest = append(civsToTest, cs.CivMap[k])
+				civsToTest = append(civsToTest, b.CivState.CivMap[k])
 			}
 
 			for _, k := range testcase.initialPickedCivs {
-				cs.CivMap[k].Picked = true
+				b.CivState.CivMap[k].Picked = true
 			}
 
 			var expectedCivs []*civ.Civ
 			for _, k := range testcase.expected {
-				expectedCivs = append(expectedCivs, cs.CivMap[k])
+				expectedCivs = append(expectedCivs, b.CivState.CivMap[k])
 			}
 
-			actual, err := cs.makePicks(civsToTest, testcase.numPicks)
+			actual, err := b.makePicks(civsToTest, testcase.numPicks)
 			if testcase.expectError {
 				assert.Error(t, err)
 			} else {
@@ -416,6 +414,99 @@ func TestMakePicksWithoutTier(t *testing.T) {
 			assert.EqualValues(t, expectedPicks, cs.Picks)
 		})
 	}
+}
+
+func TestPick(t *testing.T) {
+	snap := snapshotter.New(t)
+	defer snap.Verify()
+
+	clk := clock.NewMock()
+	b, mock := MockBot(t)
+	b.CivState.Clk = clk
+	testChannelID := "testChannel"
+
+	testUserIDs := []string{"testPlayer1", "testPlayer2", "testPlayer3"}
+	var testPlayers []*Player
+	for _, id := range testUserIDs {
+		testUser := &discordgo.User{ID: id}
+		testPlayer := NewPlayer(testUser)
+		testPlayers = append(testPlayers, testPlayer)
+	}
+	b.CivState.Players = testPlayers
+	b.CivState.PlayerMap = GetPlayerIDToPlayerMap(testPlayers)
+	b.CivState.RePicksRemaining = 1
+
+	// Kick off a ticker to increment every 1 mock second.
+	go func() {
+		ticker := clk.Ticker(1 * time.Second)
+		for {
+			<-ticker.C
+			err := b.Pick(testChannelID)
+			assert.NoError(t, err)
+			return
+		}
+	}()
+	runtime.Gosched()
+
+	// Expect the bot to add the initial message and reaction.
+	mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, MockAny{})
+	mock.Expect(b.DS.MessageReactionAdd, testChannelID, MockAny{}, "♻️")
+
+	// Expect the message to be edited every seconds for 60 seconds.
+	for i := 0; i < 60; i++ {
+		mock.Expect(b.DS.ChannelMessageEditEmbed, testChannelID, MockAny{}, MockAny{})
+	}
+
+	// Expect the bot to send the final message.
+	sessionOverEmbed := &discordgo.MessageEmbed{
+		Title: "great, have fun! see y'all next time 👋",
+		Color: constants.ColorORANGE,
+	}
+	mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, sessionOverEmbed)
+	clk.Add(61 * time.Second)
+	snap.Snapshot("picks", b.CivState.Picks)
+
+	// Reset the CivState and set RePicksRemaining to 0.
+	b.CivState = NewCivState()
+	b.CivState.Clk = clk
+	b.CivState.Players = testPlayers
+	b.CivState.PlayerMap = GetPlayerIDToPlayerMap(testPlayers)
+
+	// Do the same thing but with RePicks set to 0.
+	b.CivState.RePicksRemaining = 0
+
+	// Expect the bot to add the initial.
+	mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, MockAny{})
+
+	// Expect the bot to send the final "no repicks remaining" message.
+	sessionOverEmbed = &discordgo.MessageEmbed{
+		Title: "no more re-picks, those are your choices, deal with it",
+		Color: constants.ColorORANGE,
+	}
+	mock.Expect(b.DS.ChannelMessageSendEmbed, testChannelID, sessionOverEmbed)
+	b.Pick(testChannelID)
+	snap.Snapshot("picks2", b.CivState.Picks)
+
+	// Reset the CivState.
+	b.CivState = NewCivState()
+	b.CivState.Clk = clk
+	b.CivState.Players = testPlayers
+	b.CivState.PlayerMap = GetPlayerIDToPlayerMap(testPlayers)
+
+	// CivConfig.UseTiers false and empty CivState.Civs should result in error.
+	b.CivState.Civs = nil
+	b.CivState.CivMap = nil
+	err := b.Pick(testChannelID)
+	assert.Error(t, err)
+	snap.Snapshot("UseTiers false error", fmt.Sprintf("%v", oops.Cause(err).Error()))
+
+	// CivConfig.UseTiers true and empty CivState.Civs should result in error.
+	b.CivConfig.UseTiers = true
+	err = b.Pick(testChannelID)
+	assert.Error(t, err)
+	snap.Snapshot("UseTiers true error", fmt.Sprintf("%v", oops.Cause(err).Error()))
+
+	Check(mock.Check(), true, t)
 }
 
 func TestCountdown(t *testing.T) {
