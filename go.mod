@@ -9,6 +9,5 @@ require (
 	github.com/samsarahq/go v0.0.0-20191220233105-8077c9fbaed5
 	github.com/schollz/closestmatch v2.1.0+incompatible
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
-	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 )
